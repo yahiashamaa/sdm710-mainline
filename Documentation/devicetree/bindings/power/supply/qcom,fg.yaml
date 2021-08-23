@@ -14,8 +14,9 @@ maintainers:
 properties:
   compatible:
     enum:
-      - qcom,pm8994-fg
-      - qcom,pm8998-fg
+      - qcom,pmi8994-fg
+      - qcom,pmi8996-fg
+      - qcom,pmi8998-fg
 
   reg:
     maxItems: 1
