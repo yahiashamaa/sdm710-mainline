@@ -1157,7 +1157,8 @@ static int qcom_fg_probe(struct platform_device *pdev)
 	chip->batt_psy = devm_power_supply_register(chip->dev,
 			&batt_psy_desc, &supply_config);
 	if (IS_ERR(chip->batt_psy)) {
-		dev_err(&pdev->dev, "Failed to register battery\n");
+		if (PTR_ERR(chip->batt_psy) != -EPROBE_DEFER)
+			dev_err(&pdev->dev, "Failed to register battery\n");
 		return PTR_ERR(chip->batt_psy);
 	}
 
