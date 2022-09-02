@@ -816,6 +816,7 @@ static enum power_supply_property qcom_fg_props[] = {
 	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
 	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
 	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+	POWER_SUPPLY_PROP_PRESENT,
 	POWER_SUPPLY_PROP_TEMP,
 	POWER_SUPPLY_PROP_TEMP_MIN,
 	POWER_SUPPLY_PROP_TEMP_MAX,
@@ -888,6 +889,9 @@ static int qcom_fg_get_property(struct power_supply *psy,
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
 		val->intval = chip->batt_info->charge_full_design_uah;
+		break;
+	case POWER_SUPPLY_PROP_PRESENT:
+		val->intval = 1;
 		break;
 	case POWER_SUPPLY_PROP_TEMP:
 		ret = chip->ops->get_temperature(chip, &val->intval);
