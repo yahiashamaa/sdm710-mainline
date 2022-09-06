@@ -47,6 +47,7 @@ description: |
         sdm630
         sdm632
         sdm660
+        sdm670
         sdm845
         sdx55
         sdx65
@@ -256,6 +257,11 @@ properties:
           - enum:
               - xiaomi,lavender
           - const: qcom,sdm660
+
+      - items:
+          - enum:
+              - google,sargo
+          - const: qcom,sdm670
 
       - items:
           - enum:
