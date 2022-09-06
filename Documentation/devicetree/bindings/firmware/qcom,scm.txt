@@ -27,6 +27,7 @@ Required properties:
  * "qcom,scm-sc7180"
  * "qcom,scm-sc7280"
  * "qcom,scm-sm6125"
+ * "qcom,scm-sdm670"
  * "qcom,scm-sdm845"
  * "qcom,scm-sdx55"
  * "qcom,scm-sdx65"
