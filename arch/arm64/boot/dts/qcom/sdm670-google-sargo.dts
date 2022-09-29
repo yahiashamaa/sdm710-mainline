@@ -33,6 +33,14 @@
 
 	aliases { };
 
+	battery: battery {
+		compatible = "simple-battery";
+
+		charge-full-design-microamp-hours = <3000000>;
+		voltage-min-design-microvolt = <3312000>;
+		voltage-max-design-microvolt = <4400000>;
+	};
+
 	chosen {
 		stdout-path = "serial0:115200n8";
 
@@ -517,6 +525,21 @@
 };
 
 &qupv3_id_1 {
+	status = "okay";
+};
+
+&pm660_rradc {
+	status = "okay";
+};
+
+&pm660_charger {
+	monitored-battery = <&battery>;
+	status = "okay";
+};
+
+&pm660_fg {
+	monitored-battery = <&battery>;
+	power-supplies = <&pm660_charger>;
 	status = "okay";
 };
 
