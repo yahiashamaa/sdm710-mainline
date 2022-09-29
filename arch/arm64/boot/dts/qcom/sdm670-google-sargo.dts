@@ -14,6 +14,10 @@
 	compatible = "google,sargo", "qcom,sdm670";
 };
 
+&battery {
+	charge-full-design-microamp-hours = <3000000>;
+};
+
 &framebuffer {
 	reg = <0 0x9c000000 0 (1080 * 2220 * 4)>;
 	width = <1080>;
