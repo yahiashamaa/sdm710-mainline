@@ -28,6 +28,13 @@
 / {
 	aliases { };
 
+	battery: battery {
+		compatible = "simple-battery";
+
+		voltage-min-design-microvolt = <3312000>;
+		voltage-max-design-microvolt = <4400000>;
+	};
+
 	chosen {
 		stdout-path = "serial0:115200n8";
 
@@ -565,6 +572,17 @@
 	status = "okay";
 };
 
+&pm660_charger {
+	monitored-battery = <&battery>;
+	status = "okay";
+};
+
+&pm660_fg {
+	monitored-battery = <&battery>;
+	power-supplies = <&pm660_charger>;
+	status = "okay";
+};
+
 &pm660_gpios {
 	cam_vio_pin: cam-vio-state {
 		pins = "gpio13";
@@ -572,6 +590,10 @@
 		power-source = <PM8941_GPIO_VPH>;
 		output-low;
 	};
+};
+
+&pm660_rradc {
+	status = "okay";
 };
 
 &pm660l_gpios {
