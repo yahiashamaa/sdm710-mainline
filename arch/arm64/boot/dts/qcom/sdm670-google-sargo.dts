@@ -127,6 +127,14 @@
 		};
 	};
 
+	battery: battery {
+		compatible = "simple-battery";
+
+		charge-full-design-microamp-hours = <3000000>;
+		voltage-min-design-microvolt = <3312000>;
+		voltage-max-design-microvolt = <4400000>;
+	};
+
 	/*
 	 * Supply map from xiaomi-lavender specifies this as the supply for
 	 * ldob1, ldob9, ldob10, ldoa2, and ldoa3, while downstream specifies
@@ -465,6 +473,21 @@
 &pon_resin {
 	status = "okay";
 	linux,code = <KEY_VOLUMEDOWN>;
+};
+
+&pm660_rradc {
+	status = "okay";
+};
+
+&pm660_charger {
+	status = "okay";
+	monitored-battery = <&battery>;
+};
+
+&pm660_fg {
+	status = "okay";
+	monitored-battery = <&battery>;
+	power-supplies = <&pm660_charger>;
 };
 
 &sdhc_1 {
