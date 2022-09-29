@@ -1,0 +1,483 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * An export of masked symbols, so the dtbo gets successfully gets applied to
+ * nothing
+ *
+ * Copyright (c) 2022, Richard Acayan. All rights reserved.
+ */
+
+/ {
+	__symbols__ {
+		pm660_0 = "/masked-devices/pm660_0";
+		pm660_revid = "/masked-devices/pm660_revid";
+		qusb_phy0 = "/masked-devices/qusb_phy0";
+		pm660_1 = "/masked-devices/pm660_1";
+		pm660_misc = "/masked-devices/pm660_misc";
+		pm660l_3 = "/masked-devices/pm660l_3";
+		pm660l_revid = "/masked-devices/pm660l_revid";
+		pm660l_pbs = "/masked-devices/pm660l_pbs";
+		pm660_pdphy = "/masked-devices/pm660_pdphy";
+		usb0 = "/masked-devices/usb0";
+		eud = "/masked-devices/eud";
+		thermal_zones = "/masked-devices/thermal_zones";
+		mdss_mdp = "/masked-devices/mdss_mdp";
+		tlmm = "/masked-devices/tlmm";
+		soc = "/masked-devices/soc";
+		mdss_dsi0 = "/masked-devices/mdss_dsi0";
+		mdss_dsi_phy0 = "/masked-devices/mdss_dsi_phy0";
+		mdss_dsi0_pll = "/masked-devices/mdss_dsi0_pll";
+		sde_dsi_active = "/masked-devices/sde_dsi_active";
+		sde_te_active = "/masked-devices/sde_te_active";
+		sde_dsi_suspend = "/masked-devices/sde_dsi_suspend";
+		sde_te_suspend = "/masked-devices/sde_te_suspend";
+		pm660l_l6 = "/masked-devices/pm660l_l6";
+		mdss_dsi1 = "/masked-devices/mdss_dsi1";
+		sde_dp = "/masked-devices/sde_dp";
+		sde_rscc = "/masked-devices/sde_rscc";
+		qupv3_se7_spi_pins = "/masked-devices/qupv3_se7_spi_pins";
+		qupv3_se7_spi = "/masked-devices/qupv3_se7_spi";
+		slim_aud = "/masked-devices/slim_aud";
+		tasha_spkr_1_sd_n_active = "/masked-devices/tasha_spkr_1_sd_n_active";
+		tasha_spkr_1_sd_n_sleep = "/masked-devices/tasha_spkr_1_sd_n_sleep";
+		tasha_spkr_2_sd_n_active = "/masked-devices/tasha_spkr_2_sd_n_active";
+		tasha_spkr_2_sd_n_sleep = "/masked-devices/tasha_spkr_2_sd_n_sleep";
+		tavil_snd = "/masked-devices/tavil_snd";
+		stub_codec = "/masked-devices/stub_codec";
+		tasha_snd = "/masked-devices/tasha_snd";
+		int_codec = "/masked-devices/int_codec";
+		wcd_usbc_analog_en1_active = "/masked-devices/wcd_usbc_analog_en1_active";
+		wcd_usbc_analog_en1_idle = "/masked-devices/wcd_usbc_analog_en1_idle";
+		sdw_clk_active = "/masked-devices/sdw_clk_active";
+		sdw_data_active = "/masked-devices/sdw_data_active";
+		sdw_clk_sleep = "/masked-devices/sdw_clk_sleep";
+		sdw_data_sleep = "/masked-devices/sdw_data_sleep";
+		spkr_1_sd_n_active = "/masked-devices/spkr_1_sd_n_active";
+		spkr_1_sd_n_sleep = "/masked-devices/spkr_1_sd_n_sleep";
+		spkr_2_sd_n_active = "/masked-devices/spkr_2_sd_n_active";
+		spkr_2_sd_n_sleep = "/masked-devices/spkr_2_sd_n_sleep";
+		wcd_intr_default = "/masked-devices/wcd_intr_default";
+		tasha_mclk_default = "/masked-devices/tasha_mclk_default";
+		pm660_gpios = "/masked-devices/pm660_gpios";
+		pm660_div_clk = "/masked-devices/pm660_div_clk";
+		clock_rpmh = "/masked-devices/clock_rpmh";
+		glink_spi_xprt_wdsp = "/masked-devices/glink_spi_xprt_wdsp";
+		aqt_rst_active = "/masked-devices/aqt_rst_active";
+		aqt_rst_idle = "/masked-devices/aqt_rst_idle";
+		ter_i2s_data0_active = "/masked-devices/ter_i2s_data0_active";
+		ter_i2s_data1_active = "/masked-devices/ter_i2s_data1_active";
+		ter_i2s_sck_active = "/masked-devices/ter_i2s_sck_active";
+		ter_i2s_data0_sleep = "/masked-devices/ter_i2s_data0_sleep";
+		ter_i2s_data1_sleep = "/masked-devices/ter_i2s_data1_sleep";
+		ter_i2s_sck_sleep = "/masked-devices/ter_i2s_sck_sleep";
+		aqt_intr_default = "/masked-devices/aqt_intr_default";
+		pm660l_bob = "/masked-devices/pm660l_bob";
+		spmi_bus = "/masked-devices/spmi_bus";
+		pm660_s4 = "/masked-devices/pm660_s4";
+		pm660l_l7 = "/masked-devices/pm660l_l7";
+		pm660_l10 = "/masked-devices/pm660_l10";
+		pm660l_l1 = "/masked-devices/pm660l_l1";
+		qupv3_se10_i2c = "/masked-devices/qupv3_se10_i2c";
+		msm_dai_tdm_pri_tx = "/masked-devices/msm_dai_tdm_pri_tx";
+		dai_pri_tdm_tx_0 = "/masked-devices/dai_pri_tdm_tx_0";
+		msm_dai_tdm_sec_rx = "/masked-devices/msm_dai_tdm_sec_rx";
+		msm_dai_tdm_sec_tx = "/masked-devices/msm_dai_tdm_sec_tx";
+		dai_sec_tdm_rx_0 = "/masked-devices/dai_sec_tdm_rx_0";
+		pm660_l11 = "/masked-devices/pm660_l11";
+		qupv3_se2_spi = "/masked-devices/qupv3_se2_spi";
+		pil_modem_mem = "/masked-devices/pil_modem_mem";
+		pil_video_mem = "/masked-devices/pil_video_mem";
+		wlan_msa_mem = "/masked-devices/wlan_msa_mem";
+		pil_cdsp_mem = "/masked-devices/pil_cdsp_mem";
+		pil_mba_mem = "/masked-devices/pil_mba_mem";
+		pil_adsp_mem = "/masked-devices/pil_adsp_mem";
+		pil_ipa_fw_mem = "/masked-devices/pil_ipa_fw_mem";
+		pil_ipa_gsi_mem = "/masked-devices/pil_ipa_gsi_mem";
+		pil_gpu_mem = "/masked-devices/pil_gpu_mem";
+		secure_display_memory = "/masked-devices/secure_display_memory";
+		reserved_memory = "/masked-devices/reserved_memory";
+		pm660l_gpios = "/masked-devices/pm660l_gpios";
+		pm660_pon = "/masked-devices/pm660_pon";
+		qupv3_se3_i2c = "/masked-devices/qupv3_se3_i2c";
+		qupv3_se0_spi = "/masked-devices/qupv3_se0_spi";
+		vendor = "/masked-devices/vendor";
+		usb_nop_phy = "/masked-devices/usb_nop_phy";
+		usb_qmp_dp_phy = "/masked-devices/usb_qmp_dp_phy";
+		pm660_adc_tm = "/masked-devices/pm660_adc_tm";
+		bcl_sensor = "/masked-devices/bcl_sensor";
+		android_fstab = "/masked-devices/android_fstab";
+		smb_shutdown_default = "/masked-devices/smb_shutdown_default";
+		ufsphy_mem = "/masked-devices/ufsphy_mem";
+		pm660_l1 = "/masked-devices/pm660_l1";
+		ufshc_mem = "/masked-devices/ufshc_mem";
+		ufs_phy_gdsc = "/masked-devices/ufs_phy_gdsc";
+		pm660l_l4 = "/masked-devices/pm660l_l4";
+		pm660_l8 = "/masked-devices/pm660_l8";
+		ufs_ice = "/masked-devices/ufs_ice";
+		pm660l_switch1 = "/masked-devices/pm660l_switch1";
+		flash_led3_front_en = "/masked-devices/flash_led3_front_en";
+		flash_led3_front_dis = "/masked-devices/flash_led3_front_dis";
+		qupv3_se9_2uart = "/masked-devices/qupv3_se9_2uart";
+		qupv3_se12_2uart = "/masked-devices/qupv3_se12_2uart";
+		qupv3_se8_spi = "/masked-devices/qupv3_se8_spi";
+		qupv3_se6_4uart = "/masked-devices/qupv3_se6_4uart";
+		sdhc_1 = "/masked-devices/sdhc_1";
+		sdc1_clk_on = "/masked-devices/sdc1_clk_on";
+		sdc1_cmd_on = "/masked-devices/sdc1_cmd_on";
+		sdc1_data_on = "/masked-devices/sdc1_data_on";
+		sdc1_rclk_on = "/masked-devices/sdc1_rclk_on";
+		sdc1_clk_off = "/masked-devices/sdc1_clk_off";
+		sdc1_cmd_off = "/masked-devices/sdc1_cmd_off";
+		sdc1_data_off = "/masked-devices/sdc1_data_off";
+		sdc1_rclk_off = "/masked-devices/sdc1_rclk_off";
+		sdhc_2 = "/masked-devices/sdhc_2";
+		pm660l_l5 = "/masked-devices/pm660l_l5";
+		sdc2_clk_on = "/masked-devices/sdc2_clk_on";
+		sdc2_cmd_on = "/masked-devices/sdc2_cmd_on";
+		sdc2_data_on = "/masked-devices/sdc2_data_on";
+		sdc2_cd_on = "/masked-devices/sdc2_cd_on";
+		sdc2_clk_off = "/masked-devices/sdc2_clk_off";
+		sdc2_cmd_off = "/masked-devices/sdc2_cmd_off";
+		sdc2_data_off = "/masked-devices/sdc2_data_off";
+		sdc2_cd_off = "/masked-devices/sdc2_cd_off";
+		msm_poweroff = "/masked-devices/msm_poweroff";
+		qupv3_se9_i2c_active = "/masked-devices/qupv3_se9_i2c_active";
+		qupv3_se9_i2c_sleep = "/masked-devices/qupv3_se9_i2c_sleep";
+		qupv3_se9_i2c = "/masked-devices/qupv3_se9_i2c";
+		routing = "/masked-devices/routing";
+		pm660l_flash0 = "/masked-devices/pm660l_flash0";
+		pm660l_flash1 = "/masked-devices/pm660l_flash1";
+		pm660l_torch0 = "/masked-devices/pm660l_torch0";
+		pm660l_torch1 = "/masked-devices/pm660l_torch1";
+		pm660l_switch0 = "/masked-devices/pm660l_switch0";
+		pm660l_l3 = "/masked-devices/pm660l_l3";
+		camera_dvdd_en_default = "/masked-devices/camera_dvdd_en_default";
+		pm660_s6 = "/masked-devices/pm660_s6";
+		camera_rear_dvdd_en_default = "/masked-devices/camera_rear_dvdd_en_default";
+		cam_cci = "/masked-devices/cam_cci";
+		titan_top_gdsc = "/masked-devices/titan_top_gdsc";
+		cam_sensor_mclk0_active = "/masked-devices/cam_sensor_mclk0_active";
+		clock_camcc = "/masked-devices/clock_camcc";
+		cam_sensor_mclk2_active = "/masked-devices/cam_sensor_mclk2_active";
+		cam_sensor_front_active = "/masked-devices/cam_sensor_front_active";
+		cam_sensor_front_suspend = "/masked-devices/cam_sensor_front_suspend";
+	};
+
+	masked-devices {
+		masked = <&_masked_pm660_0>,
+			 <&_masked_pm660_revid>,
+			 <&_masked_qusb_phy0>,
+			 <&_masked_pm660_1>,
+			 <&_masked_pm660_misc>,
+			 <&_masked_pm660l_3>,
+			 <&_masked_pm660l_revid>,
+			 <&_masked_pm660l_pbs>,
+			 <&_masked_pm660_pdphy>,
+			 <&_masked_usb0>,
+			 <&_masked_eud>,
+			 <&_masked_thermal_zones>,
+			 <&_masked_mdss_mdp>,
+			 <&_masked_tlmm>,
+			 <&_masked_soc>,
+			 <&_masked_mdss_dsi0>,
+			 <&_masked_mdss_dsi_phy0>,
+			 <&_masked_mdss_dsi0_pll>,
+			 <&_masked_sde_dsi_active>,
+			 <&_masked_sde_te_active>,
+			 <&_masked_sde_dsi_suspend>,
+			 <&_masked_sde_te_suspend>,
+			 <&_masked_pm660l_l6>,
+			 <&_masked_mdss_dsi1>,
+			 <&_masked_sde_dp>,
+			 <&_masked_sde_rscc>,
+			 <&_masked_qupv3_se7_spi_pins>,
+			 <&_masked_qupv3_se7_spi>,
+			 <&_masked_slim_aud>,
+			 <&_masked_tasha_spkr_1_sd_n_active>,
+			 <&_masked_tasha_spkr_1_sd_n_sleep>,
+			 <&_masked_tasha_spkr_2_sd_n_active>,
+			 <&_masked_tasha_spkr_2_sd_n_sleep>,
+			 <&_masked_tavil_snd>,
+			 <&_masked_stub_codec>,
+			 <&_masked_tasha_snd>,
+			 <&_masked_int_codec>,
+			 <&_masked_wcd_usbc_analog_en1_active>,
+			 <&_masked_wcd_usbc_analog_en1_idle>,
+			 <&_masked_sdw_clk_active>,
+			 <&_masked_sdw_data_active>,
+			 <&_masked_sdw_clk_sleep>,
+			 <&_masked_sdw_data_sleep>,
+			 <&_masked_spkr_1_sd_n_active>,
+			 <&_masked_spkr_1_sd_n_sleep>,
+			 <&_masked_spkr_2_sd_n_active>,
+			 <&_masked_spkr_2_sd_n_sleep>,
+			 <&_masked_wcd_intr_default>,
+			 <&_masked_tasha_mclk_default>,
+			 <&_masked_pm660_gpios>,
+			 <&_masked_pm660_div_clk>,
+			 <&_masked_clock_rpmh>,
+			 <&_masked_glink_spi_xprt_wdsp>,
+			 <&_masked_aqt_rst_active>,
+			 <&_masked_aqt_rst_idle>,
+			 <&_masked_ter_i2s_data0_active>,
+			 <&_masked_ter_i2s_data1_active>,
+			 <&_masked_ter_i2s_sck_active>,
+			 <&_masked_ter_i2s_data0_sleep>,
+			 <&_masked_ter_i2s_data1_sleep>,
+			 <&_masked_ter_i2s_sck_sleep>,
+			 <&_masked_aqt_intr_default>,
+			 <&_masked_pm660l_bob>,
+			 <&_masked_spmi_bus>,
+			 <&_masked_pm660_s4>,
+			 <&_masked_pm660l_l7>,
+			 <&_masked_pm660_l10>,
+			 <&_masked_pm660l_l1>,
+			 <&_masked_qupv3_se10_i2c>,
+			 <&_masked_msm_dai_tdm_pri_tx>,
+			 <&_masked_dai_pri_tdm_tx_0>,
+			 <&_masked_msm_dai_tdm_sec_rx>,
+			 <&_masked_msm_dai_tdm_sec_tx>,
+			 <&_masked_dai_sec_tdm_rx_0>,
+			 <&_masked_pm660_l11>,
+			 <&_masked_qupv3_se2_spi>,
+			 <&_masked_pil_modem_mem>,
+			 <&_masked_pil_video_mem>,
+			 <&_masked_wlan_msa_mem>,
+			 <&_masked_pil_cdsp_mem>,
+			 <&_masked_pil_mba_mem>,
+			 <&_masked_pil_adsp_mem>,
+			 <&_masked_pil_ipa_fw_mem>,
+			 <&_masked_pil_ipa_gsi_mem>,
+			 <&_masked_pil_gpu_mem>,
+			 <&_masked_secure_display_memory>,
+			 <&_masked_reserved_memory>,
+			 <&_masked_pm660l_gpios>,
+			 <&_masked_pm660_pon>,
+			 <&_masked_qupv3_se3_i2c>,
+			 <&_masked_qupv3_se0_spi>,
+			 <&_masked_vendor>,
+			 <&_masked_usb_nop_phy>,
+			 <&_masked_usb_qmp_dp_phy>,
+			 <&_masked_pm660_adc_tm>,
+			 <&_masked_bcl_sensor>,
+			 <&_masked_android_fstab>,
+			 <&_masked_smb_shutdown_default>,
+			 <&_masked_ufsphy_mem>,
+			 <&_masked_pm660_l1>,
+			 <&_masked_ufshc_mem>,
+			 <&_masked_ufs_phy_gdsc>,
+			 <&_masked_pm660l_l4>,
+			 <&_masked_pm660_l8>,
+			 <&_masked_ufs_ice>,
+			 <&_masked_pm660l_switch1>,
+			 <&_masked_flash_led3_front_en>,
+			 <&_masked_flash_led3_front_dis>,
+			 <&_masked_qupv3_se9_2uart>,
+			 <&_masked_qupv3_se12_2uart>,
+			 <&_masked_qupv3_se8_spi>,
+			 <&_masked_qupv3_se6_4uart>,
+			 <&_masked_sdhc_1>,
+			 <&_masked_sdc1_clk_on>,
+			 <&_masked_sdc1_cmd_on>,
+			 <&_masked_sdc1_data_on>,
+			 <&_masked_sdc1_rclk_on>,
+			 <&_masked_sdc1_clk_off>,
+			 <&_masked_sdc1_cmd_off>,
+			 <&_masked_sdc1_data_off>,
+			 <&_masked_sdc1_rclk_off>,
+			 <&_masked_sdhc_2>,
+			 <&_masked_pm660l_l5>,
+			 <&_masked_sdc2_clk_on>,
+			 <&_masked_sdc2_cmd_on>,
+			 <&_masked_sdc2_data_on>,
+			 <&_masked_sdc2_cd_on>,
+			 <&_masked_sdc2_clk_off>,
+			 <&_masked_sdc2_cmd_off>,
+			 <&_masked_sdc2_data_off>,
+			 <&_masked_sdc2_cd_off>,
+			 <&_masked_msm_poweroff>,
+			 <&_masked_qupv3_se9_i2c_active>,
+			 <&_masked_qupv3_se9_i2c_sleep>,
+			 <&_masked_qupv3_se9_i2c>,
+			 <&_masked_routing>,
+			 <&_masked_pm660l_flash0>,
+			 <&_masked_pm660l_flash1>,
+			 <&_masked_pm660l_torch0>,
+			 <&_masked_pm660l_torch1>,
+			 <&_masked_pm660l_switch0>,
+			 <&_masked_pm660l_l3>,
+			 <&_masked_camera_dvdd_en_default>,
+			 <&_masked_pm660_s6>,
+			 <&_masked_camera_rear_dvdd_en_default>,
+			 <&_masked_cam_cci>,
+			 <&_masked_titan_top_gdsc>,
+			 <&_masked_cam_sensor_mclk0_active>,
+			 <&_masked_clock_camcc>,
+			 <&_masked_cam_sensor_mclk2_active>,
+			 <&_masked_cam_sensor_front_active>,
+			 <&_masked_cam_sensor_front_suspend>;
+
+		_masked_pm660_0: pm660_0 {};
+		_masked_pm660_revid: pm660_revid {};
+		_masked_qusb_phy0: qusb_phy0 {};
+		_masked_pm660_1: pm660_1 {};
+		_masked_pm660_misc: pm660_misc {};
+		_masked_pm660l_3: pm660l_3 {};
+		_masked_pm660l_revid: pm660l_revid {};
+		_masked_pm660l_pbs: pm660l_pbs {};
+		_masked_pm660_pdphy: pm660_pdphy {};
+		_masked_usb0: usb0 {};
+		_masked_eud: eud {};
+		_masked_thermal_zones: thermal_zones {};
+		_masked_mdss_mdp: mdss_mdp {};
+		_masked_tlmm: tlmm {};
+		_masked_soc: soc {};
+		_masked_mdss_dsi0: mdss_dsi0 {};
+		_masked_mdss_dsi_phy0: mdss_dsi_phy0 {};
+		_masked_mdss_dsi0_pll: mdss_dsi0_pll {};
+		_masked_sde_dsi_active: sde_dsi_active {};
+		_masked_sde_te_active: sde_te_active {};
+		_masked_sde_dsi_suspend: sde_dsi_suspend {};
+		_masked_sde_te_suspend: sde_te_suspend {};
+		_masked_pm660l_l6: pm660l_l6 {};
+		_masked_mdss_dsi1: mdss_dsi1 {};
+		_masked_sde_dp: sde_dp {};
+		_masked_sde_rscc: sde_rscc {};
+		_masked_qupv3_se7_spi_pins: qupv3_se7_spi_pins {};
+		_masked_qupv3_se7_spi: qupv3_se7_spi {};
+		_masked_slim_aud: slim_aud {};
+		_masked_tasha_spkr_1_sd_n_active: tasha_spkr_1_sd_n_active {};
+		_masked_tasha_spkr_1_sd_n_sleep: tasha_spkr_1_sd_n_sleep {};
+		_masked_tasha_spkr_2_sd_n_active: tasha_spkr_2_sd_n_active {};
+		_masked_tasha_spkr_2_sd_n_sleep: tasha_spkr_2_sd_n_sleep {};
+		_masked_tavil_snd: tavil_snd {};
+		_masked_stub_codec: stub_codec {};
+		_masked_tasha_snd: tasha_snd {};
+		_masked_int_codec: int_codec {};
+		_masked_wcd_usbc_analog_en1_active: wcd_usbc_analog_en1_active {};
+		_masked_wcd_usbc_analog_en1_idle: wcd_usbc_analog_en1_idle {};
+		_masked_sdw_clk_active: sdw_clk_active {};
+		_masked_sdw_data_active: sdw_data_active {};
+		_masked_sdw_clk_sleep: sdw_clk_sleep {};
+		_masked_sdw_data_sleep: sdw_data_sleep {};
+		_masked_spkr_1_sd_n_active: spkr_1_sd_n_active {};
+		_masked_spkr_1_sd_n_sleep: spkr_1_sd_n_sleep {};
+		_masked_spkr_2_sd_n_active: spkr_2_sd_n_active {};
+		_masked_spkr_2_sd_n_sleep: spkr_2_sd_n_sleep {};
+		_masked_wcd_intr_default: wcd_intr_default {};
+		_masked_tasha_mclk_default: tasha_mclk_default {};
+		_masked_pm660_gpios: pm660_gpios {};
+		_masked_pm660_div_clk: pm660_div_clk {};
+		_masked_clock_rpmh: clock_rpmh {};
+		_masked_glink_spi_xprt_wdsp: glink_spi_xprt_wdsp {};
+		_masked_aqt_rst_active: aqt_rst_active {};
+		_masked_aqt_rst_idle: aqt_rst_idle {};
+		_masked_ter_i2s_data0_active: ter_i2s_data0_active {};
+		_masked_ter_i2s_data1_active: ter_i2s_data1_active {};
+		_masked_ter_i2s_sck_active: ter_i2s_sck_active {};
+		_masked_ter_i2s_data0_sleep: ter_i2s_data0_sleep {};
+		_masked_ter_i2s_data1_sleep: ter_i2s_data1_sleep {};
+		_masked_ter_i2s_sck_sleep: ter_i2s_sck_sleep {};
+		_masked_aqt_intr_default: aqt_intr_default {};
+		_masked_pm660l_bob: pm660l_bob {};
+		_masked_spmi_bus: spmi_bus {};
+		_masked_pm660_s4: pm660_s4 {};
+		_masked_pm660l_l7: pm660l_l7 {};
+		_masked_pm660_l10: pm660_l10 {};
+		_masked_pm660l_l1: pm660l_l1 {};
+		_masked_qupv3_se10_i2c: qupv3_se10_i2c {};
+		_masked_msm_dai_tdm_pri_tx: msm_dai_tdm_pri_tx {};
+		_masked_dai_pri_tdm_tx_0: dai_pri_tdm_tx_0 {};
+		_masked_msm_dai_tdm_sec_rx: msm_dai_tdm_sec_rx {};
+		_masked_msm_dai_tdm_sec_tx: msm_dai_tdm_sec_tx {};
+		_masked_dai_sec_tdm_rx_0: dai_sec_tdm_rx_0 {};
+		_masked_pm660_l11: pm660_l11 {};
+		_masked_qupv3_se2_spi: qupv3_se2_spi {};
+		_masked_pil_modem_mem: pil_modem_mem {};
+		_masked_pil_video_mem: pil_video_mem {};
+		_masked_wlan_msa_mem: wlan_msa_mem {};
+		_masked_pil_cdsp_mem: pil_cdsp_mem {};
+		_masked_pil_mba_mem: pil_mba_mem {};
+		_masked_pil_adsp_mem: pil_adsp_mem {};
+		_masked_pil_ipa_fw_mem: pil_ipa_fw_mem {};
+		_masked_pil_ipa_gsi_mem: pil_ipa_gsi_mem {};
+		_masked_pil_gpu_mem: pil_gpu_mem {};
+		_masked_secure_display_memory: secure_display_memory {};
+		_masked_reserved_memory: reserved_memory {};
+		_masked_pm660l_gpios: pm660l_gpios {};
+		_masked_pm660_pon: pm660_pon {};
+		_masked_qupv3_se3_i2c: qupv3_se3_i2c {};
+		_masked_qupv3_se0_spi: qupv3_se0_spi {};
+		_masked_vendor: vendor {};
+		_masked_usb_nop_phy: usb_nop_phy {};
+		_masked_usb_qmp_dp_phy: usb_qmp_dp_phy {};
+		_masked_pm660_adc_tm: pm660_adc_tm {};
+		_masked_bcl_sensor: bcl_sensor {};
+		_masked_android_fstab: android_fstab {};
+		_masked_smb_shutdown_default: smb_shutdown_default {};
+		_masked_ufsphy_mem: ufsphy_mem {};
+		_masked_pm660_l1: pm660_l1 {};
+		_masked_ufshc_mem: ufshc_mem {};
+		_masked_ufs_phy_gdsc: ufs_phy_gdsc {};
+		_masked_pm660l_l4: pm660l_l4 {};
+		_masked_pm660_l8: pm660_l8 {};
+		_masked_ufs_ice: ufs_ice {};
+		_masked_pm660l_switch1: pm660l_switch1 {};
+		_masked_flash_led3_front_en: flash_led3_front_en {};
+		_masked_flash_led3_front_dis: flash_led3_front_dis {};
+		_masked_qupv3_se9_2uart: qupv3_se9_2uart {};
+		_masked_qupv3_se12_2uart: qupv3_se12_2uart {};
+		_masked_qupv3_se8_spi: qupv3_se8_spi {};
+		_masked_qupv3_se6_4uart: qupv3_se6_4uart {};
+		_masked_sdhc_1: sdhc_1 {};
+		_masked_sdc1_clk_on: sdc1_clk_on {};
+		_masked_sdc1_cmd_on: sdc1_cmd_on {};
+		_masked_sdc1_data_on: sdc1_data_on {};
+		_masked_sdc1_rclk_on: sdc1_rclk_on {};
+		_masked_sdc1_clk_off: sdc1_clk_off {};
+		_masked_sdc1_cmd_off: sdc1_cmd_off {};
+		_masked_sdc1_data_off: sdc1_data_off {};
+		_masked_sdc1_rclk_off: sdc1_rclk_off {};
+		_masked_sdhc_2: sdhc_2 {};
+		_masked_pm660l_l5: pm660l_l5 {};
+		_masked_sdc2_clk_on: sdc2_clk_on {};
+		_masked_sdc2_cmd_on: sdc2_cmd_on {};
+		_masked_sdc2_data_on: sdc2_data_on {};
+		_masked_sdc2_cd_on: sdc2_cd_on {};
+		_masked_sdc2_clk_off: sdc2_clk_off {};
+		_masked_sdc2_cmd_off: sdc2_cmd_off {};
+		_masked_sdc2_data_off: sdc2_data_off {};
+		_masked_sdc2_cd_off: sdc2_cd_off {};
+		_masked_msm_poweroff: msm_poweroff {};
+		_masked_qupv3_se9_i2c_active: qupv3_se9_i2c_active {};
+		_masked_qupv3_se9_i2c_sleep: qupv3_se9_i2c_sleep {};
+		_masked_qupv3_se9_i2c: qupv3_se9_i2c {};
+		_masked_routing: routing {};
+		_masked_pm660l_flash0: pm660l_flash0 {};
+		_masked_pm660l_flash1: pm660l_flash1 {};
+		_masked_pm660l_torch0: pm660l_torch0 {};
+		_masked_pm660l_torch1: pm660l_torch1 {};
+		_masked_pm660l_switch0: pm660l_switch0 {};
+		_masked_pm660l_l3: pm660l_l3 {};
+		_masked_camera_dvdd_en_default: camera_dvdd_en_default {};
+		_masked_pm660_s6: pm660_s6 {};
+		_masked_camera_rear_dvdd_en_default: camera_rear_dvdd_en_default {};
+		_masked_cam_cci: cam_cci {};
+		_masked_titan_top_gdsc: titan_top_gdsc {};
+		_masked_cam_sensor_mclk0_active: cam_sensor_mclk0_active {};
+		_masked_clock_camcc: clock_camcc {};
+		_masked_cam_sensor_mclk2_active: cam_sensor_mclk2_active {};
+		_masked_cam_sensor_front_active: cam_sensor_front_active {};
+		_masked_cam_sensor_front_suspend: cam_sensor_front_suspend {};
+	};
+};
+
+/*
+ * There may be other device tree nodes that might try to probe, but the ramoops
+ * node is the only one that pollutes dmesg with an error. It needs to be
+ * created before the overlay is applied so a status property can be injected.
+ */
+&_masked_soc {
+	ramoops {
+		status = "disabled";
+	};
+};
