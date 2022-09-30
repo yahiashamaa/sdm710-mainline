@@ -398,6 +398,39 @@
 
 };
 
+&dsi0 {
+	status = "okay";
+	vdda-supply = <&vreg_l1a_1p225>;
+
+	panel@0 {
+		compatible = "samsung,s6e3fa7";
+		reg = <0>;
+
+		reset-gpios = <&tlmm 75 GPIO_ACTIVE_LOW>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&panel_reset_pins &panel_te_pin>;
+
+		power-supply = <&vreg_l6b_3p3>;
+
+		port {
+			panel_in: endpoint {
+				remote-endpoint = <&dsi0_out>;
+			};
+		};
+	};
+};
+
+&dsi0_out {
+	remote-endpoint = <&panel_in>;
+	data-lanes = <0 1 2 3>;
+};
+
+&dsi0_phy {
+	status = "okay";
+	vdds-supply = <&vreg_l1b_0p925>;
+};
+
 &gcc {
 	protected-clocks = <GCC_QSPI_CORE_CLK>,
 			   <GCC_QSPI_CORE_CLK_SRC>,
@@ -442,6 +475,14 @@
 	};
 };
 
+&mdss {
+	status = "okay";
+};
+
+&mdss_mdp {
+	status = "okay";
+};
+
 &pm660l_gpios {
 	vol_up_pin: vol-up-state {
 		pins = "gpio7";
@@ -481,6 +522,21 @@
 
 &tlmm {
 	gpio-reserved-ranges = <0 4>, <81 4>;
+
+	panel_reset_pins: panel-active-state {
+		pins = "gpio75", "gpio76";
+		function = "gpio";
+		drive-strength = <8>;
+		bias-disable;
+	};
+
+	panel_te_pin: panel-te-state {
+		pins = "gpio10";
+		function = "mdp_vsync";
+		drive-strength = <2>;
+		bias-pull-down;
+		input-enable;
+	};
 
 	touchscreen_default: ts-default-state {
 		ts-reset-pins {
