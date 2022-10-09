@@ -379,6 +379,8 @@ struct smb2_register {
  * @regmap:		Register map
  * @batt_info:		Battery data from DT
  * @status_change_work: Worker to handle plug/unplug events
+ * @cable_irq:		USB plugin IRQ
+ * @wakeup_enabled:	If the cable IRQ will cause a wakeup
  * @usb_in_i_chan:	USB_IN current measurement channel
  * @usb_in_v_chan:	USB_IN voltage measurement channel
  * @chg_psy:		Charger power supply instance
@@ -393,6 +395,8 @@ struct smb2_chip {
 	struct power_supply_battery_info *batt_info;
 
 	struct delayed_work status_change_work;
+	int cable_irq;
+	bool wakeup_enabled;
 
 	struct iio_channel *usb_in_i_chan;
 	struct iio_channel *usb_in_v_chan;
@@ -461,7 +465,7 @@ static int smb2_apsd_get_charger_type(struct smb2_chip *chip, int *val)
 		return rc;
 	}
 	if (!(apsd_stat & APSD_DTC_STATUS_DONE_BIT)) {
-		dev_err(chip->dev, "Apsd not ready");
+		dev_dbg(chip->dev, "Apsd not ready");
 		return -EAGAIN;
 	}
 
@@ -587,7 +591,7 @@ static void smb2_status_change_work(struct work_struct *work)
 		rc = regmap_update_bits(chip->regmap, chip->base + CMD_APSD,
 					APSD_RERUN_BIT, APSD_RERUN_BIT);
 		schedule_delayed_work(&chip->status_change_work,
-				      msecs_to_jiffies(1500));
+				      msecs_to_jiffies(1000));
 		dev_dbg(chip->dev, "get charger type failed, rerun apsd\n");
 		return;
 	}
@@ -612,7 +616,7 @@ static void smb2_status_change_work(struct work_struct *work)
 }
 
 static int smb2_get_iio_chan(struct smb2_chip *chip, struct iio_channel *chan,
-		      int *val)
+			     int *val)
 {
 	int rc;
 	union power_supply_propval status;
@@ -758,7 +762,7 @@ static irqreturn_t smb2_handle_usb_plugin(int irq, void *data)
 	power_supply_changed(chip->chg_psy);
 
 	schedule_delayed_work(&chip->status_change_work,
-			      msecs_to_jiffies(1000));
+			      msecs_to_jiffies(1500));
 
 	return IRQ_HANDLED;
 }
@@ -804,12 +808,13 @@ static const struct smb2_register smb2_init_seq[] = {
 	{ .addr = AICL_RERUN_TIME_CFG, .mask = AICL_RERUN_TIME_MASK, .val = 0 },
 	/*
 	 * By default configure us as an upstream facing port
-	 * FIXME: for OTG we should set UFP_EN_CMD_BIT and DFP_EN_CMD_BIT both to 0
+	 * NOTE: for OTG we should set UFP_EN_CMD_BIT and DFP_EN_CMD_BIT both
+	 * to 0
 	 */
 	{ .addr = TYPE_C_INTRPT_ENB_SOFTWARE_CTRL,
 	  .mask = TYPEC_POWER_ROLE_CMD_MASK | VCONN_EN_SRC_BIT |
 		  VCONN_EN_VALUE_BIT,
-	  .val = VCONN_EN_SRC_BIT | UFP_EN_CMD_BIT },
+	  .val = VCONN_EN_SRC_BIT },
 	/*
 	 * disable Type-C factory mode and stay in Attached.SRC state when VCONN
 	 * over-current happens
@@ -828,10 +833,6 @@ static const struct smb2_register smb2_init_seq[] = {
 	{ .addr = CHARGING_ENABLE_CMD,
 	  .mask = CHARGING_ENABLE_CMD_BIT,
 	  .val = CHARGING_ENABLE_CMD_BIT },
-	/* Allow overriding the current limit */
-	// { .addr = USBIN_LOAD_CFG,
-	//   .mask = ICL_OVERRIDE_AFTER_APSD_BIT,
-	//   .val = ICL_OVERRIDE_AFTER_APSD_BIT },
 	{ .addr = CHGR_CFG2,
 	  .mask = CHG_EN_SRC_BIT | CHG_EN_POLARITY_BIT |
 		  PRETOFAST_TRANSITION_CFG_BIT | BAT_OV_ECC_BIT | I_TERM_BIT |
@@ -858,14 +859,13 @@ static const struct smb2_register smb2_init_seq[] = {
 	  .mask = WATCHDOG_TRIGGER_AFP_EN_BIT | WDOG_TIMER_EN_ON_PLUGIN_BIT |
 		  BARK_WDOG_INT_EN_BIT,
 	  .val = 0 },
-	/* OnePlus init stuff from "op_set_collapse_fet" */
+	/* These bits aren't documented anywhere */
 	{ .addr = USBIN_5V_AICL_THRESHOLD_CFG,
 	  .mask = USBIN_5V_AICL_THRESHOLD_CFG_MASK,
 	  .val = 0x3 },
 	{ .addr = USBIN_CONT_AICL_THRESHOLD_CFG,
 	  .mask = USBIN_CONT_AICL_THRESHOLD_CFG_MASK,
 	  .val = 0x3 },
-	/* Yay undocumented register values! */
 	{ .addr = USBIN_LOAD_CFG, .mask = BIT(0) | BIT(1), .val = 0x3 },
 	/* Enable Automatic Input Current Limit, this will slowly ramp up the current
 	 * When connected to a wall charger, and automatically stop when it detects
@@ -881,14 +881,15 @@ static const struct smb2_register smb2_init_seq[] = {
 	/*
 	 * Set pre charge current to default, the OnePlus 6 bootloader
 	 * sets this very conservatively.
+	 * NOTE: seems to be reset to zero again anyway after boot
 	 */
 	{ .addr = PRE_CHARGE_CURRENT_CFG,
 	  .mask = PRE_CHARGE_CURRENT_SETTING_MASK,
 	  .val = 500000 / 25000 },
 	/*
-	 * Set "fast charge current" to the default 1A, this won't
-	 * actually limit devices with a secondary charger but it's
-	 * needed for the OnePlus 6
+	 * This overrides all of the current limit options exposed to userspace
+	 * and prevents the device from pulling more than 1A. This is done
+	 * to avoid potential fire hazard risks.
 	 */
 	{ .addr = FAST_CHARGE_CURRENT_CFG,
 	  .mask = FAST_CHARGE_CURRENT_SETTING_MASK,
@@ -917,23 +918,30 @@ static int smb2_init_hw(struct smb2_chip *chip)
 	return 0;
 }
 
-struct smb2_irqs {
-	const char *name;
-	irqreturn_t (*handler)(int irq, void *data);
-};
+static int smb2_init_irq(struct smb2_chip *chip, int *irq, const char *name,
+			 irqreturn_t (*handler)(int irq, void *data))
+{
+	int rc;
 
-static const struct smb2_irqs irqs[] = {
-	{ .name = "bat-ov", .handler = smb2_handle_batt_overvoltage },
-	{ .name = "usb-plugin", .handler = smb2_handle_usb_plugin },
-	{ .name = "usbin-icl-change", .handler = smb2_handle_usb_icl_change },
-	{ .name = "wdog-bark", .handler = smb2_handle_wdog_bark },
-};
+	*irq = of_irq_get_byname(chip->dev->of_node, name);
+	if (*irq < 0)
+		return dev_err_probe(chip->dev, *irq,
+				     "Couldn't get irq %s byname\n", name);
+
+	rc = devm_request_threaded_irq(chip->dev, *irq, NULL, handler,
+				       IRQF_ONESHOT, name, chip);
+	if (rc < 0)
+		return dev_err_probe(chip->dev, rc, "Couldn't request irq %s\n",
+				     name);
+
+	return 0;
+}
 
 static int smb2_probe(struct platform_device *pdev)
 {
 	struct power_supply_config supply_config = {};
 	struct smb2_chip *chip;
-	int rc, i, irq;
+	int rc, irq;
 
 	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
 	if (!chip)
@@ -998,28 +1006,58 @@ static int smb2_probe(struct platform_device *pdev)
 	if (rc < 0)
 		return dev_err_probe(chip->dev, rc, "Couldn't set vbat max\n");
 
-	for (i = 0; i < ARRAY_SIZE(irqs); i++) {
-		irq = of_irq_get_byname(pdev->dev.of_node, irqs[i].name);
-		if (irq < 0)
-			return dev_err_probe(chip->dev, irq,
-					     "Couldn't get irq %s byname\n",
-					     irqs[i].name);
-		rc = devm_request_threaded_irq(chip->dev, irq, NULL,
-					       irqs[i].handler, IRQF_ONESHOT,
-					       irqs[i].name, chip);
-		if (rc < 0)
-			return dev_err_probe(chip->dev, irq,
-					     "Couldn't request irq %s\n",
-					     irqs[i].name);
-	}
+	rc = smb2_init_irq(chip, &irq, "bat-ov", smb2_handle_batt_overvoltage);
+	if (rc < 0)
+		return rc;
+
+	rc = smb2_init_irq(chip, &chip->cable_irq, "usb-plugin",
+			   smb2_handle_usb_plugin);
+	if (rc < 0)
+		return rc;
+
+	rc = smb2_init_irq(chip, &irq, "usbin-icl-change",
+			   smb2_handle_usb_icl_change);
+	if (rc < 0)
+		return rc;
+	rc = smb2_init_irq(chip, &irq, "wdog-bark", smb2_handle_wdog_bark);
+	if (rc < 0)
+		return rc;
 
 	platform_set_drvdata(pdev, chip);
+
+	device_init_wakeup(chip->dev, 1);
 
 	/* Initialise charger state */
 	schedule_delayed_work(&chip->status_change_work, 0);
 
 	return 0;
 }
+
+#ifdef CONFIG_PM_SLEEP
+static int smb2_suspend(struct device *dev)
+{
+	struct smb2_chip *chip = dev_get_drvdata(dev);
+
+	if (device_may_wakeup(dev))
+		chip->wakeup_enabled = !enable_irq_wake(chip->cable_irq);
+
+	return 0;
+}
+
+static int smb2_resume(struct device *dev)
+{
+	struct smb2_chip *chip = dev_get_drvdata(dev);
+
+	if (device_may_wakeup(dev) && chip->wakeup_enabled)
+		disable_irq_wake(chip->cable_irq);
+
+	power_supply_changed(chip->chg_psy);
+
+	return 0;
+}
+#endif
+
+static SIMPLE_DEV_PM_OPS(smb2_pm_ops, smb2_suspend, smb2_resume);
 
 static const struct of_device_id smb2_match_id_table[] = {
 	{ .compatible = "qcom,pmi8998-charger" },
@@ -1031,8 +1069,9 @@ MODULE_DEVICE_TABLE(of, smb2_match_id_table);
 static struct platform_driver qcom_spmi_smb2 = {
 	.probe = smb2_probe,
 	.driver = {
-			.name = "qcom-pmi8998-charger",
-			.of_match_table = smb2_match_id_table,
+		.name = "qcom-pmi8998-charger",
+		.pm = &smb2_pm_ops,
+		.of_match_table = smb2_match_id_table,
 		},
 };
 
