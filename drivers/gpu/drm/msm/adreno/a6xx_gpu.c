@@ -1814,6 +1814,22 @@ static uint32_t a6xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
 	return ring->memptrs->rptr = gpu_read(gpu, REG_A6XX_CP_RB_RPTR);
 }
 
+static u32 a615_get_speed_bin(u32 fuse)
+{
+	if (fuse == 0)
+		return 0;
+	else if (fuse == 90)
+		return 0;
+	else if (fuse == 146)
+		return 1;
+	else if (fuse == 163)
+		return 3;
+	else if (fuse == 105)
+		return 2;
+
+	return UINT_MAX;
+}
+
 static u32 a618_get_speed_bin(u32 fuse)
 {
 	if (fuse == 0)
@@ -1857,6 +1873,9 @@ static u32 adreno_7c3_get_speed_bin(u32 fuse)
 static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
 {
 	u32 val = UINT_MAX;
+
+	if (adreno_cmp_rev(ADRENO_REV(6, 1, 5, ANY_ID), rev))
+		val = a615_get_speed_bin(fuse);
 
 	if (adreno_cmp_rev(ADRENO_REV(6, 1, 8, ANY_ID), rev))
 		val = a618_get_speed_bin(fuse);
