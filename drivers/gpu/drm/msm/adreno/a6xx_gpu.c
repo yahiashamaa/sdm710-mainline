@@ -2226,6 +2226,22 @@ static u32 a610_get_speed_bin(u32 fuse)
 	return UINT_MAX;
 }
 
+static u32 a615_get_speed_bin(u32 fuse)
+{
+	if (fuse == 0)
+		return 0;
+	else if (fuse == 90)
+		return 0;
+	else if (fuse == 105)
+		return 1;
+	else if (fuse == 146)
+		return 2;
+	else if (fuse == 163)
+		return 3;
+
+	return UINT_MAX;
+}
+
 static u32 a618_get_speed_bin(u32 fuse)
 {
 	if (fuse == 0)
@@ -2325,6 +2341,9 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_gpu *adreno_gpu, u3
 
 	if (adreno_is_a610(adreno_gpu))
 		val = a610_get_speed_bin(fuse);
+
+	if (adreno_is_a615(adreno_cpu))
+		val = a615_get_speed_bin(fuse);
 
 	if (adreno_is_a618(adreno_gpu))
 		val = a618_get_speed_bin(fuse);
