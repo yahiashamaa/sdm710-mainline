@@ -839,17 +839,20 @@ static const struct qcom_cc_desc disp_cc_sdm845_desc = {
 };
 
 static const struct of_device_id disp_cc_sdm845_match_table[] = {
-	{ .compatible = "qcom,sdm845-dispcc" },
+	{ .compatible = "qcom,sdm845-dispcc", .data = &disp_cc_sdm845_desc },
 	{ }
 };
 MODULE_DEVICE_TABLE(of, disp_cc_sdm845_match_table);
 
 static int disp_cc_sdm845_probe(struct platform_device *pdev)
 {
+	const struct qcom_cc_desc *disp_cc_desc;
 	struct regmap *regmap;
 	struct alpha_pll_config disp_cc_pll0_config = {};
 
-	regmap = qcom_cc_map(pdev, &disp_cc_sdm845_desc);
+	disp_cc_desc = device_get_match_data(&pdev->dev);
+
+	regmap = qcom_cc_map(pdev, disp_cc_desc);
 	if (IS_ERR(regmap))
 		return PTR_ERR(regmap);
 
@@ -861,7 +864,7 @@ static int disp_cc_sdm845_probe(struct platform_device *pdev)
 	/* Enable hardware clock gating for DSI and MDP clocks */
 	regmap_update_bits(regmap, 0x8000, 0x7f0, 0x7f0);
 
-	return qcom_cc_really_probe(pdev, &disp_cc_sdm845_desc, regmap);
+	return qcom_cc_really_probe(pdev, disp_cc_desc, regmap);
 }
 
 static struct platform_driver disp_cc_sdm845_driver = {
