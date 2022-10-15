@@ -18,6 +18,10 @@
 	charge-full-design-microamp-hours = <3000000>;
 };
 
+&drv2624 {
+	ti,odclamp-voltage = <93>; /* 1.8 Vrms */
+};
+
 &framebuffer {
 	reg = <0 0x9c000000 0 (1080 * 2220 * 4)>;
 	width = <1080>;
