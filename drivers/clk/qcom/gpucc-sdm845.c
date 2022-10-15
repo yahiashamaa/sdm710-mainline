@@ -168,17 +168,20 @@ static const struct qcom_cc_desc gpu_cc_sdm845_desc = {
 };
 
 static const struct of_device_id gpu_cc_sdm845_match_table[] = {
-	{ .compatible = "qcom,sdm845-gpucc" },
+	{ .compatible = "qcom,sdm845-gpucc", .data = &gpu_cc_sdm845_desc },
 	{ }
 };
 MODULE_DEVICE_TABLE(of, gpu_cc_sdm845_match_table);
 
 static int gpu_cc_sdm845_probe(struct platform_device *pdev)
 {
+	const struct qcom_cc_desc *gpu_cc_desc;
 	struct regmap *regmap;
 	unsigned int value, mask;
 
-	regmap = qcom_cc_map(pdev, &gpu_cc_sdm845_desc);
+	gpu_cc_desc = device_get_match_data(&pdev->dev);
+
+	regmap = qcom_cc_map(pdev, gpu_cc_desc);
 	if (IS_ERR(regmap))
 		return PTR_ERR(regmap);
 
@@ -197,7 +200,7 @@ static int gpu_cc_sdm845_probe(struct platform_device *pdev)
 	regmap_update_bits(regmap, 0x106c, CLK_DIS_WAIT_MASK,
 						8 << CLK_DIS_WAIT_SHIFT);
 
-	return qcom_cc_really_probe(pdev, &gpu_cc_sdm845_desc, regmap);
+	return qcom_cc_really_probe(pdev, gpu_cc_desc, regmap);
 }
 
 static struct platform_driver gpu_cc_sdm845_driver = {
