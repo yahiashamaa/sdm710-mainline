@@ -87,7 +87,45 @@ static struct clk_rcg2 gpu_cc_gmu_clk_src = {
 	},
 };
 
+static const struct freq_tbl ftbl_gpu_cc_sdm670_gmu_clk_src[] = {
+	F(19200000, P_BI_TCXO, 1, 0, 0),
+	F(200000000, P_GPLL0_OUT_MAIN_DIV, 1.5, 0, 0),
+	{ }
+};
+
+static struct clk_rcg2 gpu_cc_sdm670_gmu_clk_src = {
+	.cmd_rcgr = 0x1120,
+	.mnd_width = 0,
+	.hid_width = 5,
+	.parent_map = gpu_cc_parent_map_0,
+	.freq_tbl = ftbl_gpu_cc_sdm670_gmu_clk_src,
+	.clkr.hw.init = &(struct clk_init_data){
+		.name = "gpu_cc_gmu_clk_src",
+		.parent_data = gpu_cc_parent_data_0,
+		.num_parents = ARRAY_SIZE(gpu_cc_parent_data_0),
+		.ops = &clk_rcg2_shared_ops,
+	},
+};
+
 static struct clk_branch gpu_cc_cx_gmu_clk = {
+	.halt_reg = 0x1098,
+	.halt_check = BRANCH_HALT,
+	.clkr = {
+		.enable_reg = 0x1098,
+		.enable_mask = BIT(0),
+		.hw.init = &(struct clk_init_data){
+			.name = "gpu_cc_cx_gmu_clk",
+			.parent_hws = (const struct clk_hw*[]){
+				&gpu_cc_gmu_clk_src.clkr.hw,
+			},
+			.num_parents = 1,
+			.flags = CLK_SET_RATE_PARENT,
+			.ops = &clk_branch2_ops,
+		},
+	},
+};
+
+static struct clk_branch gpu_cc_sdm670_cx_gmu_clk = {
 	.halt_reg = 0x1098,
 	.halt_check = BRANCH_HALT,
 	.clkr = {
@@ -139,6 +177,13 @@ static struct gdsc gpu_gx_gdsc = {
 	.flags = CLAMP_IO | AON_RESET | POLL_CFG_GDSCR,
 };
 
+static struct clk_regmap *gpu_cc_sdm670_clocks[] = {
+	[GPU_CC_CXO_CLK] = &gpu_cc_cxo_clk.clkr,
+	[GPU_CC_CX_GMU_CLK] = &gpu_cc_sdm670_cx_gmu_clk.clkr,
+	[GPU_CC_GMU_CLK_SRC] = &gpu_cc_sdm670_gmu_clk_src.clkr,
+	[GPU_CC_PLL1] = &gpu_cc_pll1.clkr,
+};
+
 static struct clk_regmap *gpu_cc_sdm845_clocks[] = {
 	[GPU_CC_CXO_CLK] = &gpu_cc_cxo_clk.clkr,
 	[GPU_CC_CX_GMU_CLK] = &gpu_cc_cx_gmu_clk.clkr,
@@ -159,6 +204,14 @@ static const struct regmap_config gpu_cc_sdm845_regmap_config = {
 	.fast_io	= true,
 };
 
+static const struct qcom_cc_desc gpu_cc_sdm670_desc = {
+	.config = &gpu_cc_sdm845_regmap_config,
+	.clks = gpu_cc_sdm670_clocks,
+	.num_clks = ARRAY_SIZE(gpu_cc_sdm845_clocks),
+	.gdscs = gpu_cc_sdm845_gdscs,
+	.num_gdscs = ARRAY_SIZE(gpu_cc_sdm845_gdscs),
+};
+
 static const struct qcom_cc_desc gpu_cc_sdm845_desc = {
 	.config = &gpu_cc_sdm845_regmap_config,
 	.clks = gpu_cc_sdm845_clocks,
@@ -168,6 +221,7 @@ static const struct qcom_cc_desc gpu_cc_sdm845_desc = {
 };
 
 static const struct of_device_id gpu_cc_sdm845_match_table[] = {
+	{ .compatible = "qcom,sdm670-gpucc", .data = &gpu_cc_sdm670_desc },
 	{ .compatible = "qcom,sdm845-gpucc", .data = &gpu_cc_sdm845_desc },
 	{ }
 };
