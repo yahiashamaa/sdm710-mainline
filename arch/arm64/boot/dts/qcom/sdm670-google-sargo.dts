@@ -671,3 +671,8 @@
 	phy-names = "usb2-phy";
 	maximum-speed = "high-speed";
 };
+
+&venus {
+	firmware-name = "qcom/sdm670/sargo/venus.mbn";
+	status = "okay";
+};
