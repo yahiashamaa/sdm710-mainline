@@ -676,3 +676,8 @@
 		firmware-name = "qcom/sdm670/sargo/a615_zap.mbn";
 	};
 };
+
+&venus {
+	status = "okay";
+	firmware-name = "qcom/sdm670/sargo/venus.mbn";
+};
