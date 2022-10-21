@@ -404,6 +404,30 @@
 		};
 	};
 
+	qup_opp_table: opp-table-qup {
+		compatible = "operating-points-v2";
+
+		opp-50000000 {
+			opp-hz = /bits/ 64 <50000000>;
+			required-opps = <&rpmhpd_opp_min_svs>;
+		};
+
+		opp-75000000 {
+			opp-hz = /bits/ 64 <75000000>;
+			required-opps = <&rpmhpd_opp_low_svs>;
+		};
+
+		opp-100000000 {
+			opp-hz = /bits/ 64 <100000000>;
+			required-opps = <&rpmhpd_opp_svs>;
+		};
+
+		opp-128000000 {
+			opp-hz = /bits/ 64 <128000000>;
+			required-opps = <&rpmhpd_opp_nom>;
+		};
+	};
+
 	psci {
 		compatible = "arm,psci-1.0";
 		method = "smc";
@@ -846,6 +870,21 @@
 				status = "disabled";
 			};
 
+			uart6: serial@898000 {
+				compatible = "qcom,geni-uart";
+				reg = <0 0x00898000 0 0x4000>;
+				clock-names = "se";
+				clocks = <&gcc GCC_QUPV3_WRAP0_S6_CLK>;
+				pinctrl-names = "default";
+				pinctrl-0 = <&qup_uart6_default>;
+				interrupts = <GIC_SPI 607 IRQ_TYPE_LEVEL_HIGH>;
+				operating-points-v2 = <&qup_opp_table>;
+				power-domains = <&rpmhpd SDM670_CX>;
+				interconnects = <&aggre1_noc MASTER_BLSP_1 0 &config_noc SLAVE_BLSP_1 0>,
+						<&gladiator_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_BLSP_1 0>;
+				interconnect-names = "qup-core", "qup-config";
+			};
+
 			i2c7: i2c@89c000 {
 				compatible = "qcom,geni-i2c";
 				reg = <0 0x0089c000 0 0x4000>;
@@ -1166,6 +1205,34 @@
 			qup_i2c6_default: qup-i2c6-default-state {
 				pins = "gpio45", "gpio46";
 				function = "qup6";
+			};
+
+			qup_uart6_default: qup-uart6-default-state {
+				pins = "gpio47", "gpio48";
+				function = "qup6";
+				drive-strength = <2>;
+				bias-disable;
+			};
+
+			qup_uart6_4pin: qup-uart6-4pin-state {
+				cts-pins {
+					pins = "gpio45";
+					function = "qup6";
+					bias-pull-down;
+				};
+
+				rts-tx-pins {
+					pins = "gpio46", "gpio47";
+					function = "qup6";
+					drive-strength = <2>;
+					bias-disable;
+				};
+
+				rx-pins {
+					pins = "gpio48";
+					function = "qup6";
+					bias-pull-up;
+				};
 			};
 
 			qup_i2c7_default: qup-i2c7-default-state {

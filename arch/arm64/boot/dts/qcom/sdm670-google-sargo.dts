@@ -31,7 +31,9 @@
 	model = "Google Pixel 3a";
 	compatible = "google,sargo", "qcom,sdm670";
 
-	aliases { };
+	aliases {
+		hsuart0 = &uart6;
+	};
 
 	battery: battery {
 		compatible = "simple-battery";
@@ -450,6 +452,10 @@
 	status = "okay";
 };
 
+&gpi_dma0 {
+	status = "okay";
+};
+
 &gpi_dma1 {
 	status = "okay";
 };
@@ -555,6 +561,10 @@
 	status = "okay";
 };
 
+&qupv3_id_0 {
+	status = "okay";
+};
+
 &qupv3_id_1 {
 	status = "okay";
 };
@@ -646,6 +656,20 @@
 		drive-strength = <2>;
 		bias-disable;
 		output-low;
+	};
+};
+
+&uart6 {
+	pinctrl-0 = <&qup_uart6_4pin>;
+	status = "okay";
+
+	bluetooth {
+		compatible = "qcom,wcn3990-bt";
+		vddio-supply = <&vph_pwr>;
+		vddxo-supply = <&vreg_l9a_1p8>;
+		vddrf-supply = <&vreg_l6a_1p3>;
+		vddch0-supply = <&vreg_l19a_3p3>;
+		max-speed = <3200000>;
 	};
 };
 
