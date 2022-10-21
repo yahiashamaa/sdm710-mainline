@@ -817,6 +817,30 @@
 			};
 		};
 
+		qup_opp_table: qup-opp-table {
+			compatible = "operating-points-v2";
+
+			opp-50000000 {
+				opp-hz = /bits/ 64 <50000000>;
+				required-opps = <&rpmhpd_opp_min_svs>;
+			};
+
+			opp-75000000 {
+				opp-hz = /bits/ 64 <75000000>;
+				required-opps = <&rpmhpd_opp_low_svs>;
+			};
+
+			opp-100000000 {
+				opp-hz = /bits/ 64 <100000000>;
+				required-opps = <&rpmhpd_opp_svs>;
+			};
+
+			opp-128000000 {
+				opp-hz = /bits/ 64 <128000000>;
+				required-opps = <&rpmhpd_opp_nom>;
+			};
+		};
+
 		gpi_dma0: dma-controller@800000 {
 			#dma-cells = <3>;
 			compatible = "qcom,sdm670-gpi-dma", "qcom,sdm845-gpi-dma";
@@ -999,6 +1023,21 @@
 				       <&gpi_dma0 1 6 QCOM_GPI_I2C>;
 				dma-names = "tx", "rx";
 				status = "disabled";
+			};
+
+			uart6: serial@898000 {
+				compatible = "qcom,geni-uart";
+				reg = <0 0x00898000 0 0x4000>;
+				clock-names = "se";
+				clocks = <&gcc GCC_QUPV3_WRAP0_S6_CLK>;
+				pinctrl-names = "default";
+				pinctrl-0 = <&qup_uart6_default>;
+				interrupts = <GIC_SPI 607 IRQ_TYPE_LEVEL_HIGH>;
+				power-domains = <&rpmhpd SDM670_CX>;
+				operating-points-v2 = <&qup_opp_table>;
+				interconnects = <&aggre1_noc MASTER_QUP_1 0 &config_noc SLAVE_QUP_1 0>,
+						<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>;
+				interconnect-names = "qup-core", "qup-config";
 			};
 
 			i2c7: i2c@89c000 {
@@ -1321,6 +1360,13 @@
 			qup_i2c6_default: qup-i2c6-default-state {
 				pins = "gpio45", "gpio46";
 				function = "qup6";
+			};
+
+			qup_uart6_default: qup-uart6-default {
+				pinmux {
+					pins = "gpio47", "gpio48";
+					function = "qup6";
+				};
 			};
 
 			qup_i2c7_default: qup-i2c7-default-state {
