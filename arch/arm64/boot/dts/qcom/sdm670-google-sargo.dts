@@ -469,6 +469,28 @@
 	};
 };
 
+&i2c3 {
+	clock-frequency = <400000>;
+	status = "okay";
+
+	pn557@28 {
+		/*
+		 * The interface is actually NQ but this should work fine until
+		 * we add embedded secure element.
+		 */
+		compatible = "nxp,nxp-nci-i2c";
+		reg = <0x28>;
+
+		interrupts-extended = <&tlmm 44 IRQ_TYPE_LEVEL_HIGH>;
+
+		enable-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
+		firmware-gpios = <&tlmm 43 GPIO_ACTIVE_HIGH>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&nfc_default_state>;
+	};
+};
+
 &i2c9 {
 	clock-frequency = <100000>;
 	status = "okay";
@@ -656,6 +678,19 @@
 		drive-strength = <2>;
 		bias-disable;
 		output-low;
+	};
+
+	nfc_default_state: nfc-default-state {
+		/*
+		 * gpio12: enable
+		 * gpio43: firmware
+		 * gpio44: irq
+		 * gpio116: ese
+		 */
+		pins = "gpio12", "gpio43", "gpio44", "gpio116";
+		function = "gpio";
+		drive-strength = <2>;
+		bias-pull-down;
 	};
 };
 
