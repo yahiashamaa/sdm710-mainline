@@ -593,6 +593,11 @@
 	};
 };
 
+&ipa {
+	firmware-name = "qcom/sdm670/sargo/ipa_fws.mbn";
+	status = "okay";
+};
+
 &mdss {
 	status = "okay";
 };
