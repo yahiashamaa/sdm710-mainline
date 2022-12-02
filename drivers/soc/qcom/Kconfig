@@ -268,4 +268,15 @@ config QCOM_INLINE_CRYPTO_ENGINE
 	tristate
 	select QCOM_SCM
 
+config QCOM_MODEMSMEM
+	tristate "Modem Shared Memory"
+	depends on ARCH_QCOM || COMPILE_TEST
+	depends on OF
+	depends on QCOM_SMEM
+	help
+	  This binds to the modem's vendor interface and provides information
+	  about the SoC. Some devices' modems expect this.
+
+	  If unsure, say N (unless you want modem on a Google Pixel 3a).
+
 endmenu
