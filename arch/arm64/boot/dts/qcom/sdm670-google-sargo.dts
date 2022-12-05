@@ -782,3 +782,14 @@
 	firmware-name = "qcom/sdm670/sargo/venus.mbn";
 	status = "okay";
 };
+
+&wifi {
+	vdd-0.8-cx-mx-supply = <&vreg_l5a_0p848>;
+	vdd-1.8-xo-supply = <&vreg_l9a_1p8>;
+	vdd-1.3-rfa-supply = <&vreg_l6a_1p3>;
+	vdd-3.3-ch0-supply = <&vreg_l19a_3p3>;
+
+	qcom,snoc-host-cap-8bit-quirk;
+
+	status = "okay";
+};
