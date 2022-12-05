@@ -212,6 +212,12 @@ struct smem_image_version {
 struct qcom_socinfo {
 	struct soc_device *soc_dev;
 	struct soc_device_attribute attr;
+
+	/* Needed for modemsmem */
+	u32 hw_plat;
+	u32 plat_ver;
+	u32 hw_plat_subtype;
+
 #ifdef CONFIG_DEBUG_FS
 	struct dentry *dbg_root;
 	struct socinfo_params info;
@@ -752,6 +758,24 @@ static void socinfo_debugfs_init(struct qcom_socinfo *qcom_socinfo,
 static void socinfo_debugfs_exit(struct qcom_socinfo *qcom_socinfo) {  }
 #endif /* CONFIG_DEBUG_FS */
 
+u32 qcom_socinfo_get_hw_plat(struct platform_device *pdev)
+{
+	struct qcom_socinfo *qs = platform_get_drvdata(pdev);
+	return qs->hw_plat;
+}
+
+u32 qcom_socinfo_get_plat_ver(struct platform_device *pdev)
+{
+	struct qcom_socinfo *qs = platform_get_drvdata(pdev);
+	return qs->plat_ver;
+}
+
+u32 qcom_socinfo_get_hw_plat_subtype(struct platform_device *pdev)
+{
+	struct qcom_socinfo *qs = platform_get_drvdata(pdev);
+	return qs->hw_plat_subtype;
+}
+
 static int qcom_socinfo_probe(struct platform_device *pdev)
 {
 	struct qcom_socinfo *qs;
@@ -781,6 +805,21 @@ static int qcom_socinfo_probe(struct platform_device *pdev)
 		qs->attr.serial_number = devm_kasprintf(&pdev->dev, GFP_KERNEL,
 							"%u",
 							le32_to_cpu(info->serial_num));
+
+	if (SOCINFO_MAJOR(info->ver) > 0 || SOCINFO_MINOR(info->ver) >= 3)
+		qs->hw_plat = info->hw_plat;
+	else
+		qs->hw_plat = -ENOTSUPP;
+
+	if (SOCINFO_MAJOR(info->ver) > 0 || SOCINFO_MINOR(info->ver) >= 4)
+		qs->plat_ver = info->plat_ver;
+	else
+		qs->plat_ver = -ENOTSUPP;
+
+	if (SOCINFO_MAJOR(info->ver) > 0 || SOCINFO_MINOR(info->ver) >= 6)
+		qs->hw_plat_subtype = info->hw_plat_subtype;
+	else
+		qs->hw_plat_subtype = -ENOTSUPP;
 
 	qs->soc_dev = soc_device_register(&qs->attr);
 	if (IS_ERR(qs->soc_dev))
