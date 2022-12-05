@@ -188,6 +188,11 @@
 		regulator-min-microvolt = <1050000>;
 		regulator-max-microvolt = <1050000>;
 	};
+
+	modemsmem {
+		compatible = "google,modemsmem";
+		qcom,smem = <134>;
+	};
 };
 
 &apps_rsc {
