@@ -1030,6 +1030,13 @@ static int qcom_smem_resolve_mem(struct qcom_smem *smem, const char *name,
 	return 0;
 }
 
+#ifdef CONFIG_QCOM_SOCINFO
+struct platform_device *qcom_smem_get_socinfo(void)
+{
+	return __smem->socinfo;
+}
+#endif
+
 static int qcom_smem_probe(struct platform_device *pdev)
 {
 	struct smem_header *header;
