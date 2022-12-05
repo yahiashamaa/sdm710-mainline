@@ -88,6 +88,11 @@
 		};
 	};
 
+	modemsmem {
+		compatible = "google,modemsmem";
+		qcom,smem = <134>;
+	};
+
 	reserved-memory {
 		#address-cells = <2>;
 		#size-cells = <2>;
