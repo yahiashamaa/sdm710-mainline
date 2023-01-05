@@ -228,7 +228,7 @@ static inline void btrfs_cleanup_ordered_extents(struct btrfs_inode *inode,
 {
 	unsigned long index = offset >> PAGE_SHIFT;
 	unsigned long end_index = (offset + bytes - 1) >> PAGE_SHIFT;
-	u64 page_start, page_end;
+	u64 page_start = 0, page_end = 0;
 	struct page *page;
 
 	if (locked_page) {
@@ -5307,7 +5307,7 @@ static int btrfs_setattr(struct user_namespace *mnt_userns, struct dentry *dentr
 		err = btrfs_dirty_inode(BTRFS_I(inode));
 
 		if (!err && attr->ia_valid & ATTR_MODE)
-			err = posix_acl_chmod(mnt_userns, inode, inode->i_mode);
+			err = posix_acl_chmod(mnt_userns, dentry, inode->i_mode);
 	}
 
 	return err;
@@ -11362,7 +11362,7 @@ static const struct inode_operations btrfs_dir_inode_operations = {
 	.mknod		= btrfs_mknod,
 	.listxattr	= btrfs_listxattr,
 	.permission	= btrfs_permission,
-	.get_acl	= btrfs_get_acl,
+	.get_inode_acl	= btrfs_get_acl,
 	.set_acl	= btrfs_set_acl,
 	.update_time	= btrfs_update_time,
 	.tmpfile        = btrfs_tmpfile,
@@ -11415,7 +11415,7 @@ static const struct inode_operations btrfs_file_inode_operations = {
 	.listxattr      = btrfs_listxattr,
 	.permission	= btrfs_permission,
 	.fiemap		= btrfs_fiemap,
-	.get_acl	= btrfs_get_acl,
+	.get_inode_acl	= btrfs_get_acl,
 	.set_acl	= btrfs_set_acl,
 	.update_time	= btrfs_update_time,
 	.fileattr_get	= btrfs_fileattr_get,
@@ -11426,7 +11426,7 @@ static const struct inode_operations btrfs_special_inode_operations = {
 	.setattr	= btrfs_setattr,
 	.permission	= btrfs_permission,
 	.listxattr	= btrfs_listxattr,
-	.get_acl	= btrfs_get_acl,
+	.get_inode_acl	= btrfs_get_acl,
 	.set_acl	= btrfs_set_acl,
 	.update_time	= btrfs_update_time,
 };
