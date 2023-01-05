@@ -507,7 +507,7 @@ struct fb_info {
 		struct aperture {
 			resource_size_t base;
 			resource_size_t size;
-		} ranges[0];
+		} ranges[];
 	} *apertures;
 
 	bool skip_vt_switch; /* no VT switch on suspend/resume required */
