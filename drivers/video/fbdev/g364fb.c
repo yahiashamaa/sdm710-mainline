@@ -175,7 +175,8 @@ int __init g364fb_init(void)
 {
 	volatile unsigned int *curs_pal_ptr =
 	    (volatile unsigned int *) CURS_PAL_REG;
-	int mem, i;
+	int mem;
+	uintptr_t i;
 
 	if (fb_get_options("g364fb", NULL))
 		return -ENODEV;
