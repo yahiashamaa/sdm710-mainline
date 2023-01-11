@@ -685,17 +685,16 @@ module_exit(exit_nlm);
 /**
  * nlmsvc_dispatch - Process an NLM Request
  * @rqstp: incoming request
- * @statp: pointer to location of accept_stat field in RPC Reply buffer
  *
  * Return values:
  *  %0: Processing complete; do not send a Reply
  *  %1: Processing complete; send Reply in rqstp->rq_res
  */
-static int nlmsvc_dispatch(struct svc_rqst *rqstp, __be32 *statp)
+static int nlmsvc_dispatch(struct svc_rqst *rqstp)
 {
 	const struct svc_procedure *procp = rqstp->rq_procinfo;
+	__be32 *statp = rqstp->rq_accept_statp;
 
-	svcxdr_init_decode(rqstp);
 	if (!procp->pc_decode(rqstp, &rqstp->rq_arg_stream))
 		goto out_decode_err;
 
@@ -705,7 +704,6 @@ static int nlmsvc_dispatch(struct svc_rqst *rqstp, __be32 *statp)
 	if (*statp != rpc_success)
 		return 1;
 
-	svcxdr_init_encode(rqstp);
 	if (!procp->pc_encode(rqstp, &rqstp->rq_res_stream))
 		goto out_encode_err;
 
