@@ -1433,9 +1433,13 @@ static void __queue_work(int cpu, struct workqueue_struct *wq,
 	lockdep_assert_irqs_disabled();
 
 
-	/* if draining, only works from the same workqueue are allowed */
-	if (unlikely(wq->flags & __WQ_DRAINING) &&
-	    WARN_ON_ONCE(!is_chained_work(wq)))
+	/*
+	 * For a draining wq, only works from the same workqueue are
+	 * allowed. The __WQ_DESTROYING helps to spot the issue that
+	 * queues a new work item to a wq after destroy_workqueue(wq).
+	 */
+	if (unlikely(wq->flags & (__WQ_DESTROYING | __WQ_DRAINING) &&
+		     WARN_ON_ONCE(!is_chained_work(wq))))
 		return;
 	rcu_read_lock();
 retry:
@@ -4414,6 +4418,11 @@ void destroy_workqueue(struct workqueue_struct *wq)
 	 */
 	workqueue_sysfs_unregister(wq);
 
+	/* mark the workqueue destruction is in progress */
+	mutex_lock(&wq->mutex);
+	wq->flags |= __WQ_DESTROYING;
+	mutex_unlock(&wq->mutex);
+
 	/* drain it before proceeding with destruction */
 	drain_workqueue(wq);
 
@@ -4709,22 +4718,53 @@ static void pr_cont_pool_info(struct worker_pool *pool)
 	pr_cont(" flags=0x%x nice=%d", pool->flags, pool->attrs->nice);
 }
 
-static void pr_cont_work(bool comma, struct work_struct *work)
+struct pr_cont_work_struct {
+	bool comma;
+	work_func_t func;
+	long ctr;
+};
+
+static void pr_cont_work_flush(bool comma, work_func_t func, struct pr_cont_work_struct *pcwsp)
+{
+	if (!pcwsp->ctr)
+		goto out_record;
+	if (func == pcwsp->func) {
+		pcwsp->ctr++;
+		return;
+	}
+	if (pcwsp->ctr == 1)
+		pr_cont("%s %ps", pcwsp->comma ? "," : "", pcwsp->func);
+	else
+		pr_cont("%s %ld*%ps", pcwsp->comma ? "," : "", pcwsp->ctr, pcwsp->func);
+	pcwsp->ctr = 0;
+out_record:
+	if ((long)func == -1L)
+		return;
+	pcwsp->comma = comma;
+	pcwsp->func = func;
+	pcwsp->ctr = 1;
+}
+
+static void pr_cont_work(bool comma, struct work_struct *work, struct pr_cont_work_struct *pcwsp)
 {
 	if (work->func == wq_barrier_func) {
 		struct wq_barrier *barr;
 
 		barr = container_of(work, struct wq_barrier, work);
 
+		pr_cont_work_flush(comma, (work_func_t)-1, pcwsp);
 		pr_cont("%s BAR(%d)", comma ? "," : "",
 			task_pid_nr(barr->task));
 	} else {
-		pr_cont("%s %ps", comma ? "," : "", work->func);
+		if (!comma)
+			pr_cont_work_flush(comma, (work_func_t)-1, pcwsp);
+		pr_cont_work_flush(comma, work->func, pcwsp);
 	}
 }
 
 static void show_pwq(struct pool_workqueue *pwq)
 {
+	struct pr_cont_work_struct pcws = { .ctr = 0, };
 	struct worker_pool *pool = pwq->pool;
 	struct work_struct *work;
 	struct worker *worker;
@@ -4757,7 +4797,8 @@ static void show_pwq(struct pool_workqueue *pwq)
 				worker->rescue_wq ? "(RESCUER)" : "",
 				worker->current_func);
 			list_for_each_entry(work, &worker->scheduled, entry)
-				pr_cont_work(false, work);
+				pr_cont_work(false, work, &pcws);
+			pr_cont_work_flush(comma, (work_func_t)-1L, &pcws);
 			comma = true;
 		}
 		pr_cont("\n");
@@ -4777,9 +4818,10 @@ static void show_pwq(struct pool_workqueue *pwq)
 			if (get_work_pwq(work) != pwq)
 				continue;
 
-			pr_cont_work(comma, work);
+			pr_cont_work(comma, work, &pcws);
 			comma = !(*work_data_bits(work) & WORK_STRUCT_LINKED);
 		}
+		pr_cont_work_flush(comma, (work_func_t)-1L, &pcws);
 		pr_cont("\n");
 	}
 
@@ -4788,9 +4830,10 @@ static void show_pwq(struct pool_workqueue *pwq)
 
 		pr_info("    inactive:");
 		list_for_each_entry(work, &pwq->inactive_works, entry) {
-			pr_cont_work(comma, work);
+			pr_cont_work(comma, work, &pcws);
 			comma = !(*work_data_bits(work) & WORK_STRUCT_LINKED);
 		}
+		pr_cont_work_flush(comma, (work_func_t)-1L, &pcws);
 		pr_cont("\n");
 	}
 }
