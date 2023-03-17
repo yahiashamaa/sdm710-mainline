@@ -12,6 +12,7 @@
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
 #include <dt-bindings/power/qcom-rpmpd.h>
+#include <dt-bindings/sound/qcom,q6asm.h>
 #include "sdm670.dtsi"
 #include "pm660.dtsi"
 #include "pm660l.dtsi"
@@ -183,6 +184,24 @@
 		rmtfs_upper_guard: rmtfs-upper-guard@fc401000 {
 			reg = <0 0xfc401000 0 0x1000>;
 			no-map;
+		};
+	};
+
+	sound {
+		compatible = "qcom,sdm660-internal-sndcard";
+		model = "Google Pixel 3a";
+
+		pinctrl-0 = <&cdc_pdm_default>,
+			    <&cdc_comp_default>,
+			    <&cdc_dmic_default>;
+		pinctrl-names = "default";
+
+		mm1-dai-link {
+			link-name = "MultiMedia1";
+
+			cpu {
+				sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
+			};
 		};
 	};
 
@@ -656,6 +675,12 @@
 	monitored-battery = <&battery>;
 	power-supplies = <&pm660_charger>;
 	status = "okay";
+};
+
+&q6asmdai {
+	dai@0 {
+		reg = <0>;
+	};
 };
 
 &sdhc_1 {
