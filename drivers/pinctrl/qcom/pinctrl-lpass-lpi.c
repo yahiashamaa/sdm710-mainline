@@ -197,6 +197,9 @@ static int lpi_config_set(struct pinctrl_dev *pctldev, unsigned int group,
 			strength = arg;
 			break;
 		case PIN_CONFIG_SLEW_RATE:
+			if (IS_ERR(pctrl->slew_base))
+				return -EINVAL;
+
 			if (arg > LPI_SLEW_RATE_MAX) {
 				dev_err(pctldev->dev, "invalid slew rate %u for pin: %d\n",
 					arg, group);
@@ -406,9 +409,11 @@ int lpi_pinctrl_probe(struct platform_device *pdev)
 				     "TLMM resource not provided\n");
 
 	pctrl->slew_base = devm_platform_ioremap_resource(pdev, 1);
-	if (IS_ERR(pctrl->slew_base))
-		return dev_err_probe(dev, PTR_ERR(pctrl->slew_base),
-				     "Slew resource not provided\n");
+	if (IS_ERR(pctrl->slew_base)) {
+		dev_warn(dev, "Slew resource not provided: %ld\n",
+			      PTR_ERR(pctrl->slew_base));
+		pctrl->slew_base = NULL;
+	}
 
 	if (of_property_read_bool(dev->of_node, "qcom,adsp-bypass-mode"))
 		ret = devm_clk_bulk_get_optional(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
