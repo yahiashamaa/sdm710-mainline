@@ -12,6 +12,7 @@
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
 #include <dt-bindings/power/qcom-rpmpd.h>
+#include <dt-bindings/sound/qcom,q6afe.h>
 #include <dt-bindings/sound/qcom,q6asm.h>
 #include "sdm670.dtsi"
 #include "pm660.dtsi"
@@ -193,7 +194,8 @@
 
 		pinctrl-0 = <&cdc_pdm_default>,
 			    <&cdc_comp_default>,
-			    <&cdc_dmic_default>;
+			    <&cdc_dmic_default>,
+			    <&sec_tdm_default>;
 		pinctrl-names = "default";
 
 		mm1-dai-link {
@@ -201,6 +203,23 @@
 
 			cpu {
 				sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
+			};
+		};
+
+		sec-tdm-rx-link {
+			link-name = "Secondary TDM0 Playback";
+
+			cpu {
+				sound-dai = <&q6afedai SECONDARY_TDM_RX_0>;
+			};
+
+			platform {
+				sound-dai = <&q6routing>;
+			};
+
+			codec {
+				sound-dai = <&cs35l36_top 0>,
+					    <&cs35l36_bottom 0>;
 			};
 		};
 	};
@@ -590,6 +609,62 @@
 	status = "okay";
 	clock-frequency = <400000>;
 
+	cs35l36_top: cs35l36@40 {
+		/* top speaker - portrait left */
+		compatible = "cirrus,cs35l36";
+		reg = <0x40>;
+
+		cirrus,boost-ind-nanohenry = <1000>;
+		cirrus,boost-ctl-select = <0x01>;
+		cirrus,boost-ctl-millivolt = <10000>;
+		cirrus,boost-peak-milliamp = <2600>;
+		cirrus,weak-fet-delay = <0x04>;
+		cirrus,weak-fet-thld = <0x01>;
+		cirrus,temp-warn-threshold = <0x01>;
+		cirrus,multi-amp-mode;
+
+		cirrus,irq-drive-select = <0x01>;
+		cirrus,irq-gpio-select = <0x00>;
+
+		sound-name-prefix = "Top";
+
+		interrupts-extended = <&tlmm 80 IRQ_TYPE_LEVEL_HIGH>;
+
+		reset-gpios = <&tlmm 14 GPIO_ACTIVE_HIGH>;
+
+		pinctrl-0 = <&cs35l36_top_default>;
+		pinctrl-names = "default";
+
+		#sound-dai-cells = <1>;
+	};
+
+	cs35l36_bottom: cs35l36@41 {
+		/* bottom speaker - portrait right */
+		compatible = "cirrus,cs35l36";
+		reg = <0x41>;
+
+		cirrus,boost-ind-nanohenry = <1000>;
+		cirrus,boost-ctl-select = <0x01>;
+		cirrus,boost-ctl-millivolt = <10000>;
+		cirrus,boost-peak-milliamp = <2600>;
+		cirrus,temp-warn-threshold = <0x01>;
+		cirrus,multi-amp-mode;
+
+		cirrus,irq-drive-select = <0x01>;
+		cirrus,irq-gpio-select = <0x00>;
+
+		sound-name-prefix = "Bottom";
+
+		interrupts-extended = <&tlmm 79 IRQ_TYPE_LEVEL_HIGH>;
+
+		reset-gpios = <&tlmm 16 GPIO_ACTIVE_HIGH>;
+
+		pinctrl-0 = <&cs35l36_bottom_default>;
+		pinctrl-names = "default";
+
+		#sound-dai-cells = <1>;
+	};
+
 	drv2624@5a {
 		compatible = "ti,drv2624";
 		reg = <0x5a>;
@@ -620,6 +695,31 @@
 &ipa {
 	firmware-name = "qcom/sdm670/sargo/ipa_fws.mbn";
 	status = "okay";
+};
+
+&lpi_tlmm {
+	sec_tdm_default: sec-tdm-default-state {
+		misc-pins {
+			pins = "gpio8", "gpio9";
+			function = "sec_tdm";
+			drive-strength = <8>;
+			bias-disable;
+		};
+
+		din-pins {
+			pins = "gpio10";
+			function = "sec_tdm_din";
+			drive-strength = <8>;
+			bias-disable;
+		};
+
+		dout-pins {
+			pins = "gpio11";
+			function = "sec_tdm_dout";
+			drive-strength = <8>;
+			bias-disable;
+		};
+	};
 };
 
 &mdss {
@@ -677,6 +777,19 @@
 	status = "okay";
 };
 
+&q6afedai {
+	dai@28 {
+		reg = <SECONDARY_TDM_RX_0>;
+
+		qcom,tdm-sync-mode = <0>;
+		qcom,tdm-sync-src = <1>;
+		qcom,tdm-data-out = <0>;
+		qcom,tdm-invert-sync = <0>;
+		qcom,tdm-data-delay = <1>;
+		qcom,tdm-data-align = <0>;
+	};
+};
+
 &q6asmdai {
 	dai@0 {
 		reg = <0>;
@@ -699,6 +812,40 @@
 
 &tlmm {
 	gpio-reserved-ranges = <0 4>, <81 4>;
+
+	cs35l36_top_default: cs35l36-top-default-state {
+		reset-pins {
+			pins = "gpio14";
+			function = "gpio";
+			drive-strength = <2>;
+			output-high;
+		};
+
+		irq-pins {
+			pins = "gpio80";
+			function = "gpio";
+			drive-strength = <2>;
+			bias-pull-down;
+			input-enable;
+		};
+	};
+
+	cs35l36_bottom_default: cs35l36-bottom-default-state {
+		reset-pins {
+			pins = "gpio16";
+			function = "gpio";
+			drive-strength = <2>;
+			output-high;
+		};
+
+		irq-pins {
+			pins = "gpio79";
+			function = "gpio";
+			drive-strength = <2>;
+			bias-pull-down;
+			input-enable;
+		};
+	};
 
 	panel_default: panel-default-state {
 		te-pins {
