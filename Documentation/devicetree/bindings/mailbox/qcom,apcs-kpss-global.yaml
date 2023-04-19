@@ -30,6 +30,7 @@ properties:
               - qcom,sc7180-apss-shared
               - qcom,sc8180x-apss-shared
               - qcom,sdm660-apcs-hmss-global
+              - qcom,sdm670-apss-shared
               - qcom,sdm845-apss-shared
               - qcom,sm4250-apcs-hmss-global
               - qcom,sm6125-apcs-hmss-global
