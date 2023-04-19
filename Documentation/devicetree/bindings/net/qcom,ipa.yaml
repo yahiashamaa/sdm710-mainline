@@ -47,6 +47,7 @@ properties:
       - qcom,msm8998-ipa
       - qcom,sc7180-ipa
       - qcom,sc7280-ipa
+      - qcom,sdm670-ipa
       - qcom,sdm845-ipa
       - qcom,sdx55-ipa
       - qcom,sm6350-ipa
