@@ -2527,6 +2527,7 @@ static const struct of_device_id q6v5_of_match[] = {
 	{ .compatible = "qcom,sc7180-mss-pil", .data = &sc7180_mss},
 	{ .compatible = "qcom,sc7280-mss-pil", .data = &sc7280_mss},
 	{ .compatible = "qcom,sdm660-mss-pil", .data = &sdm660_mss},
+	{ .compatible = "qcom,sdm670-mss-pil", .data = &sdm845_mss},
 	{ .compatible = "qcom,sdm845-mss-pil", .data = &sdm845_mss},
 	{ },
 };
