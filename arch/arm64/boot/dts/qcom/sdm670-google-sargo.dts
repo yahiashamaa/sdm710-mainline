@@ -730,7 +730,7 @@
 };
 
 &mss_pil {
-	firmware-name = "qcom/sdm670/sargo/mba.mbn", "qcom/sdm670/sargo/modem.mbn";
+	firmware-name = "msm-firmware-loader/target/mba.mbn", "msm-firmware-loader/target/modem.mdt";
 	status = "okay";
 };
 
