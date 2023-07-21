@@ -734,6 +734,17 @@
 	status = "okay";
 };
 
+&pm660l_flash {
+	status = "okay";
+
+	led-0 {
+		led-sources = <1>, <2>;
+		led-max-microamp = <500000>;
+		flash-max-microamp = <1500000>;
+		flash-max-timeout-us = <1280000>;
+	};
+};
+
 &pm660l_gpios {
 	vol_up_pin: vol-up-state {
 		pins = "gpio7";
