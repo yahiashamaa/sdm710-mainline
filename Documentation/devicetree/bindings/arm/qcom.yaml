@@ -871,6 +871,7 @@ properties:
 
       - items:
           - enum:
+              - google,bonito-sdc
               - google,sargo
           - const: qcom,sdm670
 
