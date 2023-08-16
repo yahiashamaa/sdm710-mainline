@@ -856,7 +856,7 @@
 			function = "mdp_vsync";
 			drive-strength = <2>;
 			bias-pull-down;
-			input-enable;
+			output-disable;
 		};
 
 		reset-pins {
