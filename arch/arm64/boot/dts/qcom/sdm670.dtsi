@@ -2415,9 +2415,8 @@
 
 			qcom,qmp = <&aoss_qmp>;
 
-			qcom,smem-states = <&adsp_smp2p_out 0>,
-					   <&adsp_smp2p_out 12>;
-			qcom,smem-state-names = "stop", "wake";
+			qcom,smem-states = <&adsp_smp2p_out 0>;
+			qcom,smem-state-names = "stop";
 
 			status = "disabled";
 
