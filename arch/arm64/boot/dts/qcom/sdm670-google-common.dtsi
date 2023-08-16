@@ -829,7 +829,7 @@
 			function = "gpio";
 			drive-strength = <2>;
 			bias-pull-down;
-			input-enable;
+			output-disable;
 		};
 	};
 
@@ -846,7 +846,7 @@
 			function = "gpio";
 			drive-strength = <2>;
 			bias-pull-down;
-			input-enable;
+			output-disable;
 		};
 	};
 
