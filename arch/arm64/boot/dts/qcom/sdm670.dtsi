@@ -1863,7 +1863,7 @@
 		};
 
 		mdss: display-subsystem@ae00000 {
-			compatible = "qcom,sdm845-mdss";
+			compatible = "qcom,sdm670-mdss";
 			reg = <0 0x0ae00000 0 0x1000>;
 			reg-names = "mdss";
 
@@ -1891,7 +1891,7 @@
 			ranges;
 
 			mdss_mdp: display-controller@ae01000 {
-				compatible = "qcom,sdm845-dpu";
+				compatible = "qcom,sdm670-dpu";
 				reg = <0 0x0ae01000 0 0x8f000>,
 				      <0 0x0aeb0000 0 0x2008>;
 				reg-names = "mdp", "vbif";
