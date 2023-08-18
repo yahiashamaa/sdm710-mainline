@@ -55,6 +55,12 @@
 	};
 
 	clocks {
+		int_cdc_bclk: int-cdc-bclk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <1536000>;
+		};
+
 		sleep_clk: sleep-clk {
 			compatible = "fixed-clock";
 			#clock-cells = <0>;
@@ -185,7 +191,14 @@
 
 		pinctrl-names = "default";
 		pinctrl-0 = <&cdc_pdm_default>,
+			    <&cdc_dmic_default>,
 			    <&sec_tdm_default>;
+
+		audio-routing = "Analog PDM_RX1", "Digital PDM_RX1",
+				"Analog PDM_RX2", "Digital PDM_RX2",
+				"Analog PDM_RX3", "Digital PDM_RX3",
+				"Digital LPASS_PDM_TX", "Analog PDM_TX",
+				"Analog AMIC2", "Analog MIC BIAS External2";
 
 		mm1-dai-link {
 			link-name = "MultiMedia1";
@@ -225,6 +238,40 @@
 			codec {
 				sound-dai = <&cs35l36_top 0>,
 					    <&cs35l36_bottom 0>;
+			};
+		};
+
+		int0-mi2s-rx-link {
+			link-name = "Internal MI2S Playback";
+
+			cpu {
+				sound-dai = <&q6afedai INT0_MI2S_RX>;
+			};
+
+			platform {
+				sound-dai = <&q6routing>;
+			};
+
+			codec {
+				sound-dai = <&pm660l_codec 0>,
+					    <&lpass_codec 0>;
+			};
+		};
+
+		int3-mi2s-tx-link {
+			link-name = "Internal MI2S Capture";
+
+			cpu {
+				sound-dai = <&q6afedai INT3_MI2S_TX>;
+			};
+
+			platform {
+				sound-dai = <&q6routing>;
+			};
+
+			codec {
+				sound-dai = <&pm660l_codec 1>,
+					    <&lpass_codec 1>;
 			};
 		};
 	};
@@ -665,6 +712,17 @@
 	status = "okay";
 };
 
+&lpass_codec {
+	clocks = <&q6afecc LPASS_CLK_ID_INT_MCLK_0 LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+		 <&int_cdc_bclk>;
+	clock-names = "mclk", "ahbix-clk";
+
+	assigned-clocks = <&q6afecc LPASS_CLK_ID_INT_MCLK_0 LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+	assigned-clock-rates = <9600000>;
+
+	status = "okay";
+};
+
 &lpi_tlmm {
 	sec_tdm_default: sec-tdm-default-state {
 		misc-pins {
@@ -753,6 +811,22 @@
 	status = "okay";
 };
 
+&pm660l_codec {
+	clocks = <&q6afecc LPASS_CLK_ID_INT_MCLK_0 LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+	clock-names = "mclk";
+
+	assigned-clocks = <&q6afecc LPASS_CLK_ID_INT_MCLK_0 LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+	assigned-clock-rates = <9600000>;
+
+	vdd-cdc-io-supply = <&vreg_l10a_1p8>;
+	vdd-cdc-tx-rx-cx-supply = <&vreg_l1b_0p925>;
+	vdd-micbias-supply = <&vreg_l7b_3p125>;
+
+	qcom,micbias-lvl = <2500>;
+
+	status = "okay";
+};
+
 &pm660l_gpios {
 	vol_up_pin: vol-up-state {
 		pins = "gpio7";
@@ -790,6 +864,16 @@
 		qcom,tdm-invert-sync = <0>;
 		qcom,tdm-data-delay = <1>;
 		qcom,tdm-data-align = <0>;
+	};
+
+	dai@81 {
+		reg = <INT0_MI2S_RX>;
+		qcom,sd-lines = <0 1>;
+	};
+
+	dai@88 {
+		reg = <INT3_MI2S_TX>;
+		qcom,sd-lines = <0 1>;
 	};
 };
 
