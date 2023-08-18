@@ -185,8 +185,6 @@
 		model = "Google Pixel 3a";
 
 		pinctrl-0 = <&cdc_pdm_default>,
-			    <&cdc_comp_default>,
-			    <&cdc_dmic_default>,
 			    <&sec_tdm_default>;
 		pinctrl-names = "default";
 
@@ -195,6 +193,14 @@
 
 			cpu {
 				sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
+			};
+		};
+
+		mm2-dai-link {
+			link-name = "MultiMedia2";
+
+			cpu {
+				sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA2>;
 			};
 		};
 
@@ -796,6 +802,10 @@
 &q6asmdai {
 	dai@0 {
 		reg = <0>;
+	};
+
+	dai@1 {
+		reg = <1>;
 	};
 };
 
