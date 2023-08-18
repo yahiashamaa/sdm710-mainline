@@ -131,6 +131,20 @@
 #define RX_CODEC_DMA_RX_7	126
 #define QUINARY_MI2S_RX		127
 #define QUINARY_MI2S_TX		128
+#define INT0_MI2S_RX		129
+#define INT0_MI2S_TX		130
+#define INT1_MI2S_RX		131
+#define INT1_MI2S_TX		132
+#define INT2_MI2S_RX		133
+#define INT2_MI2S_TX		134
+#define INT3_MI2S_RX		135
+#define INT3_MI2S_TX		136
+#define INT4_MI2S_RX		137
+#define INT4_MI2S_TX		138
+#define INT5_MI2S_RX		130
+#define INT5_MI2S_TX		141
+#define INT6_MI2S_RX		142
+#define INT6_MI2S_TX		143
 
 #define LPASS_CLK_ID_PRI_MI2S_IBIT	1
 #define LPASS_CLK_ID_PRI_MI2S_EBIT	2
