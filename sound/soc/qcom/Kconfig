@@ -154,6 +154,8 @@ config SND_SOC_MSM8996
 config SND_SOC_SDM660_INT
 	tristate "SoC Machine driver for SDM660 and SDM670 boards"
 	depends on QCOM_APR
+	depends on OF
+	depends on PM
 	help
 	  This adds support for audio on Qualcomm Technologies Inc. SDM660
 	  and SDM670 SoC-based systems.
