@@ -62,6 +62,12 @@
 			clock-frequency = <32764>;
 		};
 
+		int0_mclk: int0-mclk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <9600000>;
+		};
+
 		xo_board: xo-board {
 			compatible = "fixed-clock";
 			#clock-cells = <0>;
@@ -188,6 +194,10 @@
 			    <&sec_tdm_default>;
 		pinctrl-names = "default";
 
+		audio-routing = "PDM_IN_RX1", "PDM_OUT_RX1",
+				"PDM_IN_RX2", "PDM_OUT_RX2",
+				"PDM_IN_RX3", "PDM_OUT_RX3";
+
 		mm1-dai-link {
 			link-name = "MultiMedia1";
 
@@ -218,6 +228,23 @@
 			codec {
 				sound-dai = <&cs35l36_top 0>,
 					    <&cs35l36_bottom 0>;
+			};
+		};
+
+		int0-mi2s-tx-link {
+			link-name = "Internal MI2S Capture";
+
+			cpu {
+				sound-dai = <&q6afedai INT0_MI2S_RX>;
+			};
+
+			platform {
+				sound-dai = <&q6routing>;
+			};
+
+			codec {
+				sound-dai = <&pm660l_analog_codec 0>,
+					    <&sdm660_digital_codec 0>;
 			};
 		};
 	};
@@ -771,6 +798,13 @@
 	status = "okay";
 };
 
+&pm660l_analog_codec {
+	vdd-cdc-io-supply = <&vreg_l10a_1p8>;
+	vdd-cdc-tx-rx-cx-supply = <&vreg_l1b_0p925>;
+	vdd-micbias-supply = <&vreg_l7b_3p125>;
+	status = "okay";
+};
+
 &pm660_rradc {
 	status = "okay";
 };
@@ -797,6 +831,11 @@
 		qcom,tdm-data-delay = <1>;
 		qcom,tdm-data-align = <0>;
 	};
+
+	dai@81 {
+		reg = <INT0_MI2S_RX>;
+		qcom,sd-lines = <0 1>;
+	};
 };
 
 &q6asmdai {
@@ -821,6 +860,11 @@
 	vqmmc-supply = <&vreg_l8a_1p8>;
 
 	status = "okay";
+};
+
+&sdm660_digital_codec {
+	clocks = <&int0_mclk>;
+	clock-names = "mclk";
 };
 
 &tlmm {
