@@ -2593,5 +2593,11 @@
 				output-high;
 			};
 		};
+
+		sdm660_digital_codec: audio-codec@62ec0000 {
+			compatible = "qcom,sdm660-wcd-digital-codec";
+			reg = <0 0x62ec0000 0 0x400>;
+			#sound-dai-cells = <1>;
+		};
 	};
 };
