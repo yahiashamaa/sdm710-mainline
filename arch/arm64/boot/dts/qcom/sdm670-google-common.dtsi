@@ -231,8 +231,8 @@
 			};
 		};
 
-		int0-mi2s-tx-link {
-			link-name = "Internal MI2S Capture";
+		int0-mi2s-rx-link {
+			link-name = "Internal MI2S Playback";
 
 			cpu {
 				sound-dai = <&q6afedai INT0_MI2S_RX>;
