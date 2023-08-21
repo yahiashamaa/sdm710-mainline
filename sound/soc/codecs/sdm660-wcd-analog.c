@@ -301,9 +301,7 @@ struct pm660l_wcd_analog_priv {
 	/* special event to detect accessory type */
 	int	mbhc_btn0_released;
 	bool	detect_accessory_type;
-#if 0
 	struct clk *mclk;
-#endif
 	struct snd_soc_component *component;
 	struct regulator_bulk_data supplies[ARRAY_SIZE(supply_names)];
 	struct snd_soc_jack *jack;
@@ -1261,13 +1259,11 @@ static int pm660l_wcd_analog_spmi_probe(struct platform_device *pdev)
 	if (ret < 0)
 		return ret;
 
-#if 0
 	priv->mclk = devm_clk_get(dev, "mclk");
 	if (IS_ERR(priv->mclk)) {
 		dev_err(dev, "failed to get mclk\n");
 		return PTR_ERR(priv->mclk);
 	}
-#endif
 
 	for (i = 0; i < ARRAY_SIZE(supply_names); i++)
 		priv->supplies[i].supply = supply_names[i];
@@ -1279,13 +1275,11 @@ static int pm660l_wcd_analog_spmi_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-#if 0
 	ret = clk_prepare_enable(priv->mclk);
 	if (ret < 0) {
 		dev_err(dev, "failed to enable mclk %d\n", ret);
 		return ret;
 	}
-#endif
 
 	irq = platform_get_irq_byname(pdev, "mbhc_switch_int");
 	if (irq < 0) {
@@ -1339,19 +1333,15 @@ static int pm660l_wcd_analog_spmi_probe(struct platform_device *pdev)
 				      ARRAY_SIZE(pm660l_wcd_analog_dai));
 
 err_disable_clk:
-#if 0
 	clk_disable_unprepare(priv->mclk);
-#endif
 	return ret;
 }
 
 static void pm660l_wcd_analog_spmi_remove(struct platform_device *pdev)
 {
-#if 0
 	struct pm660l_wcd_analog_priv *priv = dev_get_drvdata(&pdev->dev);
 
 	clk_disable_unprepare(priv->mclk);
-#endif
 }
 
 static const struct of_device_id pm660l_wcd_analog_spmi_match_table[] = {
