@@ -195,11 +195,11 @@
 			    <&sec_tdm_default>;
 		pinctrl-names = "default";
 
-		audio-routing = "PDM_IN_RX1", "PDM_OUT_RX1",
-				"PDM_IN_RX2", "PDM_OUT_RX2",
-				"PDM_IN_RX3", "PDM_OUT_RX3",
-				"LPASS_PDM_TX", "PDM_TX",
-				"AMIC2", "MIC BIAS External2";
+		audio-routing = "Analog PDM_RX1", "Digital PDM_RX1",
+				"Analog PDM_RX2", "Digital PDM_RX2",
+				"Analog PDM_RX3", "Digital PDM_RX3",
+				"Digital LPASS_PDM_TX", "Analog PDM_TX",
+				"Analog AMIC2", "Analog MIC BIAS External2";
 
 		mm1-dai-link {
 			link-name = "MultiMedia1";
