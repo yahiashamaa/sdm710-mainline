@@ -214,6 +214,14 @@
 			};
 		};
 
+		mm3-dai-link {
+			link-name = "MultiMedia3";
+
+			cpu {
+				sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA3>;
+			};
+		};
+
 		sec-tdm-rx-link {
 			link-name = "Secondary TDM0 Playback";
 
@@ -845,6 +853,10 @@
 
 	dai@1 {
 		reg = <1>;
+	};
+
+	dai@2 {
+		reg = <2>;
 	};
 };
 
