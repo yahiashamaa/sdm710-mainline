@@ -191,12 +191,15 @@
 		model = "Google Pixel 3a";
 
 		pinctrl-0 = <&cdc_pdm_default>,
+			    <&cdc_dmic_default>,
 			    <&sec_tdm_default>;
 		pinctrl-names = "default";
 
 		audio-routing = "PDM_IN_RX1", "PDM_OUT_RX1",
 				"PDM_IN_RX2", "PDM_OUT_RX2",
-				"PDM_IN_RX3", "PDM_OUT_RX3";
+				"PDM_IN_RX3", "PDM_OUT_RX3",
+				"LPASS_PDM_TX", "PDM_TX",
+				"AMIC2", "MIC BIAS External2";
 
 		mm1-dai-link {
 			link-name = "MultiMedia1";
@@ -253,6 +256,23 @@
 			codec {
 				sound-dai = <&pm660l_analog_codec 0>,
 					    <&sdm660_digital_codec 0>;
+			};
+		};
+
+		int3-mi2s-tx-link {
+			link-name = "Internal MI2S Capture";
+
+			cpu {
+				sound-dai = <&q6afedai INT3_MI2S_TX>;
+			};
+
+			platform {
+				sound-dai = <&q6routing>;
+			};
+
+			codec {
+				sound-dai = <&pm660l_analog_codec 1>,
+					    <&sdm660_digital_codec 1>;
 			};
 		};
 	};
@@ -641,7 +661,7 @@
 	status = "okay";
 	clock-frequency = <400000>;
 
-	cs35l36_top: cs35l36@40 {
+	cs35l36_top: audio-codec@40 {
 		/* top speaker - portrait left */
 		compatible = "cirrus,cs35l36";
 		reg = <0x40>;
@@ -670,7 +690,7 @@
 		#sound-dai-cells = <1>;
 	};
 
-	cs35l36_bottom: cs35l36@41 {
+	cs35l36_bottom: audio-codec@41 {
 		/* bottom speaker - portrait right */
 		compatible = "cirrus,cs35l36";
 		reg = <0x41>;
@@ -807,9 +827,15 @@
 };
 
 &pm660l_analog_codec {
+	clocks = <&int0_mclk>;
+	clock-names = "mclk";
+
 	vdd-cdc-io-supply = <&vreg_l10a_1p8>;
 	vdd-cdc-tx-rx-cx-supply = <&vreg_l1b_0p925>;
 	vdd-micbias-supply = <&vreg_l7b_3p125>;
+
+	qcom,micbias-lvl = <2500>;
+
 	status = "okay";
 };
 
@@ -842,6 +868,11 @@
 
 	dai@81 {
 		reg = <INT0_MI2S_RX>;
+		qcom,sd-lines = <0 1>;
+	};
+
+	dai@88 {
+		reg = <INT3_MI2S_TX>;
 		qcom,sd-lines = <0 1>;
 	};
 };
