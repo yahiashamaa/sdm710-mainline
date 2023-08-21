@@ -817,9 +817,9 @@ static void pm660l_wcd_analog_remove(struct snd_soc_component *component)
 
 static const struct snd_soc_dapm_route pm660l_wcd_analog_audio_map[] = {
 
-	{"PDM_IN_RX1", NULL, "PDM Playback"},
-	{"PDM_IN_RX2", NULL, "PDM Playback"},
-	{"PDM_IN_RX3", NULL, "PDM Playback"},
+	{"PDM_RX1", NULL, "PDM Playback"},
+	{"PDM_RX2", NULL, "PDM Playback"},
+	{"PDM_RX3", NULL, "PDM Playback"},
 	{"PDM Capture", NULL, "PDM_TX"},
 
 	/* ADC Connections */
@@ -837,16 +837,16 @@ static const struct snd_soc_dapm_route pm660l_wcd_analog_audio_map[] = {
 
 	/* RDAC Connections */
 	{"HPHR DAC", NULL, "RDAC2 MUX"},
-	{"RDAC2 MUX", "RX1", "PDM_IN_RX1"},
-	{"RDAC2 MUX", "RX2", "PDM_IN_RX2"},
-	{"HPHL DAC", NULL, "PDM_IN_RX1"},
-	{"PDM_IN_RX1", NULL, "RXD1_CLK"},
-	{"PDM_IN_RX2", NULL, "RXD2_CLK"},
-	{"PDM_IN_RX3", NULL, "RXD3_CLK"},
+	{"RDAC2 MUX", "RX1", "PDM_RX1"},
+	{"RDAC2 MUX", "RX2", "PDM_RX2"},
+	{"HPHL DAC", NULL, "PDM_RX1"},
+	{"PDM_RX1", NULL, "RXD1_CLK"},
+	{"PDM_RX2", NULL, "RXD2_CLK"},
+	{"PDM_RX3", NULL, "RXD3_CLK"},
 
-	{"PDM_IN_RX1", NULL, "RXD_PDM_CLK"},
-	{"PDM_IN_RX2", NULL, "RXD_PDM_CLK"},
-	{"PDM_IN_RX3", NULL, "RXD_PDM_CLK"},
+	{"PDM_RX1", NULL, "RXD_PDM_CLK"},
+	{"PDM_RX2", NULL, "RXD_PDM_CLK"},
+	{"PDM_RX3", NULL, "RXD_PDM_CLK"},
 
 	{"ADC1", NULL, "TXD_CLK"},
 	{"ADC2", NULL, "TXD_CLK"},
@@ -856,9 +856,9 @@ static const struct snd_soc_dapm_route pm660l_wcd_analog_audio_map[] = {
 	{"ADC2", NULL, "TXA_CLK25"},
 	{"ADC3", NULL, "TXA_CLK25"},
 
-	{"PDM_IN_RX1", NULL, "A_MCLK2"},
-	{"PDM_IN_RX2", NULL, "A_MCLK2"},
-	{"PDM_IN_RX3", NULL, "A_MCLK2"},
+	{"PDM_RX1", NULL, "A_MCLK2"},
+	{"PDM_RX2", NULL, "A_MCLK2"},
+	{"PDM_RX3", NULL, "A_MCLK2"},
 
 	{"PDM_TX", NULL, "A_MCLK2"},
 	{"A_MCLK2", NULL, "A_MCLK"},
@@ -895,7 +895,7 @@ static const struct snd_soc_dapm_route pm660l_wcd_analog_audio_map[] = {
 	{"SPK PA", NULL, "RX_BIAS"},
 	{"SPK PA", NULL, "SPKR_CLK"},
 	{"SPK PA", NULL, "SPK DAC"},
-	{"SPK DAC", "Switch", "PDM_IN_RX3"},
+	{"SPK DAC", "Switch", "PDM_RX3"},
 
 	{"MIC_BIAS1", NULL, "INT_LDO_H"},
 	{"MIC_BIAS2", NULL, "INT_LDO_H"},
@@ -911,9 +911,9 @@ static const struct snd_soc_dapm_route pm660l_wcd_analog_audio_map[] = {
 
 static const struct snd_soc_dapm_widget pm660l_wcd_analog_dapm_widgets[] = {
 
-	SND_SOC_DAPM_AIF_IN("PDM_IN_RX1", NULL, 0, SND_SOC_NOPM, 0, 0),
-	SND_SOC_DAPM_AIF_IN("PDM_IN_RX2", NULL, 0, SND_SOC_NOPM, 0, 0),
-	SND_SOC_DAPM_AIF_IN("PDM_IN_RX3", NULL, 0, SND_SOC_NOPM, 0, 0),
+	SND_SOC_DAPM_AIF_IN("PDM_RX1", NULL, 0, SND_SOC_NOPM, 0, 0),
+	SND_SOC_DAPM_AIF_IN("PDM_RX2", NULL, 0, SND_SOC_NOPM, 0, 0),
+	SND_SOC_DAPM_AIF_IN("PDM_RX3", NULL, 0, SND_SOC_NOPM, 0, 0),
 	SND_SOC_DAPM_AIF_OUT("PDM_TX", NULL, 0, SND_SOC_NOPM, 0, 0),
 
 	SND_SOC_DAPM_INPUT("AMIC1"),

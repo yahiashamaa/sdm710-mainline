@@ -726,9 +726,9 @@ static const struct snd_soc_dapm_widget sdm660_wcd_digital_dapm_widgets[] = {
 	SND_SOC_DAPM_AIF_IN("I2S RX2", NULL, 0, SND_SOC_NOPM, 0, 0),
 	SND_SOC_DAPM_AIF_IN("I2S RX3", NULL, 0, SND_SOC_NOPM, 0, 0),
 
-	SND_SOC_DAPM_OUTPUT("PDM_OUT_RX1"),
-	SND_SOC_DAPM_OUTPUT("PDM_OUT_RX2"),
-	SND_SOC_DAPM_OUTPUT("PDM_OUT_RX3"),
+	SND_SOC_DAPM_OUTPUT("PDM_RX1"),
+	SND_SOC_DAPM_OUTPUT("PDM_RX2"),
+	SND_SOC_DAPM_OUTPUT("PDM_RX3"),
 
 	SND_SOC_DAPM_INPUT("LPASS_PDM_TX"),
 
@@ -985,7 +985,7 @@ static const struct snd_soc_dapm_route sdm660_wcd_digital_audio_map[] = {
 	{"RX_I2S_CLK", NULL, "CDC_CONN"},
 
 	/* RX1 PATH.. */
-	{"PDM_OUT_RX1", NULL, "RX1 INT"},
+	{"PDM_RX1", NULL, "RX1 INT"},
 	{"RX1 INT", NULL, "RX1 MIX1"},
 
 	{"RX1 MIX1", NULL, "RX1 MIX1 INP1"},
@@ -1009,7 +1009,7 @@ static const struct snd_soc_dapm_route sdm660_wcd_digital_audio_map[] = {
 	{"RX1 MIX1 INP3", "RX3", "I2S RX3"},
 
 	/* RX2 PATH */
-	{"PDM_OUT_RX2", NULL, "RX2 INT"},
+	{"PDM_RX2", NULL, "RX2 INT"},
 	{"RX2 INT", NULL, "RX2 MIX1"},
 
 	{"RX2 MIX1", NULL, "RX2 MIX1 INP1"},
@@ -1033,7 +1033,7 @@ static const struct snd_soc_dapm_route sdm660_wcd_digital_audio_map[] = {
 	{"RX2 MIX1 INP3", "RX3", "I2S RX3"},
 
 	/* RX3 PATH */
-	{"PDM_OUT_RX3", NULL, "RX3 INT"},
+	{"PDM_RX3", NULL, "RX3 INT"},
 	{"RX3 INT", NULL, "RX3 MIX1"},
 
 	{"RX3 MIX1", NULL, "RX3 MIX1 INP1"},
