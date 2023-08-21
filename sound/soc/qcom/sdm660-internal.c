@@ -269,7 +269,7 @@ static int sdm660_int_dai_init(struct snd_soc_pcm_runtime *rtd)
 	case INT0_MI2S_RX:
 		jack = data->jack.jack;
 
-		jack->private_data = codec;
+		jack->private_data = codec->component;
 		jack->private_free = sdm660_int_jack_free;
 
 		ret = snd_soc_component_set_jack(codec->component,
