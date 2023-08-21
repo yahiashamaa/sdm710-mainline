@@ -119,8 +119,10 @@
 					  "cdc_hphr_cnp_int",
 					  "cdc_hphl_cnp_int";
 			qcom,hphl-jack-type-normally-open;
+			qcom,gnd-jack-type-normally-open;
 			qcom,mbhc-vthreshold-low = <75 150 237 437 437>;
 			qcom,mbhc-vthreshold-high = <75 150 237 437 437>;
+			qcom,micbias2-ext-cap;
 			#sound-dai-cells = <1>;
 			status = "disabled";
 		};
