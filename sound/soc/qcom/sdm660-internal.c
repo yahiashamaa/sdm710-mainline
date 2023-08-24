@@ -135,10 +135,12 @@ static void snd_sdm660_int_shutdown(struct snd_pcm_substream *stream)
 				0, SNDRV_PCM_STREAM_PLAYBACK);
 
 		data->int_mclk0_count--;
+#if 0
 		if (data->int_mclk0_count == 0)
 			snd_soc_dai_set_sysclk(cpu,
 				Q6AFE_LPASS_CLK_ID_INT_MCLK_0,
 				0, SNDRV_PCM_STREAM_PLAYBACK);
+#endif
 
 		break;
 	case INT3_MI2S_TX:
@@ -149,10 +151,12 @@ static void snd_sdm660_int_shutdown(struct snd_pcm_substream *stream)
 				0, SNDRV_PCM_STREAM_PLAYBACK);
 
 		data->int_mclk0_count--;
+#if 0
 		if (data->int_mclk0_count == 0)
 			snd_soc_dai_set_sysclk(cpu,
 				Q6AFE_LPASS_CLK_ID_INT_MCLK_0,
 				0, SNDRV_PCM_STREAM_PLAYBACK);
+#endif
 
 		break;
 	default:
