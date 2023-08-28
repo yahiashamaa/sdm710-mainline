@@ -30,7 +30,6 @@ struct sdm660_int_snd_data {
 	uint32_t sec_tdm_clk_count;
 	uint32_t int0_mi2s_clk_count;
 	uint32_t int3_mi2s_clk_count;
-	uint32_t int_mclk0_count;
 };
 
 static int snd_sdm660_int_startup(struct snd_pcm_substream *stream)
@@ -69,12 +68,6 @@ static int snd_sdm660_int_startup(struct snd_pcm_substream *stream)
 				Q6AFE_LPASS_CLK_ID_INT0_MI2S_IBIT,
 				MI2S_BCLK_RATE, SNDRV_PCM_STREAM_PLAYBACK);
 
-		data->int_mclk0_count++;
-		if (data->int_mclk0_count == 1)
-			snd_soc_dai_set_sysclk(cpu,
-				Q6AFE_LPASS_CLK_ID_INT_MCLK_0,
-				DEFAULT_INT_MCLK_RATE, SNDRV_PCM_STREAM_PLAYBACK);
-
 		/*
 		 * Downstream specifies that the AFE is a clock consumer, but
 		 * the sound is distorted (loud on the right channel and sped
@@ -89,12 +82,6 @@ static int snd_sdm660_int_startup(struct snd_pcm_substream *stream)
 			snd_soc_dai_set_sysclk(cpu,
 				Q6AFE_LPASS_CLK_ID_INT3_MI2S_IBIT,
 				MI2S_BCLK_RATE, SNDRV_PCM_STREAM_PLAYBACK);
-
-		data->int_mclk0_count++;
-		if (data->int_mclk0_count == 1)
-			snd_soc_dai_set_sysclk(cpu,
-				Q6AFE_LPASS_CLK_ID_INT_MCLK_0,
-				DEFAULT_INT_MCLK_RATE, SNDRV_PCM_STREAM_PLAYBACK);
 
 		/*
 		 * Downstream specifies that the AFE is a clock consumer, but
@@ -134,14 +121,6 @@ static void snd_sdm660_int_shutdown(struct snd_pcm_substream *stream)
 				Q6AFE_LPASS_CLK_ID_INT0_MI2S_IBIT,
 				0, SNDRV_PCM_STREAM_PLAYBACK);
 
-		data->int_mclk0_count--;
-#if 0
-		if (data->int_mclk0_count == 0)
-			snd_soc_dai_set_sysclk(cpu,
-				Q6AFE_LPASS_CLK_ID_INT_MCLK_0,
-				0, SNDRV_PCM_STREAM_PLAYBACK);
-#endif
-
 		break;
 	case INT3_MI2S_TX:
 		data->int3_mi2s_clk_count--;
@@ -149,14 +128,6 @@ static void snd_sdm660_int_shutdown(struct snd_pcm_substream *stream)
 			snd_soc_dai_set_sysclk(cpu,
 				Q6AFE_LPASS_CLK_ID_INT3_MI2S_IBIT,
 				0, SNDRV_PCM_STREAM_PLAYBACK);
-
-		data->int_mclk0_count--;
-#if 0
-		if (data->int_mclk0_count == 0)
-			snd_soc_dai_set_sysclk(cpu,
-				Q6AFE_LPASS_CLK_ID_INT_MCLK_0,
-				0, SNDRV_PCM_STREAM_PLAYBACK);
-#endif
 
 		break;
 	default:
