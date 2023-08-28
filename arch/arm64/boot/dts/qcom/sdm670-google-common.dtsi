@@ -62,12 +62,6 @@
 			clock-frequency = <32764>;
 		};
 
-		int0_mclk: int0-mclk {
-			compatible = "fixed-clock";
-			#clock-cells = <0>;
-			clock-frequency = <9600000>;
-		};
-
 		xo_board: xo-board {
 			compatible = "fixed-clock";
 			#clock-cells = <0>;
@@ -827,8 +821,11 @@
 };
 
 &pm660l_analog_codec {
-	clocks = <&int0_mclk>;
+	clocks = <&q6afecc LPASS_CLK_ID_INT_MCLK_0 LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
 	clock-names = "mclk";
+
+	assigned-clocks = <&q6afecc LPASS_CLK_ID_INT_MCLK_0 LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+	assigned-clock-rates = <9600000>;
 
 	vdd-cdc-io-supply = <&vreg_l10a_1p8>;
 	vdd-cdc-tx-rx-cx-supply = <&vreg_l1b_0p925>;
@@ -906,8 +903,10 @@
 };
 
 &sdm660_digital_codec {
-	clocks = <&int0_mclk>;
-	clock-names = "mclk";
+	assigned-clocks = <&q6afecc LPASS_CLK_ID_INT_MCLK_0 LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+	assigned-clock-rates = <9600000>;
+
+	status = "okay";
 };
 
 &tlmm {
