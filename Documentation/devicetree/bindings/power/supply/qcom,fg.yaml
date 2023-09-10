@@ -35,7 +35,7 @@ allOf:
       properties:
         compatible:
           enum:
-            - qcom,pm8994-fg
+            - qcom,pmi8994-fg
 
     then:
       properties:
@@ -53,7 +53,7 @@ allOf:
       properties:
         compatible:
           enum:
-            - qcom,pm8998-fg
+            - qcom,pmi8998-fg
 
     then:
       properties:
