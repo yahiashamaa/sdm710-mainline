@@ -77,21 +77,33 @@ static int q6voice_dai_open(struct snd_soc_component *component,
 	return 0;
 }
 
-static int q6voice_get_mixer(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
+static int q6voice_get_rx_mixer(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_soc_dapm_context *dapm = snd_soc_dapm_kcontrol_dapm(kcontrol);
 	struct snd_soc_component *c = snd_soc_dapm_to_component(dapm);
 	struct soc_mixer_control *mc =
 		(struct soc_mixer_control *)kcontrol->private_value;
 	struct q6voice *v = snd_soc_component_get_drvdata(c);
-	bool capture = !!mc->shift;
 
 	ucontrol->value.integer.value[0] =
-		q6voice_get_port(v, Q6VOICE_PATH_VOICE, capture) == mc->reg;
+		q6voice_get_port(v, Q6VOICE_PATH_VOICE, 0) == mc->reg;
 	return 0;
 }
 
-static int q6voice_put_mixer(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
+static int q6voice_get_tx_mixer(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
+{
+	struct snd_soc_dapm_context *dapm = snd_soc_dapm_kcontrol_dapm(kcontrol);
+	struct snd_soc_component *c = snd_soc_dapm_to_component(dapm);
+	struct soc_mixer_control *mc =
+		(struct soc_mixer_control *)kcontrol->private_value;
+	struct q6voice *v = snd_soc_component_get_drvdata(c);
+
+	ucontrol->value.integer.value[0] =
+		q6voice_get_port(v, Q6VOICE_PATH_VOICE, 1) == mc->reg;
+	return 0;
+}
+
+static int q6voice_put_rx_mixer(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_soc_dapm_context *dapm = snd_soc_dapm_kcontrol_dapm(kcontrol);
 	struct snd_soc_component *c = snd_soc_dapm_to_component(dapm);
@@ -99,53 +111,70 @@ static int q6voice_put_mixer(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_
 		(struct soc_mixer_control *)kcontrol->private_value;
 	struct q6voice *v = snd_soc_component_get_drvdata(c);
 	bool val = !!ucontrol->value.integer.value[0];
-	bool capture = !!mc->shift;
 
 	if (val)
-		q6voice_set_port(v, Q6VOICE_PATH_VOICE, capture, mc->reg);
-	else if (q6voice_get_port(v, Q6VOICE_PATH_VOICE, capture) == mc->reg)
-		q6voice_set_port(v, Q6VOICE_PATH_VOICE, capture, 0);
+		q6voice_set_port(v, Q6VOICE_PATH_VOICE, 0, mc->reg);
+	else if (q6voice_get_port(v, Q6VOICE_PATH_VOICE, 0) == mc->reg)
+		q6voice_set_port(v, Q6VOICE_PATH_VOICE, 0, 0);
+
+	snd_soc_dapm_mixer_update_power(dapm, kcontrol, val, NULL);
+	return 1;
+}
+
+static int q6voice_put_tx_mixer(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
+{
+	struct snd_soc_dapm_context *dapm = snd_soc_dapm_kcontrol_dapm(kcontrol);
+	struct snd_soc_component *c = snd_soc_dapm_to_component(dapm);
+	struct soc_mixer_control *mc =
+		(struct soc_mixer_control *)kcontrol->private_value;
+	struct q6voice *v = snd_soc_component_get_drvdata(c);
+	bool val = !!ucontrol->value.integer.value[0];
+
+	if (val)
+		q6voice_set_port(v, Q6VOICE_PATH_VOICE, 1, mc->reg);
+	else if (q6voice_get_port(v, Q6VOICE_PATH_VOICE, 1) == mc->reg)
+		q6voice_set_port(v, Q6VOICE_PATH_VOICE, 1, 0);
 
 	snd_soc_dapm_mixer_update_power(dapm, kcontrol, val, NULL);
 	return 1;
 }
 
 static const struct snd_kcontrol_new voice_tx_mixer_controls[] = {
-	SOC_SINGLE_EXT("PRI_MI2S_TX", PRIMARY_MI2S_TX, 1, 1, 0,
-		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("SEC_MI2S_TX", SECONDARY_MI2S_TX, 1, 1, 0,
-		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("TERT_MI2S_TX", TERTIARY_MI2S_TX, 1, 1, 0,
-		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("QUAT_MI2S_TX", QUATERNARY_MI2S_TX, 1, 1, 0,
-		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("QUIN_MI2S_TX", QUINARY_MI2S_TX, 1, 1, 0,
-		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("PRI_MI2S_TX", PRIMARY_MI2S_TX, 0, 1, 0,
+		       q6voice_get_tx_mixer, q6voice_put_tx_mixer),
+	SOC_SINGLE_EXT("SEC_MI2S_TX", SECONDARY_MI2S_TX, 0, 1, 0,
+		       q6voice_get_tx_mixer, q6voice_put_tx_mixer),
+	SOC_SINGLE_EXT("TERT_MI2S_TX", TERTIARY_MI2S_TX, 0, 1, 0,
+		       q6voice_get_tx_mixer, q6voice_put_tx_mixer),
+	SOC_SINGLE_EXT("QUAT_MI2S_TX", QUATERNARY_MI2S_TX, 0, 1, 0,
+		       q6voice_get_tx_mixer, q6voice_put_tx_mixer),
+	SOC_SINGLE_EXT("QUIN_MI2S_TX", QUINARY_MI2S_TX, 0, 1, 0,
+		       q6voice_get_tx_mixer, q6voice_put_tx_mixer),
 };
 
 static const struct snd_kcontrol_new primary_mi2s_rx_mixer_controls[] = {
 	SOC_SINGLE_EXT("CS-Voice", PRIMARY_MI2S_RX, 0, 1, 0,
-		       q6voice_get_mixer, q6voice_put_mixer)
+		       q6voice_get_rx_mixer, q6voice_put_rx_mixer)
 };
 
 static const struct snd_kcontrol_new secondary_mi2s_rx_mixer_controls[] = {
 	SOC_SINGLE_EXT("CS-Voice", SECONDARY_MI2S_RX, 0, 1, 0,
-		       q6voice_get_mixer, q6voice_put_mixer)
+		       q6voice_get_rx_mixer, q6voice_put_rx_mixer)
 };
 
 static const struct snd_kcontrol_new tertiary_mi2s_rx_mixer_controls[] = {
 	SOC_SINGLE_EXT("CS-Voice", TERTIARY_MI2S_RX, 0, 1, 0,
-		       q6voice_get_mixer, q6voice_put_mixer)
+		       q6voice_get_rx_mixer, q6voice_put_rx_mixer)
 };
 
 static const struct snd_kcontrol_new quaternary_mi2s_rx_mixer_controls[] = {
 	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_MI2S_RX, 0, 1, 0,
-		       q6voice_get_mixer, q6voice_put_mixer)
+		       q6voice_get_rx_mixer, q6voice_put_rx_mixer)
 };
 
 static const struct snd_kcontrol_new quinary_mi2s_rx_mixer_controls[] = {
 	SOC_SINGLE_EXT("CS-Voice", QUINARY_MI2S_RX, 0, 1, 0,
-		       q6voice_get_mixer, q6voice_put_mixer)
+		       q6voice_get_rx_mixer, q6voice_put_rx_mixer)
 };
 
 static const struct snd_soc_dapm_widget q6voice_dapm_widgets[] = {
