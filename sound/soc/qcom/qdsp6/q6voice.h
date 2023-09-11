@@ -2,6 +2,12 @@
 #ifndef _Q6_VOICE_H
 #define _Q6_VOICE_H
 
+#define Q6VOICE_CAPTURE BIT(15)
+
+/*
+ * Path types from 0x8000 - 0xffff and similar sequences occurring every 65536
+ * values are reserved for specifying whether the path is capture or playback.
+ */
 enum q6voice_path_type {
 	Q6VOICE_PATH_VOICE	= 0,
 	/* TODO: Q6VOICE_PATH_VOIP	= 1, */
