@@ -13,6 +13,7 @@
 #include <dt-bindings/power/qcom-rpmpd.h>
 #include <dt-bindings/sound/qcom,q6afe.h>
 #include <dt-bindings/sound/qcom,q6asm.h>
+#include <dt-bindings/sound/qcom,q6voice.h>
 #include "sdm670.dtsi"
 #include "pm660.dtsi"
 #include "pm660l.dtsi"
@@ -222,6 +223,14 @@
 
 			cpu {
 				sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA3>;
+			};
+		};
+
+		voicemmode1-dai-link {
+			link-name = "VoiceMMode1";
+
+			cpu {
+				sound-dai = <&q6voicedai VOICEMMODE1>;
 			};
 		};
 
@@ -902,6 +911,12 @@
 
 	dai@2 {
 		reg = <2>;
+	};
+};
+
+&q6voicedai {
+	dai@1 {
+		reg = <VOICEMMODE1>;
 	};
 };
 
