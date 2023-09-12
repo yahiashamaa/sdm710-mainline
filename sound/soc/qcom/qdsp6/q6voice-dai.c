@@ -132,10 +132,11 @@ static int q6voice_get_mixer(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_
 	struct soc_mixer_control *mc =
 		(struct soc_mixer_control *)kcontrol->private_value;
 	struct q6voice *v = snd_soc_component_get_drvdata(c);
+	enum q6voice_path_type path = mc->shift & ~Q6VOICE_CAPTURE;
 	bool capture = !!(mc->shift & Q6VOICE_CAPTURE);
 
 	ucontrol->value.integer.value[0] =
-		q6voice_get_port(v, Q6VOICE_PATH_VOICE, capture) == mc->reg;
+		q6voice_get_port(v, path, capture) == mc->reg;
 	return 0;
 }
 
@@ -147,75 +148,76 @@ static int q6voice_put_mixer(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_
 		(struct soc_mixer_control *)kcontrol->private_value;
 	struct q6voice *v = snd_soc_component_get_drvdata(c);
 	bool val = !!ucontrol->value.integer.value[0];
+	enum q6voice_path_type path = mc->shift & ~Q6VOICE_CAPTURE;
 	bool capture = !!(mc->shift & Q6VOICE_CAPTURE);
 
 	if (val)
-		q6voice_set_port(v, Q6VOICE_PATH_VOICE, capture, mc->reg);
-	else if (q6voice_get_port(v, Q6VOICE_PATH_VOICE, capture) == mc->reg)
-		q6voice_set_port(v, Q6VOICE_PATH_VOICE, capture, 0);
+		q6voice_set_port(v, path, capture, mc->reg);
+	else if (q6voice_get_port(v, path, capture) == mc->reg)
+		q6voice_set_port(v, path, capture, 0);
 
 	snd_soc_dapm_mixer_update_power(dapm, kcontrol, val, NULL);
 	return 1;
 }
 
 static const struct snd_kcontrol_new cs_voice_tx_mixer_controls[] = {
-	SOC_SINGLE_EXT("PRI_MI2S_TX", PRIMARY_MI2S_TX, Q6VOICE_CAPTURE | CS_VOICE, 1, 0,
+	SOC_SINGLE_EXT("PRI_MI2S_TX", PRIMARY_MI2S_TX, Q6VOICE_CAPTURE | Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("SEC_MI2S_TX", SECONDARY_MI2S_TX, Q6VOICE_CAPTURE | CS_VOICE, 1, 0,
+	SOC_SINGLE_EXT("SEC_MI2S_TX", SECONDARY_MI2S_TX, Q6VOICE_CAPTURE | Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("TERT_MI2S_TX", TERTIARY_MI2S_TX, Q6VOICE_CAPTURE | CS_VOICE, 1, 0,
+	SOC_SINGLE_EXT("TERT_MI2S_TX", TERTIARY_MI2S_TX, Q6VOICE_CAPTURE | Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("QUAT_MI2S_TX", QUATERNARY_MI2S_TX, Q6VOICE_CAPTURE | CS_VOICE, 1, 0,
+	SOC_SINGLE_EXT("QUAT_MI2S_TX", QUATERNARY_MI2S_TX, Q6VOICE_CAPTURE | Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("QUIN_MI2S_TX", QUINARY_MI2S_TX, Q6VOICE_CAPTURE | CS_VOICE, 1, 0,
+	SOC_SINGLE_EXT("QUIN_MI2S_TX", QUINARY_MI2S_TX, Q6VOICE_CAPTURE | Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
 };
 
 static const struct snd_kcontrol_new voicemmode1_tx_mixer_controls[] = {
-	SOC_SINGLE_EXT("PRI_MI2S_TX", PRIMARY_MI2S_TX, Q6VOICE_CAPTURE | VOICEMMODE1, 1, 0,
+	SOC_SINGLE_EXT("PRI_MI2S_TX", PRIMARY_MI2S_TX, Q6VOICE_CAPTURE | Q6VOICE_PATH_VOICEMMODE1, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("SEC_MI2S_TX", SECONDARY_MI2S_TX, Q6VOICE_CAPTURE | VOICEMMODE1, 1, 0,
+	SOC_SINGLE_EXT("SEC_MI2S_TX", SECONDARY_MI2S_TX, Q6VOICE_CAPTURE | Q6VOICE_PATH_VOICEMMODE1, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("TERT_MI2S_TX", TERTIARY_MI2S_TX, Q6VOICE_CAPTURE | VOICEMMODE1, 1, 0,
+	SOC_SINGLE_EXT("TERT_MI2S_TX", TERTIARY_MI2S_TX, Q6VOICE_CAPTURE | Q6VOICE_PATH_VOICEMMODE1, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("QUAT_MI2S_TX", QUATERNARY_MI2S_TX, Q6VOICE_CAPTURE | VOICEMMODE1, 1, 0,
+	SOC_SINGLE_EXT("QUAT_MI2S_TX", QUATERNARY_MI2S_TX, Q6VOICE_CAPTURE | Q6VOICE_PATH_VOICEMMODE1, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("QUIN_MI2S_TX", QUINARY_MI2S_TX, Q6VOICE_CAPTURE | VOICEMMODE1, 1, 0,
+	SOC_SINGLE_EXT("QUIN_MI2S_TX", QUINARY_MI2S_TX, Q6VOICE_CAPTURE | Q6VOICE_PATH_VOICEMMODE1, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
 };
 
 static const struct snd_kcontrol_new primary_mi2s_rx_mixer_controls[] = {
-	SOC_SINGLE_EXT("CS-Voice", PRIMARY_MI2S_RX, CS_VOICE, 1, 0,
+	SOC_SINGLE_EXT("CS-Voice", PRIMARY_MI2S_RX, Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("VoiceMMode1", PRIMARY_MI2S_RX, VOICEMMODE1, 1, 0,
+	SOC_SINGLE_EXT("VoiceMMode1", PRIMARY_MI2S_RX, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer)
 };
 
 static const struct snd_kcontrol_new secondary_mi2s_rx_mixer_controls[] = {
-	SOC_SINGLE_EXT("CS-Voice", SECONDARY_MI2S_RX, CS_VOICE, 1, 0,
+	SOC_SINGLE_EXT("CS-Voice", SECONDARY_MI2S_RX, Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("VoiceMMode1", SECONDARY_MI2S_RX, VOICEMMODE1, 1, 0,
+	SOC_SINGLE_EXT("VoiceMMode1", SECONDARY_MI2S_RX, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer)
 };
 
 static const struct snd_kcontrol_new tertiary_mi2s_rx_mixer_controls[] = {
-	SOC_SINGLE_EXT("CS-Voice", TERTIARY_MI2S_RX, CS_VOICE, 1, 0,
+	SOC_SINGLE_EXT("CS-Voice", TERTIARY_MI2S_RX, Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("VoiceMMode1", TERTIARY_MI2S_RX, VOICEMMODE1, 1, 0,
+	SOC_SINGLE_EXT("VoiceMMode1", TERTIARY_MI2S_RX, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer)
 };
 
 static const struct snd_kcontrol_new quaternary_mi2s_rx_mixer_controls[] = {
-	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_MI2S_RX, CS_VOICE, 1, 0,
+	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_MI2S_RX, Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("VoiceMMode1", QUATERNARY_MI2S_RX, VOICEMMODE1, 1, 0,
+	SOC_SINGLE_EXT("VoiceMMode1", QUATERNARY_MI2S_RX, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer)
 };
 
 static const struct snd_kcontrol_new quinary_mi2s_rx_mixer_controls[] = {
-	SOC_SINGLE_EXT("CS-Voice", QUINARY_MI2S_RX, CS_VOICE, 1, 0,
+	SOC_SINGLE_EXT("CS-Voice", QUINARY_MI2S_RX, Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
-	SOC_SINGLE_EXT("VoiceMMode1", QUINARY_MI2S_RX, VOICEMMODE1, 1, 0,
+	SOC_SINGLE_EXT("VoiceMMode1", QUINARY_MI2S_RX, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer)
 };
 
