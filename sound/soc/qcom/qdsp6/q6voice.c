@@ -51,12 +51,37 @@ static int q6voice_path_start(struct q6voice_path *p)
 
 	cvp = p->runtime->sessions[Q6VOICE_SERVICE_CVP];
 	if (!cvp) {
-		cvp = q6cvp_session_create(p->type,
-					   q6afe_get_port_id(p->tx_port),
-					   q6afe_get_port_id(p->rx_port));
+		cvp = q6cvp_session_create_v3(p->type,
+					      q6afe_get_port_id(p->tx_port),
+					      q6afe_get_port_id(p->rx_port));
 		if (IS_ERR(cvp))
 			return PTR_ERR(cvp);
 		p->runtime->sessions[Q6VOICE_SERVICE_CVP] = cvp;
+	}
+
+	ret = q6cvp_send_channel_info(cvp, false);
+	if (ret) {
+		dev_err(dev, "failed to send rx channel info: %d\n", ret);
+	}
+
+	ret = q6cvp_send_channel_info(cvp, true);
+	if (ret) {
+		dev_err(dev, "failed to send tx channel info: %d\n", ret);
+	}
+
+	ret = q6cvp_send_media_format(cvp, q6afe_get_port_id(p->rx_port), false);
+	if (ret) {
+		dev_err(dev, "failed to send rx media format: %d\n", ret);
+	}
+
+	ret = q6cvp_send_media_format(cvp, q6afe_get_port_id(p->tx_port), true);
+	if (ret) {
+		dev_err(dev, "failed to send tx media format: %d\n", ret);
+	}
+
+	ret = q6cvp_topology_commit(cvp);
+	if (ret) {
+		dev_err(dev, "failed to commit topology: %d\n", ret);
 	}
 
 	ret = q6cvp_enable(cvp, true);
