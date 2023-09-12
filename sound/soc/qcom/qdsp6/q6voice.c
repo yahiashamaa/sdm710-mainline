@@ -30,8 +30,35 @@ struct q6voice_path {
 
 struct q6voice {
 	struct device *dev;
+	bool cvd_v2_3;
 	struct q6voice_path paths[Q6VOICE_PATH_COUNT];
 };
+
+static inline struct q6voice_session *session_create(enum q6voice_path_type type,
+						     int tx_port, int rx_port)
+{
+	return q6cvp_session_create(type, tx_port, rx_port);
+}
+
+static struct q6voice_session *session_create_v3(enum q6voice_path_type type,
+						 int tx_port, int rx_port)
+{
+	struct q6voice_session *cvp;
+
+	cvp = q6cvp_session_create_v3(type, tx_port, rx_port);
+	if (cvp == NULL)
+		return NULL;
+
+	q6cvp_send_channel_info(cvp, false);
+	q6cvp_send_channel_info(cvp, true);
+
+	q6cvp_send_media_format(cvp, rx_port, false);
+	q6cvp_send_media_format(cvp, tx_port, true);
+
+	q6cvp_topology_commit(cvp);
+
+	return cvp;
+}
 
 static int q6voice_path_start(struct q6voice_path *p)
 {
@@ -51,9 +78,15 @@ static int q6voice_path_start(struct q6voice_path *p)
 
 	cvp = p->runtime->sessions[Q6VOICE_SERVICE_CVP];
 	if (!cvp) {
-		cvp = q6cvp_session_create(p->type,
-					   q6afe_get_port_id(p->tx_port),
-					   q6afe_get_port_id(p->rx_port));
+		if (p->v->cvd_v2_3)
+			cvp = session_create_v3(p->type,
+						q6afe_get_port_id(p->tx_port),
+						q6afe_get_port_id(p->rx_port));
+		else
+			cvp = session_create(p->type,
+					     q6afe_get_port_id(p->tx_port),
+					     q6afe_get_port_id(p->rx_port));
+
 		if (IS_ERR(cvp))
 			return PTR_ERR(cvp);
 		p->runtime->sessions[Q6VOICE_SERVICE_CVP] = cvp;
@@ -208,7 +241,7 @@ static void q6voice_free(void *data)
 	}
 }
 
-struct q6voice *q6voice_create(struct device *dev)
+struct q6voice *q6voice_create(struct device *dev, bool cvd_v2_3)
 {
 	struct q6voice *v;
 	enum q6voice_path_type path;
