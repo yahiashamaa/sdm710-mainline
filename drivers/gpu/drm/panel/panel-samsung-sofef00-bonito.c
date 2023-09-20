@@ -37,8 +37,22 @@ static void sofef00_reset(struct sofef00 *ctx)
 	usleep_range(10000, 11000);
 }
 
-static int sofef00_on(struct sofef00 *ctx)
+static int sofef00_prepare(struct drm_panel *panel)
 {
+	struct sofef00 *ctx = to_sofef00(panel);
+
+	if (ctx->prepared)
+		return 0;
+
+	sofef00_reset(ctx);
+
+	ctx->prepared = true;
+	return 0;
+}
+
+static int sofef00_enable(struct drm_panel *panel)
+{
+	struct sofef00 *ctx = to_sofef00(panel);
 	struct mipi_dsi_device *dsi = ctx->dsi;
 	struct device *dev = &dsi->dev;
 	int ret;
@@ -72,28 +86,6 @@ static int sofef00_on(struct sofef00 *ctx)
 		return ret;
 	}
 
-	return 0;
-}
-
-static int sofef00_prepare(struct drm_panel *panel)
-{
-	struct sofef00 *ctx = to_sofef00(panel);
-	struct device *dev = &ctx->dsi->dev;
-	int ret;
-
-	if (ctx->prepared)
-		return 0;
-
-	sofef00_reset(ctx);
-
-	ret = sofef00_on(ctx);
-	if (ret < 0) {
-		dev_err(dev, "Failed to initialize panel: %d\n", ret);
-		gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-		return ret;
-	}
-
-	ctx->prepared = true;
 	return 0;
 }
 
@@ -168,6 +160,7 @@ static int sofef00_get_modes(struct drm_panel *panel,
 
 static const struct drm_panel_funcs sofef00_panel_funcs = {
 	.prepare = sofef00_prepare,
+	.enable = sofef00_enable,
 	.disable = sofef00_disable,
 	.unprepare = sofef00_unprepare,
 	.get_modes = sofef00_get_modes,
