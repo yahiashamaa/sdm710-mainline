@@ -286,6 +286,55 @@
 		};
 	};
 
+	thermal-zones {
+		xo-thermal {
+			polling-delay-passive = <250>;
+			polling-delay = <1000>;
+
+			thermal-sensors = <&pm660_adc_tm 0>;
+
+			cooling-maps {
+				map0 {
+					trip = <&xo_alert0>;
+					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+
+				};
+
+				map1 {
+					trip = <&xo_alert1>;
+					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+
+				};
+			};
+
+			trips {
+				xo_alert0: trip-point0 {
+					temperature = <47000>;
+					hysteresis = <1000>;
+					type = "passive";
+				};
+
+				xo_alert1: trip-point1 {
+					temperature = <52000>;
+					hysteresis = <1000>;
+					type = "passive";
+				};
+
+				xo_crit: trip-point2 {
+					temperature = <59000>;
+					hysteresis = <1000>;
+					type = "critical";
+				};
+			};
+		};
+	};
+
 	/*
 	 * The touchscreen regulator seems to be controlled somehow by a gpio.
 	 * Model it as a fixed regulator and keep it on. Without schematics we
@@ -804,6 +853,18 @@
 &mss_pil {
 	firmware-name = "qcom/sdm670/sargo/mba.mbn", "qcom/sdm670/sargo/modem.mbn";
 	status = "okay";
+};
+
+&pm660_adc_tm {
+	status = "okay";
+
+	xo-therm@0 {
+		reg = <0>;
+		io-channels = <&pm660_adc ADC5_XO_THERM_100K_PU>;
+		qcom,hw-settle-time-us = <200>;
+		qcom,pre-scaling = <1 20>;
+		qcom,ratiometric;
+	};
 };
 
 &pm660_charger {
