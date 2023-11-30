@@ -40,7 +40,6 @@ static void sofef00_reset(struct sofef00 *ctx)
 static int sofef00_prepare(struct drm_panel *panel)
 {
 	struct sofef00 *ctx = to_sofef00(panel);
-	struct device *dev = &ctx->dsi->dev;
 
 	if (ctx->prepared)
 		return 0;
