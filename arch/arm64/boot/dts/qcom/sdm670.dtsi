@@ -1610,7 +1610,14 @@
 					opp-hz = /bits/ 64 <750000000>;
 					opp-level = <RPMH_REGULATOR_LEVEL_TURBO>;
 					opp-peak-kBps = <7216000>;
-					opp-supported-hw = <0xc>;
+					opp-supported-hw = <0x8>;
+				};
+
+				opp-700000000 {
+					opp-hz = /bits/ 64 <700000000>;
+					opp-level = <RPMH_REGULATOR_LEVEL_TURBO>;
+					opp-peak-kBps = <7216000>;
+					opp-supported-hw = <0x4>;
 				};
 
 				opp-650000000 {
@@ -1624,7 +1631,14 @@
 					opp-hz = /bits/ 64 <565000000>;
 					opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
 					opp-peak-kBps = <7216000>;
-					opp-supported-hw = <0xe>;
+					opp-supported-hw = <0xc>;
+				};
+
+				opp-504000000 {
+					opp-hz = /bits/ 64 <504000000>;
+					opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
+					opp-peak-kBps = <7216000>;
+					opp-supported-hw = <0x2>;
 				};
 
 				opp-430000000 {
