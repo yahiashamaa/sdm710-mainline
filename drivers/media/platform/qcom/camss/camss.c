@@ -842,6 +842,44 @@ static const struct resources vfe_res_8250[] = {
 	},
 };
 
+static const struct resources_icc icc_res_sdm670[] = {
+	{
+		.name = "cam_ahb",
+		.icc_bw_tbl.avg = 38400,
+		.icc_bw_tbl.peak = 76500,
+	},
+	{
+		.name = "cam_hf_1_mnoc",
+		.icc_bw_tbl.avg = 2097152,
+		.icc_bw_tbl.peak = 2097152,
+	},
+	{
+		.name = "cam_hf_1_camnoc",
+		.icc_bw_tbl.avg = 32768,
+		.icc_bw_tbl.peak = 32768,
+	},
+	{
+		.name = "cam_hf_2_mnoc",
+		.icc_bw_tbl.avg = 2097152,
+		.icc_bw_tbl.peak = 2097152,
+	},
+	{
+		.name = "cam_hf_2_camnoc",
+		.icc_bw_tbl.avg = 2097152,
+		.icc_bw_tbl.peak = 2097152,
+	},
+	{
+		.name = "cam_sf_0_mnoc",
+		.icc_bw_tbl.avg = 0,
+		.icc_bw_tbl.peak = 2097152,
+	},
+	{
+		.name = "cam_sf_0_camnoc",
+		.icc_bw_tbl.avg = 0,
+		.icc_bw_tbl.peak = 2097152,
+	},
+};
+
 static const struct resources_icc icc_res_sm8250[] = {
 	{
 		.name = "cam_ahb",
@@ -1576,6 +1614,13 @@ static int camss_probe(struct platform_device *pdev)
 		camss->csid_num = 4;
 		camss->vfe_num = 2;
 	} else if (of_device_is_compatible(dev->of_node,
+					   "qcom,sdm670-camss")) {
+		camss->version = CAMSS_845;
+		camss->csiphy_num = 3;
+		camss->csid_num = 3;
+		camss->vfe_num = 2;
+		camss->vfe_lite_num = 1;
+	} else if (of_device_is_compatible(dev->of_node,
 					   "qcom,sdm845-camss")) {
 		camss->version = CAMSS_845;
 		camss->csiphy_num = 4;
@@ -1739,6 +1784,7 @@ static const struct of_device_id camss_dt_match[] = {
 	{ .compatible = "qcom,msm8916-camss" },
 	{ .compatible = "qcom,msm8996-camss" },
 	{ .compatible = "qcom,sdm660-camss" },
+	{ .compatible = "qcom,sdm670-camss" },
 	{ .compatible = "qcom,sdm845-camss" },
 	{ .compatible = "qcom,sm8250-camss" },
 	{ }
