@@ -6,6 +6,7 @@
  * Copyright (c) 2022, Richard Acayan. All rights reserved.
  */
 
+#include <dt-bindings/clock/qcom,camcc-sdm845.h>
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/leds/common.h>
@@ -374,6 +375,34 @@
 		regulator-min-microvolt = <1050000>;
 		regulator-max-microvolt = <1050000>;
 	};
+
+	cam_front_ldo: cam-front-ldo-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "cam_front_ldo";
+		regulator-min-microvolt = <1352000>;
+		regulator-max-microvolt = <1352000>;
+		regulator-enable-ramp-delay = <135>;
+
+		gpios = <&pm660l_gpios 4 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&cam_front_ldo_pin>;
+	};
+
+	cam_vio_ldo: cam-vio-ldo-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "cam_vio_ldo";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		regulator-enable-ramp-delay = <233>;
+
+		gpios = <&pm660_gpios 13 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&cam_vio_pin>;
+	};
 };
 
 &adsp_pas {
@@ -597,6 +626,57 @@
 			regulator-enable-ramp-delay = <500>;
 		};
 	};
+};
+
+&camss {
+	vdda-phy-supply = <&vreg_l1a_1p225>;
+	status = "okay";
+};
+
+&cci {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&cci1_default &cam_mclk_default>;
+	pinctrl-1 = <&cci1_sleep>;
+
+	status = "okay";
+};
+
+&cci_i2c1 {
+	camera@1a {
+		compatible = "sony,imx355";
+		reg = <0x1a>;
+
+		clocks = <&camcc CAM_CC_MCLK2_CLK>;
+		clock-names = "mclk";
+
+		clock-frequency = <19200000>;
+
+		assigned-clocks = <&camcc CAM_CC_MCLK2_CLK>;
+		assigned-clock-rates = <24000000>;
+
+		reset-gpios = <&tlmm 9 GPIO_ACTIVE_HIGH>;
+
+		vana-supply = <&cam_front_ldo>;
+		vdig-supply = <&cam_front_ldo>;
+		vio-supply = <&cam_vio_ldo>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&cam_front_default>;
+
+		port {
+			cam_front_endpoint: endpoint {
+				data-lanes = <0 1 2 3>;
+				link-frequencies = /bits/ 64 <360000000>;
+				remote-endpoint = <&camss_endpoint1>;
+			};
+		};
+	};
+};
+
+&camss_endpoint1 {
+	clock-lanes = <7>;
+	data-lanes = <0 1 2 3>;
+	remote-endpoint = <&cam_front_endpoint>;
 };
 
 &gcc {
@@ -878,6 +958,15 @@
 	status = "okay";
 };
 
+&pm660_gpios {
+	cam_vio_pin: cam-vio-state {
+		pins = "gpio13";
+		function = "normal";
+		power-source = <PM8941_GPIO_VPH>;
+		output-low;
+	};
+};
+
 &pm660_rradc {
 	status = "okay";
 };
@@ -912,6 +1001,13 @@
 };
 
 &pm660l_gpios {
+	cam_front_ldo_pin: cam-front-state {
+		pins = "gpio4";
+		function = "normal";
+		power-source = <PM8941_GPIO_VPH>;
+		output-low;
+	};
+
 	vol_up_pin: vol-up-state {
 		pins = "gpio7";
 		function = "normal";
@@ -997,6 +1093,22 @@
 
 &tlmm {
 	gpio-reserved-ranges = <0 4>, <81 4>;
+
+	cam_front_default: cam-front-default-state {
+		pins = "gpio9";
+		function = "gpio";
+		drive-strength = <2>;
+		bias-disable;
+	};
+
+	cam_mclk_default: cam-default-state {
+		mclk2-pins {
+			pins = "gpio15";
+			function = "cam_mclk";
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
 
 	cs35l36_top_default: cs35l36-top-default-state {
 		reset-pins {
