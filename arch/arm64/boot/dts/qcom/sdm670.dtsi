@@ -1236,13 +1236,6 @@
 			};
 		};
 
-		refgen_regulator: regulator@ff1000 {
-			compatible = "qcom,sdm670-refgen-regulator",
-				     "qcom,sdm845-refgen-regulator";
-			reg = <0 0x00ff1000 0 0x60>;
-			regulator-always-on;
-		};
-
 		mem_noc: interconnect@1380000 {
 			compatible = "qcom,sdm670-mem-noc";
 			reg = <0 0x01380000 0 0x27200>;
