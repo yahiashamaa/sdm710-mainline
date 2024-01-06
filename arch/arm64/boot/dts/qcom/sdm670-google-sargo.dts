@@ -22,6 +22,11 @@
 	status = "okay";
 };
 
+&panel {
+	compatible = "samsung,s6e3fa7-ams559nk06";
+	status = "okay";
+};
+
 &rmi4_f12 {
 	touchscreen-x-mm = <63>;
 	touchscreen-y-mm = <127>;
