@@ -38,6 +38,10 @@ properties:
        - voltage-max-design-microvolt
        See Documentation/devicetree/bindings/power/supply/battery.yaml
 
+  power-supplies:
+    items:
+      - description: Power supply for status reporting.
+
 allOf:
   - if:
       properties:
