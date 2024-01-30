@@ -4,6 +4,7 @@
  * Copyright (c) 2023, Richard Acayan. All rights reserved.
  */
 
+#include <dt-bindings/sound/qcom,q6dsp-lpass-ports.h>
 #include <linux/module.h>
 #include <linux/of.h>
 #include <linux/platform_device.h>
