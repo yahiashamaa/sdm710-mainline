@@ -1811,8 +1811,7 @@ static const struct camss_resources sdm670_resources = {
 	.vfe_res = vfe_res_845,
 	.csiphy_num = 3,
 	.csid_num = 3,
-	.vfe_num = 2,
-	.vfe_lite_num = 1,
+	.vfe_num = 3,
 };
 
 static const struct camss_resources sdm845_resources = {
