@@ -2414,6 +2414,28 @@
 			#reset-cells = <1>;
 		};
 
+		tsens0: thermal-sensor@c263000 {
+			compatible = "qcom,sdm670-tsens", "qcom,tsens-v2";
+			reg = <0 0x0c263000 0 0x1ff>,
+			      <0 0x0c222000 0 0x4>;
+			interrupts = <GIC_SPI 506 IRQ_TYPE_EDGE_RISING>,
+				     <GIC_SPI 508 IRQ_TYPE_EDGE_RISING>;
+			interrupt-names = "uplow", "critical";
+			#thermal-sensor-cells = <1>;
+			#qcom,sensors = <13>;
+		};
+
+		tsens1: thermal-sensor@c265000 {
+			compatible = "qcom,sdm670-tsens", "qcom,tsens-v2";
+			reg = <0 0x0c265000 0 0x1ff>,
+			      <0 0x0c223000 0 0x4>;
+			interrupts = <GIC_SPI 507 IRQ_TYPE_EDGE_RISING>,
+				     <GIC_SPI 509 IRQ_TYPE_EDGE_RISING>;
+			interrupt-names = "uplow", "critical";
+			#thermal-sensor-cells = <1>;
+			#qcom,sensors = <8>;
+		};
+
 		aoss_reset: reset-controller@c2a0000 {
 			compatible = "qcom,sdm845-aoss-cc";
 			reg = <0 0x0c2a0000 0 0x31000>;
@@ -2868,28 +2890,6 @@
 			#sound-dai-cells = <1>;
 
 			status = "disabled";
-		};
-
-		tsens0: thermal-sensor@c263000 {
-			compatible = "qcom,sdm670-tsens", "qcom,tsens-v2";
-			reg = <0 0xc263000 0 0x1ff>,
-			      <0 0xc222000 0 0x4>;
-			interrupts = <GIC_SPI 506 IRQ_TYPE_EDGE_RISING>,
-				     <GIC_SPI 508 IRQ_TYPE_EDGE_RISING>;
-			interrupt-names = "uplow", "critical";
-			#thermal-sensor-cells = <1>;
-			#qcom,sensors = <13>;
-		};
-
-		tsens1: thermal-sensor@c265000 {
-			compatible = "qcom,sdm670-tsens", "qcom,tsens-v2";
-			reg = <0 0xc265000 0 0x1ff>,
-			      <0 0xc223000 0 0x4>;
-			interrupts = <GIC_SPI 507 IRQ_TYPE_EDGE_RISING>,
-				     <GIC_SPI 509 IRQ_TYPE_EDGE_RISING>;
-			interrupt-names = "uplow", "critical";
-			#thermal-sensor-cells = <1>;
-			#qcom,sensors = <8>;
 		};
 	};
 
