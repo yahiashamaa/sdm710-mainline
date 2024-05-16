@@ -711,10 +711,10 @@
 	clock-frequency = <400000>;
 	status = "okay";
 
-	pn557@28 {
+	nfc@28 {
 		/*
-		 * The interface is actually NQ but this should work fine until
-		 * we add embedded secure element.
+		 * The interface is actually NQ (PN557) but this should work
+		 * fine until we add embedded secure element.
 		 */
 		compatible = "nxp,nxp-nci-i2c";
 		reg = <0x28>;
