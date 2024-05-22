@@ -65,8 +65,8 @@
 #define IMX363_REG_CSI_LANE_MODE     0x0114
 #define IMX363_REG_LINE_LENGTH_PCK_H 0x0342
 #define IMX363_REG_LINE_LENGTH_PCK_L 0x0343
-#define IMX363_REG_X_ADDR_START_H	 0x0344 
-#define IMX363_REG_X_ADDR_START_L	 0x0345 
+#define IMX363_REG_X_ADDR_START_H	 0x0344
+#define IMX363_REG_X_ADDR_START_L	 0x0345
 #define IMX363_REG_Y_ADDR_START_H	 0x0346
 #define IMX363_REG_Y_ADDR_START_L	 0x0347
 #define IMX363_REG_X_ADDR_END_H		 0x0348
@@ -626,10 +626,10 @@ static void imx363_fill_pad_format(struct imx363 *imx363,
 	fmt->format.height = mode->height;
 	fmt->format.code = mode->code;
 	fmt->format.field = V4L2_FIELD_NONE;
-	fmt->format.colorspace = V4L2_COLORSPACE_RAW;
-	fmt->format.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-	fmt->format.quantization = V4L2_QUANTIZATION_DEFAULT;
-	fmt->format.xfer_func = V4L2_XFER_FUNC_NONE;
+	// fmt->format.colorspace = V4L2_COLORSPACE_RAW;
+	// fmt->format.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+	// fmt->format.quantization = V4L2_QUANTIZATION_DEFAULT;
+	// fmt->format.xfer_func = V4L2_XFER_FUNC_NONE;
 }
 
 /**
@@ -651,7 +651,7 @@ static int imx363_get_pad_format(struct v4l2_subdev *sd,
 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
 		struct v4l2_mbus_framefmt *framefmt;
 
-		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
+		framefmt = v4l2_subdev_state_get_format(sd_state, fmt->pad);
 		fmt->format = *framefmt;
 	} else {
 		imx363_fill_pad_format(imx363, imx363->cur_mode, fmt);
@@ -686,7 +686,7 @@ static int imx363_set_pad_format(struct v4l2_subdev *sd,
 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
 		struct v4l2_mbus_framefmt *framefmt;
 
-		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
+		framefmt = v4l2_subdev_state_get_format(sd_state, fmt->pad);
 		*framefmt = fmt->format;
 	} else {
 		ret = imx363_update_controls(imx363, mode);
@@ -946,11 +946,14 @@ static const struct v4l2_subdev_video_ops imx363_video_ops = {
 };
 
 static const struct v4l2_subdev_pad_ops imx363_pad_ops = {
-	.init_cfg = imx363_init_pad_cfg,
 	.enum_mbus_code = imx363_enum_mbus_code,
 	.enum_frame_size = imx363_enum_frame_size,
 	.get_fmt = imx363_get_pad_format,
 	.set_fmt = imx363_set_pad_format,
+};
+
+static const struct v4l2_subdev_internal_ops imx363_subdev_internal_ops = {
+	.init_state = imx363_init_pad_cfg,
 };
 
 static const struct v4l2_subdev_ops imx363_subdev_ops = {
@@ -987,7 +990,7 @@ static int imx363_power_on(struct device *dev)
 		goto error_reset;
 	}
 
-	usleep_range(1000, 1200);
+	usleep_range(10000, 12000);
 
 	return 0;
 
@@ -1122,6 +1125,7 @@ static int imx363_probe(struct i2c_client *client)
 
 	/* Initialize subdev */
 	v4l2_i2c_subdev_init(&imx363->sd, client, &imx363_subdev_ops);
+	imx363->sd.internal_ops = &imx363_subdev_internal_ops;
 
 	ret = imx363_parse_hw_config(imx363);
 	if (ret) {
@@ -1227,7 +1231,7 @@ static const struct of_device_id imx363_of_match[] = {
 MODULE_DEVICE_TABLE(of, imx363_of_match);
 
 static struct i2c_driver imx363_driver = {
-	.probe_new = imx363_probe,
+	.probe = imx363_probe,
 	.remove = imx363_remove,
 	.driver = {
 		.name = "imx363",
