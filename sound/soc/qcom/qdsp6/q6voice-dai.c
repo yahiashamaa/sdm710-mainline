@@ -249,6 +249,286 @@ static const struct snd_kcontrol_new quinary_mi2s_rx_mixer_controls[] = {
 		       q6voice_get_mixer, q6voice_put_mixer)
 };
 
+static const struct snd_kcontrol_new primary_tdm_rx_0_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", PRIMARY_TDM_RX_0, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", PRIMARY_TDM_RX_0, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new primary_tdm_rx_1_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", PRIMARY_TDM_RX_1, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", PRIMARY_TDM_RX_1, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new primary_tdm_rx_2_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", PRIMARY_TDM_RX_2, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", PRIMARY_TDM_RX_2, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new primary_tdm_rx_3_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", PRIMARY_TDM_RX_3, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", PRIMARY_TDM_RX_3, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new primary_tdm_rx_4_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", PRIMARY_TDM_RX_4, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", PRIMARY_TDM_RX_4, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new primary_tdm_rx_5_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", PRIMARY_TDM_RX_5, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", PRIMARY_TDM_RX_5, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new primary_tdm_rx_6_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", PRIMARY_TDM_RX_6, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", PRIMARY_TDM_RX_6, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new primary_tdm_rx_7_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", PRIMARY_TDM_RX_7, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", PRIMARY_TDM_RX_7, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new secondary_tdm_rx_0_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", SECONDARY_TDM_RX_0, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", SECONDARY_TDM_RX_0, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new secondary_tdm_rx_1_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", SECONDARY_TDM_RX_1, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", SECONDARY_TDM_RX_1, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new secondary_tdm_rx_2_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", SECONDARY_TDM_RX_2, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", SECONDARY_TDM_RX_2, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new secondary_tdm_rx_3_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", SECONDARY_TDM_RX_3, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", SECONDARY_TDM_RX_3, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new secondary_tdm_rx_4_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", SECONDARY_TDM_RX_4, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", SECONDARY_TDM_RX_4, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new secondary_tdm_rx_5_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", SECONDARY_TDM_RX_5, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", SECONDARY_TDM_RX_5, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new secondary_tdm_rx_6_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", SECONDARY_TDM_RX_6, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", SECONDARY_TDM_RX_6, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new secondary_tdm_rx_7_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", SECONDARY_TDM_RX_7, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", SECONDARY_TDM_RX_7, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new tertiary_tdm_rx_0_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", TERTIARY_TDM_RX_0, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", TERTIARY_TDM_RX_0, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new tertiary_tdm_rx_1_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", TERTIARY_TDM_RX_1, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", TERTIARY_TDM_RX_1, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new tertiary_tdm_rx_2_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", TERTIARY_TDM_RX_2, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", TERTIARY_TDM_RX_2, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new tertiary_tdm_rx_3_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", TERTIARY_TDM_RX_3, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", TERTIARY_TDM_RX_3, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new tertiary_tdm_rx_4_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", TERTIARY_TDM_RX_4, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", TERTIARY_TDM_RX_4, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new tertiary_tdm_rx_5_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", TERTIARY_TDM_RX_5, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", TERTIARY_TDM_RX_5, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new tertiary_tdm_rx_6_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", TERTIARY_TDM_RX_6, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", TERTIARY_TDM_RX_6, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new tertiary_tdm_rx_7_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", TERTIARY_TDM_RX_7, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", TERTIARY_TDM_RX_7, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quaternary_tdm_rx_0_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_TDM_RX_0, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUATERNARY_TDM_RX_0, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quaternary_tdm_rx_1_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_TDM_RX_1, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUATERNARY_TDM_RX_1, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quaternary_tdm_rx_2_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_TDM_RX_2, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUATERNARY_TDM_RX_2, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quaternary_tdm_rx_3_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_TDM_RX_3, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUATERNARY_TDM_RX_3, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quaternary_tdm_rx_4_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_TDM_RX_4, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUATERNARY_TDM_RX_4, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quaternary_tdm_rx_5_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_TDM_RX_5, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUATERNARY_TDM_RX_5, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quaternary_tdm_rx_6_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_TDM_RX_6, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUATERNARY_TDM_RX_6, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quaternary_tdm_rx_7_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUATERNARY_TDM_RX_7, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUATERNARY_TDM_RX_7, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quinary_tdm_rx_0_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUINARY_TDM_RX_0, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUINARY_TDM_RX_0, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quinary_tdm_rx_1_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUINARY_TDM_RX_1, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUINARY_TDM_RX_1, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quinary_tdm_rx_2_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUINARY_TDM_RX_2, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUINARY_TDM_RX_2, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quinary_tdm_rx_3_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUINARY_TDM_RX_3, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUINARY_TDM_RX_3, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quinary_tdm_rx_4_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUINARY_TDM_RX_4, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUINARY_TDM_RX_4, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quinary_tdm_rx_5_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUINARY_TDM_RX_5, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUINARY_TDM_RX_5, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quinary_tdm_rx_6_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUINARY_TDM_RX_6, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUINARY_TDM_RX_6, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
+static const struct snd_kcontrol_new quinary_tdm_rx_7_mixer_controls[] = {
+	SOC_SINGLE_EXT("CS-Voice", QUINARY_TDM_RX_7, Q6VOICE_PATH_VOICE, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer),
+	SOC_SINGLE_EXT("VoiceMMode1", QUINARY_TDM_RX_7, Q6VOICE_PATH_VOICEMMODE1, 1, 0,
+		       q6voice_get_mixer, q6voice_put_mixer)
+};
+
 static const struct snd_kcontrol_new int0_mi2s_rx_mixer_controls[] = {
 	SOC_SINGLE_EXT("CS-Voice", INT0_MI2S_RX, Q6VOICE_PATH_VOICE, 1, 0,
 		       q6voice_get_mixer, q6voice_put_mixer),
@@ -324,6 +604,126 @@ static const struct snd_soc_dapm_widget q6voice_dapm_widgets[] = {
 	SND_SOC_DAPM_MIXER("QUIN_MI2S_RX Voice Mixer", SND_SOC_NOPM, 0, 0,
 			   quinary_mi2s_rx_mixer_controls,
 			   ARRAY_SIZE(quinary_mi2s_rx_mixer_controls)),
+	SND_SOC_DAPM_MIXER("PRIMARY_TDM_RX_0 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   primary_tdm_rx_0_mixer_controls,
+			   ARRAY_SIZE(primary_tdm_rx_0_mixer_controls)),
+	SND_SOC_DAPM_MIXER("PRIMARY_TDM_RX_1 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   primary_tdm_rx_1_mixer_controls,
+			   ARRAY_SIZE(primary_tdm_rx_1_mixer_controls)),
+	SND_SOC_DAPM_MIXER("PRIMARY_TDM_RX_2 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   primary_tdm_rx_2_mixer_controls,
+			   ARRAY_SIZE(primary_tdm_rx_2_mixer_controls)),
+	SND_SOC_DAPM_MIXER("PRIMARY_TDM_RX_3 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   primary_tdm_rx_3_mixer_controls,
+			   ARRAY_SIZE(primary_tdm_rx_3_mixer_controls)),
+	SND_SOC_DAPM_MIXER("PRIMARY_TDM_RX_4 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   primary_tdm_rx_4_mixer_controls,
+			   ARRAY_SIZE(primary_tdm_rx_4_mixer_controls)),
+	SND_SOC_DAPM_MIXER("PRIMARY_TDM_RX_5 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   primary_tdm_rx_5_mixer_controls,
+			   ARRAY_SIZE(primary_tdm_rx_5_mixer_controls)),
+	SND_SOC_DAPM_MIXER("PRIMARY_TDM_RX_6 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   primary_tdm_rx_6_mixer_controls,
+			   ARRAY_SIZE(primary_tdm_rx_6_mixer_controls)),
+	SND_SOC_DAPM_MIXER("PRIMARY_TDM_RX_7 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   primary_tdm_rx_7_mixer_controls,
+			   ARRAY_SIZE(primary_tdm_rx_7_mixer_controls)),
+	SND_SOC_DAPM_MIXER("SEC_TDM_RX_0 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   secondary_tdm_rx_0_mixer_controls,
+			   ARRAY_SIZE(secondary_tdm_rx_0_mixer_controls)),
+	SND_SOC_DAPM_MIXER("SEC_TDM_RX_1 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   secondary_tdm_rx_1_mixer_controls,
+			   ARRAY_SIZE(secondary_tdm_rx_1_mixer_controls)),
+	SND_SOC_DAPM_MIXER("SEC_TDM_RX_2 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   secondary_tdm_rx_2_mixer_controls,
+			   ARRAY_SIZE(secondary_tdm_rx_2_mixer_controls)),
+	SND_SOC_DAPM_MIXER("SEC_TDM_RX_3 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   secondary_tdm_rx_3_mixer_controls,
+			   ARRAY_SIZE(secondary_tdm_rx_3_mixer_controls)),
+	SND_SOC_DAPM_MIXER("SEC_TDM_RX_4 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   secondary_tdm_rx_4_mixer_controls,
+			   ARRAY_SIZE(secondary_tdm_rx_4_mixer_controls)),
+	SND_SOC_DAPM_MIXER("SEC_TDM_RX_5 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   secondary_tdm_rx_5_mixer_controls,
+			   ARRAY_SIZE(secondary_tdm_rx_5_mixer_controls)),
+	SND_SOC_DAPM_MIXER("SEC_TDM_RX_6 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   secondary_tdm_rx_6_mixer_controls,
+			   ARRAY_SIZE(secondary_tdm_rx_6_mixer_controls)),
+	SND_SOC_DAPM_MIXER("SEC_TDM_RX_7 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   secondary_tdm_rx_7_mixer_controls,
+			   ARRAY_SIZE(secondary_tdm_rx_7_mixer_controls)),
+	SND_SOC_DAPM_MIXER("TERT_TDM_RX_0 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   tertiary_tdm_rx_0_mixer_controls,
+			   ARRAY_SIZE(tertiary_tdm_rx_0_mixer_controls)),
+	SND_SOC_DAPM_MIXER("TERT_TDM_RX_1 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   tertiary_tdm_rx_1_mixer_controls,
+			   ARRAY_SIZE(tertiary_tdm_rx_1_mixer_controls)),
+	SND_SOC_DAPM_MIXER("TERT_TDM_RX_2 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   tertiary_tdm_rx_2_mixer_controls,
+			   ARRAY_SIZE(tertiary_tdm_rx_2_mixer_controls)),
+	SND_SOC_DAPM_MIXER("TERT_TDM_RX_3 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   tertiary_tdm_rx_3_mixer_controls,
+			   ARRAY_SIZE(tertiary_tdm_rx_3_mixer_controls)),
+	SND_SOC_DAPM_MIXER("TERT_TDM_RX_4 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   tertiary_tdm_rx_4_mixer_controls,
+			   ARRAY_SIZE(tertiary_tdm_rx_4_mixer_controls)),
+	SND_SOC_DAPM_MIXER("TERT_TDM_RX_5 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   tertiary_tdm_rx_5_mixer_controls,
+			   ARRAY_SIZE(tertiary_tdm_rx_5_mixer_controls)),
+	SND_SOC_DAPM_MIXER("TERT_TDM_RX_6 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   tertiary_tdm_rx_6_mixer_controls,
+			   ARRAY_SIZE(tertiary_tdm_rx_6_mixer_controls)),
+	SND_SOC_DAPM_MIXER("TERT_TDM_RX_7 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   tertiary_tdm_rx_7_mixer_controls,
+			   ARRAY_SIZE(tertiary_tdm_rx_7_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUAT_TDM_RX_0 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quaternary_tdm_rx_0_mixer_controls,
+			   ARRAY_SIZE(quaternary_tdm_rx_0_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUAT_TDM_RX_1 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quaternary_tdm_rx_1_mixer_controls,
+			   ARRAY_SIZE(quaternary_tdm_rx_1_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUAT_TDM_RX_2 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quaternary_tdm_rx_2_mixer_controls,
+			   ARRAY_SIZE(quaternary_tdm_rx_2_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUAT_TDM_RX_3 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quaternary_tdm_rx_3_mixer_controls,
+			   ARRAY_SIZE(quaternary_tdm_rx_3_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUAT_TDM_RX_4 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quaternary_tdm_rx_4_mixer_controls,
+			   ARRAY_SIZE(quaternary_tdm_rx_4_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUAT_TDM_RX_5 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quaternary_tdm_rx_5_mixer_controls,
+			   ARRAY_SIZE(quaternary_tdm_rx_5_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUAT_TDM_RX_6 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quaternary_tdm_rx_6_mixer_controls,
+			   ARRAY_SIZE(quaternary_tdm_rx_6_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUAT_TDM_RX_7 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quaternary_tdm_rx_7_mixer_controls,
+			   ARRAY_SIZE(quaternary_tdm_rx_7_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUIN_TDM_RX_0 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quinary_tdm_rx_0_mixer_controls,
+			   ARRAY_SIZE(quinary_tdm_rx_0_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUIN_TDM_RX_1 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quinary_tdm_rx_1_mixer_controls,
+			   ARRAY_SIZE(quinary_tdm_rx_1_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUIN_TDM_RX_2 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quinary_tdm_rx_2_mixer_controls,
+			   ARRAY_SIZE(quinary_tdm_rx_2_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUIN_TDM_RX_3 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quinary_tdm_rx_3_mixer_controls,
+			   ARRAY_SIZE(quinary_tdm_rx_3_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUIN_TDM_RX_4 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quinary_tdm_rx_4_mixer_controls,
+			   ARRAY_SIZE(quinary_tdm_rx_4_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUIN_TDM_RX_5 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quinary_tdm_rx_5_mixer_controls,
+			   ARRAY_SIZE(quinary_tdm_rx_5_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUIN_TDM_RX_6 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quinary_tdm_rx_6_mixer_controls,
+			   ARRAY_SIZE(quinary_tdm_rx_6_mixer_controls)),
+	SND_SOC_DAPM_MIXER("QUIN_TDM_RX_7 Voice Mixer", SND_SOC_NOPM, 0, 0,
+			   quinary_tdm_rx_7_mixer_controls,
+			   ARRAY_SIZE(quinary_tdm_rx_7_mixer_controls)),
 	SND_SOC_DAPM_MIXER("INT0_MI2S_RX Voice Mixer", SND_SOC_NOPM, 0, 0,
 			   int0_mi2s_rx_mixer_controls,
 			   ARRAY_SIZE(int0_mi2s_rx_mixer_controls)),
@@ -367,6 +767,14 @@ static const struct snd_soc_dapm_route q6voice_dapm_routes[] = {
 	{ "TERT_MI2S_RX Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
 	{ "QUAT_MI2S_RX Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
 	{ "QUIN_MI2S_RX Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
+	{ "SEC_TDM_RX_0 Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
+	{ "SEC_TDM_RX_1 Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
+	{ "SEC_TDM_RX_2 Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
+	{ "SEC_TDM_RX_3 Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
+	{ "SEC_TDM_RX_4 Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
+	{ "SEC_TDM_RX_5 Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
+	{ "SEC_TDM_RX_6 Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
+	{ "SEC_TDM_RX_7 Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
 	{ "INT0_MI2S_RX Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
 	{ "INT1_MI2S_RX Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
 	{ "INT2_MI2S_RX Voice Mixer",	"CS-Voice",	"CS-VOICE_DL1" },
@@ -394,6 +802,14 @@ static const struct snd_soc_dapm_route q6voice_dapm_routes[] = {
 	{ "TERT_MI2S_RX Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
 	{ "QUAT_MI2S_RX Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
 	{ "QUIN_MI2S_RX Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
+	{ "SEC_TDM_RX_0 Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
+	{ "SEC_TDM_RX_1 Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
+	{ "SEC_TDM_RX_2 Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
+	{ "SEC_TDM_RX_3 Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
+	{ "SEC_TDM_RX_4 Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
+	{ "SEC_TDM_RX_5 Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
+	{ "SEC_TDM_RX_6 Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
+	{ "SEC_TDM_RX_7 Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
 	{ "INT0_MI2S_RX Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
 	{ "INT1_MI2S_RX Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
 	{ "INT2_MI2S_RX Voice Mixer",	"VoiceMMode1",	"VOICEMMODE1_DL" },
@@ -407,6 +823,14 @@ static const struct snd_soc_dapm_route q6voice_dapm_routes[] = {
 	{ "TERT_MI2S_RX",		NULL,		"TERT_MI2S_RX Voice Mixer" },
 	{ "QUAT_MI2S_RX",		NULL,		"QUAT_MI2S_RX Voice Mixer" },
 	{ "QUIN_MI2S_RX",		NULL,		"QUIN_MI2S_RX Voice Mixer" },
+	{ "SEC_TDM_RX_0",		NULL,		"SEC_TDM_RX_0 Voice Mixer" },
+	{ "SEC_TDM_RX_1",		NULL,		"SEC_TDM_RX_1 Voice Mixer" },
+	{ "SEC_TDM_RX_2",		NULL,		"SEC_TDM_RX_2 Voice Mixer" },
+	{ "SEC_TDM_RX_3",		NULL,		"SEC_TDM_RX_3 Voice Mixer" },
+	{ "SEC_TDM_RX_4",		NULL,		"SEC_TDM_RX_4 Voice Mixer" },
+	{ "SEC_TDM_RX_5",		NULL,		"SEC_TDM_RX_5 Voice Mixer" },
+	{ "SEC_TDM_RX_6",		NULL,		"SEC_TDM_RX_6 Voice Mixer" },
+	{ "SEC_TDM_RX_7",		NULL,		"SEC_TDM_RX_7 Voice Mixer" },
 	{ "INT0_MI2S_RX",		NULL,		"INT0_MI2S_RX Voice Mixer" },
 	{ "INT1_MI2S_RX",		NULL,		"INT1_MI2S_RX Voice Mixer" },
 	{ "INT2_MI2S_RX",		NULL,		"INT2_MI2S_RX Voice Mixer" },
