@@ -28,6 +28,7 @@
 struct sdm660_int_snd_data {
 	struct snd_soc_jack jack;
 	bool jack_setup;
+	uint32_t pri_tdm_clk_count;
 	uint32_t sec_tdm_clk_count;
 	uint32_t int0_mi2s_clk_count;
 	uint32_t int3_mi2s_clk_count;
@@ -42,6 +43,26 @@ static int snd_sdm660_int_startup(struct snd_pcm_substream *stream)
 	int i;
 
 	switch (cpu->id) {
+	case PRIMARY_TDM_TX_0:
+		data->pri_tdm_clk_count++;
+		if (data->pri_tdm_clk_count == 1)
+			snd_soc_dai_set_sysclk(cpu,
+				Q6AFE_LPASS_CLK_ID_PRI_TDM_IBIT,
+				2048000, SNDRV_PCM_STREAM_PLAYBACK);
+
+		for_each_rtd_codec_dais(rtd, i, codec) {
+			snd_soc_dai_set_fmt(codec, SND_SOC_DAIFMT_DSP_B
+						 | SND_SOC_DAIFMT_IB_IF);
+
+			snd_soc_dai_set_pll(codec, 0, 1,
+					    2048000,
+					    2048000 * 2);
+
+			snd_soc_dai_set_sysclk(codec, 1,
+					       2048000 * 2,
+					       SNDRV_PCM_STREAM_PLAYBACK);
+		}
+		break;
 	case SECONDARY_TDM_RX_0:
 		data->sec_tdm_clk_count++;
 		if (data->sec_tdm_clk_count == 1)
@@ -107,6 +128,14 @@ static void snd_sdm660_int_shutdown(struct snd_pcm_substream *stream)
 	struct snd_soc_dai *cpu = snd_soc_rtd_to_cpu(rtd, 0);
 
 	switch (cpu->id) {
+	case PRIMARY_TDM_TX_0:
+		data->pri_tdm_clk_count--;
+		if (data->pri_tdm_clk_count == 0)
+			snd_soc_dai_set_sysclk(cpu,
+				Q6AFE_LPASS_CLK_ID_PRI_TDM_IBIT,
+				0, SNDRV_PCM_STREAM_PLAYBACK);
+
+		break;
 	case SECONDARY_TDM_RX_0:
 		data->sec_tdm_clk_count--;
 		if (data->sec_tdm_clk_count == 0)
@@ -141,15 +170,46 @@ static unsigned int tdm_slot_off[] = {
 	0, 4, 8, 12, 16, 20, 24, 28
 };
 
+/* The primary TDM uses odd offsets */
+static unsigned int pri_tdm_slot_off[] = {
+	0, 8, 12
+};
+
 static int snd_sdm660_int_hw_params(struct snd_pcm_substream *stream,
 				    struct snd_pcm_hw_params *params)
 {
 	struct snd_soc_pcm_runtime *rtd = snd_soc_substream_to_rtd(stream);
 	struct snd_soc_dai *cpu = snd_soc_rtd_to_cpu(rtd, 0);
+	struct snd_soc_dai *codec;
 	unsigned int channels;
-	int ret;
+	int ret, i;
 
 	switch (cpu->id) {
+	case PRIMARY_TDM_TX_0:
+		channels = params_channels(params);
+
+		ret = snd_soc_dai_set_tdm_slot(cpu, (1 << channels) - 1, 0, 8, 16);
+		if (ret) {
+			dev_err(cpu->dev, "set tdm slot failed\n");
+			return ret;
+		}
+
+		ret = snd_soc_dai_set_channel_map(cpu, channels, pri_tdm_slot_off,
+						  0, NULL);
+		if (ret) {
+			dev_err(cpu->dev, "set channel map failed\n");
+			return ret;
+		}
+
+		for_each_rtd_codec_dais(rtd, i, codec) {
+			ret = snd_soc_dai_set_tdm_slot(codec, 0xf, 0, 8, 32);
+			if (ret) {
+				dev_err(cpu->dev, "set tdm slot failed\n");
+				return ret;
+			}
+		}
+
+		break;
 	case SECONDARY_TDM_RX_0:
 		channels = params_channels(params);
 
@@ -201,9 +261,16 @@ static int sdm660_int_be_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
 	struct snd_interval *channels = hw_param_interval(params,
 			SNDRV_PCM_HW_PARAM_CHANNELS);
 	struct snd_mask *fmt = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
+	struct snd_soc_dai *cpu = snd_soc_rtd_to_cpu(rtd, 0);
 
-	rate->min = rate->max = DEFAULT_SAMPLE_RATE_48K;
-	channels->min = channels->max = 2;
+	if (cpu->id == PRIMARY_TDM_TX_0) {
+		rate->min = rate->max = 16000;
+		channels->min = channels->max = 1;
+	} else {
+		rate->min = rate->max = DEFAULT_SAMPLE_RATE_48K;
+		channels->min = channels->max = 2;
+	}
+
 	snd_mask_set_format(fmt, SNDRV_PCM_FORMAT_S16_LE);
 
 	return 0;

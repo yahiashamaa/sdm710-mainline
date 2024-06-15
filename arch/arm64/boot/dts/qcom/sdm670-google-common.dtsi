@@ -196,13 +196,15 @@
 		pinctrl-names = "default";
 		pinctrl-0 = <&cdc_pdm_default>,
 			    <&cdc_dmic_default>,
+			    <&pri_tdm_default>,
 			    <&sec_tdm_default>;
 
 		audio-routing = "Analog PDM_RX1", "Digital PDM_RX1",
 				"Analog PDM_RX2", "Digital PDM_RX2",
 				"Analog PDM_RX3", "Digital PDM_RX3",
 				"Digital LPASS_PDM_TX", "Analog PDM_TX",
-				"Analog AMIC2", "Analog MIC BIAS External2";
+				"Analog AMIC2", "Analog MIC BIAS External2",
+				"Stereo1 DMIC Mux", "Analog MIC BIAS Internal1";
 
 		mm1-dai-link {
 			link-name = "MultiMedia1";
@@ -228,11 +230,49 @@
 			};
 		};
 
+		mm4-dai-link {
+			link-name = "MultiMedia4";
+
+			cpu {
+				sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA4>;
+			};
+		};
+
 		voicemmode1-dai-link {
 			link-name = "VoiceMMode1";
 
 			cpu {
 				sound-dai = <&q6voicedai VOICEMMODE1>;
+			};
+		};
+
+#if 0
+		soundtrigger1-dai-link {
+			link-name = "SoundTrigger 1";
+
+			cpu {
+				sound-dai = <&rt5514_spi 0>;
+			};
+
+			codec {
+				sound-dai = <&rt5514_i2c 0>;
+			};
+		};
+#endif
+
+		pri-tdm-tx-link {
+			link-name = "Primary TDM0 Capture";
+
+			cpu {
+				sound-dai = <&q6afedai PRIMARY_TDM_TX_0>;
+			};
+
+			platform {
+				sound-dai = <&q6routing>;
+			};
+
+			codec {
+				sound-dai = <&rt5514_i2c 0>;
 			};
 		};
 
@@ -507,6 +547,10 @@
 			regulator-min-microvolt = <1800000>;
 			regulator-max-microvolt = <1800000>;
 			regulator-enable-ramp-delay = <250>;
+			/* consumed by internal micbias */
+#if 0
+			regulator-always-on;
+#endif
 		};
 
 		vreg_l12a_1p8: ldo12 {
@@ -821,6 +865,12 @@
 		#sound-dai-cells = <1>;
 	};
 
+	rt5514_i2c: audio-codec@57 {
+		compatible = "realtek,rt5514";
+		reg = <0x57>;
+		#sound-dai-cells = <1>;
+	};
+
 	drv2624: haptics@5a {
 		compatible = "ti,drv2624";
 		reg = <0x5a>;
@@ -984,6 +1034,7 @@
 	vdd-micbias-supply = <&vreg_l7b_3p125>;
 
 	qcom,micbias-lvl = <2500>;
+	qcom,micbias1-ext-cap;
 
 	status = "okay";
 };
@@ -1036,6 +1087,17 @@
 };
 
 &q6afedai {
+	dai@19 {
+		reg = <PRIMARY_TDM_TX_0>;
+
+		qcom,tdm-sync-mode = <0>;
+		qcom,tdm-sync-src = <1>;
+		qcom,tdm-data-out = <0>;
+		qcom,tdm-invert-sync = <0>;
+		qcom,tdm-data-delay = <1>;
+		qcom,tdm-data-align = <0>;
+	};
+
 	dai@28 {
 		reg = <SECONDARY_TDM_RX_0>;
 
@@ -1070,6 +1132,10 @@
 	dai@2 {
 		reg = <2>;
 	};
+
+	dai@3 {
+		reg = <3>;
+	};
 };
 
 &q6voicedai {
@@ -1090,6 +1156,22 @@
 	vqmmc-supply = <&vreg_l8a_1p8>;
 
 	status = "okay";
+};
+
+&spi2 {
+	status = "okay";
+
+	rt5514_spi: audio-codec@0 {
+		compatible = "realtek,rt5514";
+		reg = <0x00>;
+		interrupts-extended = <&tlmm 126 IRQ_TYPE_EDGE_RISING>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&rt5514_spi_default>;
+		spi-max-frequency = <10000000>;
+		spi-cpol;
+		spi-cpha;
+		#sound-dai-cells = <1>;
+	};
 };
 
 &tlmm {
@@ -1166,6 +1248,70 @@
 			drive-strength = <8>;
 			bias-disable;
 		};
+	};
+
+	pri_tdm_default: pri-tdm-default-state {
+		misc-pins {
+			pins = "gpio65";
+			function = "pri_mi2s";
+			drive-strength = <8>;
+		};
+
+		ws-pins {
+			pins = "gpio66";
+			function = "pri_mi2s_ws";
+			drive-strength = <8>;
+		};
+
+		dout-pins {
+			pins = "gpio67";
+			function = "pri_mi2s";
+			drive-strength = <8>;
+		};
+
+		din-pins {
+			pins = "gpio68";
+			function = "pri_mi2s";
+			drive-strength = <8>;
+		};
+	};
+
+	pri_tdm_sleep: pri-tdm-sleep-state {
+		misc-pins {
+			pins = "gpio65";
+			function = "pri_mi2s";
+			drive-strength = <2>;
+			bias-pull-down;
+		};
+
+		ws-pins {
+			pins = "gpio66";
+			function = "pri_mi2s_ws";
+			drive-strength = <2>;
+			bias-pull-down;
+		};
+
+		dout-pins {
+			pins = "gpio67";
+			function = "pri_mi2s";
+			drive-strength = <2>;
+			bias-pull-down;
+		};
+
+		din-pins {
+			pins = "gpio68";
+			function = "pri_mi2s";
+			drive-strength = <2>;
+			bias-pull-down;
+		};
+	};
+
+	rt5514_spi_default: rt5514-spi-default-state {
+		pins = "gpio126";
+		function = "gpio";
+		drive-strength = <2>;
+		bias-pull-down;
+		output-disable;
 	};
 
 	touchscreen_default: ts-default-state {
