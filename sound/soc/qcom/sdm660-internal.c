@@ -48,18 +48,18 @@ static int snd_sdm660_int_startup(struct snd_pcm_substream *stream)
 		if (data->pri_tdm_clk_count == 1)
 			snd_soc_dai_set_sysclk(cpu,
 				Q6AFE_LPASS_CLK_ID_PRI_TDM_IBIT,
-				2048000, SNDRV_PCM_STREAM_PLAYBACK);
+				12288000, SNDRV_PCM_STREAM_PLAYBACK);
 
 		for_each_rtd_codec_dais(rtd, i, codec) {
 			snd_soc_dai_set_fmt(codec, SND_SOC_DAIFMT_DSP_B
 						 | SND_SOC_DAIFMT_IB_IF);
 
 			snd_soc_dai_set_pll(codec, 0, 1,
-					    2048000,
-					    2048000 * 2);
+					    12288000,
+					    12288000 * 2);
 
 			snd_soc_dai_set_sysclk(codec, 1,
-					       2048000 * 2,
+					       12288000 * 2,
 					       SNDRV_PCM_STREAM_PLAYBACK);
 		}
 		break;
@@ -261,15 +261,9 @@ static int sdm660_int_be_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
 	struct snd_interval *channels = hw_param_interval(params,
 			SNDRV_PCM_HW_PARAM_CHANNELS);
 	struct snd_mask *fmt = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
-	struct snd_soc_dai *cpu = snd_soc_rtd_to_cpu(rtd, 0);
 
-	if (cpu->id == PRIMARY_TDM_TX_0) {
-		rate->min = rate->max = 16000;
-		channels->min = channels->max = 1;
-	} else {
-		rate->min = rate->max = DEFAULT_SAMPLE_RATE_48K;
-		channels->min = channels->max = 2;
-	}
+	rate->min = rate->max = DEFAULT_SAMPLE_RATE_48K;
+	channels->min = channels->max = 2;
 
 	snd_mask_set_format(fmt, SNDRV_PCM_FORMAT_S16_LE);
 

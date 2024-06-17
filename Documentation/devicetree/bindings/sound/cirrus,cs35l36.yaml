@@ -1,0 +1,100 @@
+# SPDX-License-Identifier: GPL-2.0-only
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/sound/cirrus,cs35l36.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Cirrus Logic CS35L36 Speaker Amplifier
+
+maintainers:
+    # By default. Someone relevant (a Cirrus employee or a device tree
+    # maintainer) who is willing can add or replace their name here.
+  - Richard Acayan <mailingradian@gmail.com>
+
+description:
+  The CS35L36 speaker amplifier is an amplifier connected over I2C.
+
+properties:
+  compatible:
+    const: cirrus,cs35l36
+
+  reg:
+    description: I2C address of the device
+
+  VA-supply: true
+  VP-supply: true
+
+  cirrus,boost-ctl-millivolt:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 2550
+    maximum: 12000
+    description: |
+      Boost Voltage Value. Configures the boost converter's output voltage in
+      mV. This must be a multiple of of 50mV.
+
+  cirrus,boost-peak-milliamp:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 1600
+    maximum: 4500
+    description:
+      Boost-converter peak current limit in mA. Configures the peak current by
+      monitoring the current through the boost FET. This must be a multiple of
+      50mA.
+
+  cirrus,boost-ind-nanohenry:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    enum: [1000, 1200]
+    description:
+      Inductor estimation LBST reference value. Seeds the digital boost
+      converter's inductor estimation block with the initial inductance value
+      to reference.
+
+  cirrus,multi-amp-mode:
+    type: boolean
+    description:
+      Boolean to determine if there are more than one amplifier in the system.
+      If more than one it is best to Hi-Z the ASP port to prevent bus
+      contention on the output signal.
+
+  cirrus,boost-ctl-select:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    enum: [0x00, 0x01, 0x10]
+    description:
+      Boost converter control source selection. Selects the source of the
+      BST_CTL target VBST voltage for the boost converter to generate.
+
+      0x00 - Control Port Value
+      0x01 - Class H Tracking (Default)
+      0x10 - MultiDevice Sync Value
+
+  cirrus,amp-pcm-inv:
+    type: boolean
+    description: Determines if Amplifier will invert incoming PCM data.
+
+  cirrus,imon-pol-inv:
+    type: boolean
+    description:
+      Determines if Amplifier will invert the polarity of outbound
+      IMON feedback data.
+
+  cirrus,vmon-pol-inv:
+    type: boolean
+    description:
+      Determines if Amplifier will invert the polarity of outbound
+      VMON feedback data.
+
+  cirrus,dcm-mode-enable:
+    type: boolean
+    description:
+      Boost converter automatic DCM Mode enable. This enables the digital boost
+      converter to operate in a low power (Discontinuous Conduction) mode
+      during low loading conditions.
+
+required:
+  - compatible
+  - reg
+  - cirrus,boost-ctl-millivolt
+  - cirrus,boost-peak-milliamp
+  - cirrus,boost-ind-nanohenry
+
+additionalProperties: false

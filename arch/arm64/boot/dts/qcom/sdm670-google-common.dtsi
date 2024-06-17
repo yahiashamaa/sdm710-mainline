@@ -246,20 +246,6 @@
 			};
 		};
 
-#if 0
-		soundtrigger1-dai-link {
-			link-name = "SoundTrigger 1";
-
-			cpu {
-				sound-dai = <&rt5514_spi 0>;
-			};
-
-			codec {
-				sound-dai = <&rt5514_i2c 0>;
-			};
-		};
-#endif
-
 		pri-tdm-tx-link {
 			link-name = "Primary TDM0 Capture";
 
