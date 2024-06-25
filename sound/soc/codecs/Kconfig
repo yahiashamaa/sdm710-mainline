@@ -1576,12 +1576,17 @@ config SND_SOC_RT1318_SDW
 	select REGMAP_SOUNDWIRE
 
 config SND_SOC_RT5514
-	tristate
+	tristate "Realtek ALC5514 Codec"
 	depends on I2C
+	help
+	  Enable support for the Realtek ALC5514 microphone codec.
 
 config SND_SOC_RT5514_SPI
-	tristate
+	tristate "Realtek RT5514 Codec - SPI"
 	depends on SPI_MASTER
+	help
+	  Enable support for loading firmware and audio capture over SPI for
+	  the Realtek ALC5514 microphone codec.
 
 config SND_SOC_RT5514_SPI_BUILTIN
 	bool # force RT5514_SPI to be built-in to avoid link errors
