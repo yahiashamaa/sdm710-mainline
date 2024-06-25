@@ -188,7 +188,7 @@ static int snd_sdm660_int_hw_params(struct snd_pcm_substream *stream,
 	case PRIMARY_TDM_TX_0:
 		channels = params_channels(params);
 
-		ret = snd_soc_dai_set_tdm_slot(cpu, (1 << channels) - 1, 0, 8, 16);
+		ret = snd_soc_dai_set_tdm_slot(cpu, (1 << channels) - 1, 0, 8, 32);
 		if (ret) {
 			dev_err(cpu->dev, "set tdm slot failed\n");
 			return ret;
@@ -202,7 +202,7 @@ static int snd_sdm660_int_hw_params(struct snd_pcm_substream *stream,
 		}
 
 		for_each_rtd_codec_dais(rtd, i, codec) {
-			ret = snd_soc_dai_set_tdm_slot(codec, 0xf, 0, 8, 32);
+			ret = snd_soc_dai_set_tdm_slot(codec, 0xff, 0, 8, 32);
 			if (ret) {
 				dev_err(cpu->dev, "set tdm slot failed\n");
 				return ret;
