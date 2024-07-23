@@ -690,6 +690,9 @@
 		pinctrl-names = "default";
 		pinctrl-0 = <&cam_front_default>;
 
+		rotation = <270>;
+		orientation = <0>;
+
 		port {
 			cam_front_endpoint: endpoint {
 				data-lanes = <0 1 2 3>;
