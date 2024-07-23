@@ -1579,6 +1579,7 @@ DEFINE_RUNTIME_DEV_PM_OPS(imx355_pm_ops, imx355_suspend, imx355_resume, NULL);
 static int imx355_init_controls(struct imx355 *imx355)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(&imx355->sd);
+	struct v4l2_fwnode_device_properties props;
 	struct v4l2_ctrl_handler *ctrl_hdlr;
 	s64 exposure_max;
 	s64 vblank_def;
@@ -1590,7 +1591,7 @@ static int imx355_init_controls(struct imx355 *imx355)
 	int ret;
 
 	ctrl_hdlr = &imx355->ctrl_handler;
-	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 10);
+	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 12);
 	if (ret)
 		return ret;
 
@@ -1661,6 +1662,15 @@ static int imx355_init_controls(struct imx355 *imx355)
 		dev_err(&client->dev, "control init failed: %d", ret);
 		goto error;
 	}
+
+	ret = v4l2_fwnode_device_parse(&client->dev, &props);
+	if (ret)
+		goto error;
+
+	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &imx355_ctrl_ops,
+					      &props);
+	if (ret)
+		goto error;
 
 	imx355->sd.ctrl_handler = ctrl_hdlr;
 
