@@ -213,6 +213,17 @@ static const struct llcc_slice_config sc8280xp_data[] = {
 	{ LLCC_CPUHWT,   5, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
 };
 
+static const struct llcc_slice_config sdm670_data[] = {
+	{ LLCC_CPUSS,   1,  512, 1, 0, 0xf, 0x0, 0, 0, 1, 1, 1 },
+	{ LLCC_ROTATOR, 4,  384, 2, 1, 0x0, 0xe, 2, 0, 1, 1, 0 },
+	{ LLCC_VOICE,   5,  512, 1, 0, 0xf, 0x0, 0, 0, 1, 1, 0 },
+	{ LLCC_AUDIO,   6,  512, 1, 0, 0xf, 0x0, 0, 0, 1, 1, 0 },
+	{ LLCC_MDM,     8,  512, 1, 0, 0xf, 0x0, 0, 0, 1, 1, 0 },
+	{ LLCC_GPU,     12, 384, 1, 1, 0x0, 0x0, 0, 0, 1, 1, 1 },
+	{ LLCC_MMUHWT,  13, 512, 1, 0, 0xf, 0x0, 0, 0, 1, 0, 0 },
+	{ LLCC_AUDHW,   22, 512, 1, 1, 0xf, 0x0, 0, 0, 1, 1, 1 },
+};
+
 static const struct llcc_slice_config sdm845_data[] =  {
 	{ LLCC_CPUSS,    1,  2816, 1, 0, 0xffc, 0x2,   0, 0, 1, 1, 1 },
 	{ LLCC_VIDSC0,   2,  512,  2, 1, 0x0,   0x0f0, 0, 0, 1, 1, 0 },
@@ -592,6 +603,17 @@ static const struct qcom_llcc_config sc8280xp_cfg[] = {
 	},
 };
 
+static const struct qcom_llcc_config sdm670_cfg[] = {
+	{
+		.sct_data	= sdm670_data,
+		.size		= ARRAY_SIZE(sdm670_data),
+		.need_llcc_cfg	= false,
+		.reg_offset	= llcc_v1_reg_offset,
+		.edac_reg_offset = &llcc_v1_edac_reg_offset,
+		.no_edac	= true,
+	},
+};
+
 static const struct qcom_llcc_config sdm845_cfg[] = {
 	{
 		.sct_data	= sdm845_data,
@@ -716,6 +738,11 @@ static const struct qcom_sct_config sc8180x_cfgs = {
 static const struct qcom_sct_config sc8280xp_cfgs = {
 	.llcc_config	= sc8280xp_cfg,
 	.num_config	= ARRAY_SIZE(sc8280xp_cfg),
+};
+
+static const struct qcom_sct_config sdm670_cfgs = {
+	.llcc_config	= sdm670_cfg,
+	.num_config	= ARRAY_SIZE(sdm670_cfg),
 };
 
 static const struct qcom_sct_config sdm845_cfgs = {
@@ -1336,6 +1363,7 @@ static const struct of_device_id qcom_llcc_of_match[] = {
 	{ .compatible = "qcom,sc7280-llcc", .data = &sc7280_cfgs },
 	{ .compatible = "qcom,sc8180x-llcc", .data = &sc8180x_cfgs },
 	{ .compatible = "qcom,sc8280xp-llcc", .data = &sc8280xp_cfgs },
+	{ .compatible = "qcom,sdm670-llcc", .data = &sdm670_cfgs },
 	{ .compatible = "qcom,sdm845-llcc", .data = &sdm845_cfgs },
 	{ .compatible = "qcom,sm6350-llcc", .data = &sm6350_cfgs },
 	{ .compatible = "qcom,sm7150-llcc", .data = &sm7150_cfgs },
