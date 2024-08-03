@@ -2244,7 +2244,6 @@ static const struct camss_resources sdm660_resources = {
 	.link_entities = camss_link_entities
 };
 
-
 static const struct camss_resources sdm670_resources = {
 	.version = CAMSS_845,
 	.csiphy_res = csiphy_res_845,
