@@ -659,6 +659,14 @@
 	status = "okay";
 };
 
+&camss_port1 {
+	camss_endpoint1: endpoint {
+		clock-lanes = <7>;
+		data-lanes = <0 1 2 3>;
+		remote-endpoint = <&cam_front_endpoint>;
+	};
+};
+
 &cci {
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&cci1_default &cam_mclk_default>;
@@ -700,12 +708,6 @@
 			};
 		};
 	};
-};
-
-&camss_endpoint1 {
-	clock-lanes = <7>;
-	data-lanes = <0 1 2 3>;
-	remote-endpoint = <&cam_front_endpoint>;
 };
 
 &gcc {
