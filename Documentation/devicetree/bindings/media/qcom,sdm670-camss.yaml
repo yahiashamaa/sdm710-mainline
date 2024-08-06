@@ -205,6 +205,10 @@ additionalProperties: false
 
 examples:
   - |
+    #include <dt-bindings/clock/qcom,camcc-sdm845.h>
+    #include <dt-bindings/clock/qcom,gcc-sdm845.h>
+    #include <dt-bindings/interrupt-controller/arm-gic.h>
+
     soc {
         #address-cells = <2>;
         #size-cells = <2>;
