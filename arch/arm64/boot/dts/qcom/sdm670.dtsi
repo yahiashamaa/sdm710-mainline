@@ -2414,26 +2414,26 @@
 			};
 		};
 
-		camss: camera-controller@acb3000 {
+		camss: camera-controller@ac65000 {
 			compatible = "qcom,sdm670-camss";
-			reg = <0 0x0acb3000 0 0x1000>,
-			      <0 0x0acba000 0 0x1000>,
-			      <0 0x0acc8000 0 0x1000>,
-			      <0 0x0ac65000 0 0x1000>,
+			reg = <0 0x0ac65000 0 0x1000>,
 			      <0 0x0ac66000 0 0x1000>,
 			      <0 0x0ac67000 0 0x1000>,
 			      <0 0x0acaf000 0 0x4000>,
+			      <0 0x0acb3000 0 0x1000>,
 			      <0 0x0acb6000 0 0x4000>,
-			      <0 0x0acc4000 0 0x4000>;
-			reg-names = "csid0",
-				    "csid1",
-				    "csid2",
-				    "csiphy0",
+			      <0 0x0acba000 0 0x1000>,
+			      <0 0x0acc4000 0 0x4000>,
+			      <0 0x0acc8000 0 0x1000>;
+			reg-names = "csiphy0",
 				    "csiphy1",
 				    "csiphy2",
 				    "vfe0",
+				    "csid0",
 				    "vfe1",
-				    "vfe_lite";
+				    "csid1",
+				    "vfe_lite",
+				    "csid2";
 
 			interrupts = <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
 				     <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
