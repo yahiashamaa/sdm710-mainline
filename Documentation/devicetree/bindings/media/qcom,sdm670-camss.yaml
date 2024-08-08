@@ -18,43 +18,32 @@ properties:
     const: qcom,sdm670-camss
 
   clocks:
-    maxItems: 33
+    maxItems: 22
 
   clock-names:
     items:
       - const: camnoc_axi
       - const: cpas_ahb
-      - const: cphy_rx_src
       - const: csi0
-      - const: csi0_src
       - const: csi1
-      - const: csi1_src
       - const: csi2
-      - const: csi2_src
       - const: csiphy0
       - const: csiphy0_timer
-      - const: csiphy0_timer_src
       - const: csiphy1
       - const: csiphy1_timer
-      - const: csiphy1_timer_src
       - const: csiphy2
       - const: csiphy2_timer
-      - const: csiphy2_timer_src
       - const: gcc_camera_ahb
       - const: gcc_camera_axi
-      - const: slow_ahb_src
       - const: soc_ahb
       - const: vfe0_axi
       - const: vfe0
       - const: vfe0_cphy_rx
-      - const: vfe0_src
       - const: vfe1_axi
       - const: vfe1
       - const: vfe1_cphy_rx
-      - const: vfe1_src
       - const: vfe_lite
       - const: vfe_lite_cphy_rx
-      - const: vfe_lite_src
 
   interrupts:
     maxItems: 9
@@ -256,70 +245,48 @@ examples:
 
             clocks = <&camcc CAM_CC_CAMNOC_AXI_CLK>,
                      <&camcc CAM_CC_CPAS_AHB_CLK>,
-                     <&camcc CAM_CC_CPHY_RX_CLK_SRC>,
                      <&camcc CAM_CC_IFE_0_CSID_CLK>,
-                     <&camcc CAM_CC_IFE_0_CSID_CLK_SRC>,
                      <&camcc CAM_CC_IFE_1_CSID_CLK>,
-                     <&camcc CAM_CC_IFE_1_CSID_CLK_SRC>,
                      <&camcc CAM_CC_IFE_LITE_CSID_CLK>,
-                     <&camcc CAM_CC_IFE_LITE_CSID_CLK_SRC>,
                      <&camcc CAM_CC_CSIPHY0_CLK>,
                      <&camcc CAM_CC_CSI0PHYTIMER_CLK>,
-                     <&camcc CAM_CC_CSI0PHYTIMER_CLK_SRC>,
                      <&camcc CAM_CC_CSIPHY1_CLK>,
                      <&camcc CAM_CC_CSI1PHYTIMER_CLK>,
-                     <&camcc CAM_CC_CSI1PHYTIMER_CLK_SRC>,
                      <&camcc CAM_CC_CSIPHY2_CLK>,
                      <&camcc CAM_CC_CSI2PHYTIMER_CLK>,
-                     <&camcc CAM_CC_CSI2PHYTIMER_CLK_SRC>,
                      <&gcc GCC_CAMERA_AHB_CLK>,
                      <&gcc GCC_CAMERA_AXI_CLK>,
-                     <&camcc CAM_CC_SLOW_AHB_CLK_SRC>,
                      <&camcc CAM_CC_SOC_AHB_CLK>,
                      <&camcc CAM_CC_IFE_0_AXI_CLK>,
                      <&camcc CAM_CC_IFE_0_CLK>,
                      <&camcc CAM_CC_IFE_0_CPHY_RX_CLK>,
-                     <&camcc CAM_CC_IFE_0_CLK_SRC>,
                      <&camcc CAM_CC_IFE_1_AXI_CLK>,
                      <&camcc CAM_CC_IFE_1_CLK>,
                      <&camcc CAM_CC_IFE_1_CPHY_RX_CLK>,
-                     <&camcc CAM_CC_IFE_1_CLK_SRC>,
                      <&camcc CAM_CC_IFE_LITE_CLK>,
-                     <&camcc CAM_CC_IFE_LITE_CPHY_RX_CLK>,
-                     <&camcc CAM_CC_IFE_LITE_CLK_SRC>;
+                     <&camcc CAM_CC_IFE_LITE_CPHY_RX_CLK>;
             clock-names = "camnoc_axi",
                           "cpas_ahb",
-                          "cphy_rx_src",
                           "csi0",
-                          "csi0_src",
                           "csi1",
-                          "csi1_src",
                           "csi2",
-                          "csi2_src",
                           "csiphy0",
                           "csiphy0_timer",
-                          "csiphy0_timer_src",
                           "csiphy1",
                           "csiphy1_timer",
-                          "csiphy1_timer_src",
                           "csiphy2",
                           "csiphy2_timer",
-                          "csiphy2_timer_src",
                           "gcc_camera_ahb",
                           "gcc_camera_axi",
-                          "slow_ahb_src",
                           "soc_ahb",
                           "vfe0_axi",
                           "vfe0",
                           "vfe0_cphy_rx",
-                          "vfe0_src",
                           "vfe1_axi",
                           "vfe1",
                           "vfe1_cphy_rx",
-                          "vfe1_src",
                           "vfe_lite",
-                          "vfe_lite_cphy_rx",
-                          "vfe_lite_src";
+                          "vfe_lite_cphy_rx";
 
             iommus = <&apps_smmu 0x808 0x0>,
                      <&apps_smmu 0x810 0x8>,
