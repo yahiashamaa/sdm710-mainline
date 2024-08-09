@@ -668,6 +668,7 @@ static const struct camss_subdev_resources vfe_res_670[] = {
 		.vfe = {
 			.line_num = 4,
 			.has_pd = true,
+			.pd_name = "ife0",
 			.hw_ops = &vfe_ops_170
 		}
 	},
@@ -688,6 +689,7 @@ static const struct camss_subdev_resources vfe_res_670[] = {
 		.vfe = {
 			.line_num = 4,
 			.has_pd = true,
+			.pd_name = "ife1",
 			.hw_ops = &vfe_ops_170
 		}
 	},
