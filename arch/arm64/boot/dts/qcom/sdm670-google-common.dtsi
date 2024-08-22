@@ -416,6 +416,20 @@
 		pinctrl-0 = <&cam_front_ldo_pin>;
 	};
 
+	cam_rear_ldo: cam-rear-ldo-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "cam_rear_ldo";
+		regulator-min-microvolt = <1352000>;
+		regulator-max-microvolt = <1352000>;
+		regulator-enable-ramp-delay = <233>;
+
+		gpios = <&pm660l_gpios 3 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&cam_rear_ldo_pin>;
+	};
+
 	cam_vio_ldo: cam-vio-ldo-regulator {
 		compatible = "regulator-fixed";
 		regulator-name = "cam_vio_ldo";
@@ -659,6 +673,14 @@
 	status = "okay";
 };
 
+&camss_port0 {
+	camss_endpoint0: endpoint {
+		clock-lanes = <7>;
+		data-lanes = <0 1 2 3>;
+		remote-endpoint = <&cam_rear_endpoint>;
+	};
+};
+
 &camss_port1 {
 	camss_endpoint1: endpoint {
 		clock-lanes = <7>;
@@ -669,10 +691,46 @@
 
 &cci {
 	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&cci1_default &cam_mclk_default>;
-	pinctrl-1 = <&cci1_sleep>;
+	pinctrl-0 = <&cci0_default &cci1_default &cam_mclk_default>;
+	pinctrl-1 = <&cci0_sleep &cci1_sleep>;
 
 	status = "okay";
+};
+
+&cci_i2c0 {
+	camera@1a {
+		compatible = "sony,imx363";
+		reg = <0x1a>;
+
+		clocks = <&camcc CAM_CC_MCLK0_CLK>;
+		clock-names = "xvclk";
+
+		clock-frequency = <24000000>;
+
+		assigned-clocks = <&camcc CAM_CC_MCLK0_CLK>;
+		assigned-clock-rates = <24000000>;
+
+		reset-gpios = <&tlmm 127 GPIO_ACTIVE_HIGH>;
+
+		vif-supply = <&cam_vio_ldo>;
+		vana-supply = <&cam_rear_ldo>;
+		vdig-supply = <&cam_rear_ldo>;
+		vio-supply = <&cam_vio_ldo>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&cam_rear_default>;
+
+		rotation = <90>;
+		orientation = <1>;
+
+		port {
+			cam_rear_endpoint: endpoint {
+				data-lanes = <0 1 2 3>;
+				link-frequencies = /bits/ 64 <321000000 636000000>;
+				remote-endpoint = <&camss_endpoint0>;
+			};
+		};
+	};
 };
 
 &cci_i2c1 {
@@ -1035,6 +1093,13 @@
 };
 
 &pm660l_gpios {
+	cam_rear_ldo_pin: cam-rear-state {
+		pins = "gpio3";
+		function = "normal";
+		power-source = <PM8941_GPIO_VPH>;
+		output-low;
+	};
+
 	cam_front_ldo_pin: cam-front-state {
 		pins = "gpio4";
 		function = "normal";
@@ -1159,6 +1224,20 @@
 &tlmm {
 	gpio-reserved-ranges = <0 4>, <81 4>;
 
+	cam_rear_default: cam-rear-default-state {
+		vana-pins {
+			pins = "gpio8";
+			output-high;
+		};
+
+		reset-pins {
+			pins = "gpio127";
+			function = "gpio";
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
+
 	cam_front_default: cam-front-default-state {
 		pins = "gpio9";
 		function = "gpio";
@@ -1167,6 +1246,13 @@
 	};
 
 	cam_mclk_default: cam-default-state {
+		mclk0-pins {
+			pins = "gpio13";
+			function = "cam_mclk";
+			drive-strength = <2>;
+			bias-disable;
+		};
+
 		mclk2-pins {
 			pins = "gpio15";
 			function = "cam_mclk";
