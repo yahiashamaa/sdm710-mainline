@@ -1302,7 +1302,7 @@ MODULE_DEVICE_TABLE(of, fg_match_id_table);
 
 static struct platform_driver qcom_fg_driver = {
 	.probe = qcom_fg_probe,
-	.remove = qcom_fg_remove,
+	.remove_new = qcom_fg_remove,
 	.driver = {
 		.name = "qcom-fg",
 		.of_match_table = fg_match_id_table,
