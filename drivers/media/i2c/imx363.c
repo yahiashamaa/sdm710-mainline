@@ -422,28 +422,6 @@ static const struct cci_reg_sequence mode_4032x3024_regs[] = {
 	{CCI_REG8(0x0227), 0x00},
 };
 
-static const struct cci_reg_sequence mode_1920_1080_regs[] = {
-	{IMX363_REG_BINNING_MODE, 1},
-	{IMX363_REG_BINNING_TYPE_V, 0x42},
-	// {IMX363_REG_SCALE_MODE, 1},
-	// {IMX363_REG_SCALE_M, 64},
-	{IMX363_REG_X_ADD_STA, 0}, // analog cropping
-	{IMX363_REG_Y_ADD_STA, 0},
-	{IMX363_REG_X_ADD_END, 4031},
-	{IMX363_REG_Y_ADD_END, 3023},
-	{IMX363_REG_X_EVN_INC, 1}, //subsampling
-	{IMX363_REG_X_ODD_INC, 1},
-	{IMX363_REG_Y_EVN_INC, 1},
-	{IMX363_REG_Y_ODD_INC, 1},
-	{IMX363_REG_DIG_CROP_X_OFFSET, 0}, // digital cropping
-	{IMX363_REG_DIG_CROP_Y_OFFSET, 0},
-	{IMX363_REG_DIG_CROP_IMAGE_WIDTH, 1920},
-	{IMX363_REG_DIG_CROP_IMAGE_HEIGHT, 1080},
-	{IMX363_REG_X_OUT_SIZE, 1920},
-	{IMX363_REG_Y_OUT_SIZE, 1080},
-	{IMX363_REG_FRM_LENGTH_LINES, IMX363_VTS_30FPS_HD},
-};
-
 /*
  * The supported formats.
  * This table MUST contain 4 entries per format, to cover the various flip
@@ -566,23 +544,6 @@ static const struct imx363_mode supported_modes[] = {
 			.top = IMX363_PIXEL_ARRAY_TOP,
 			.width = IMX363_PIXEL_ARRAY_WIDTH,
 			.height = IMX363_PIXEL_ARRAY_HEIGHT,
-		},
-	},
-	{
-		.width = 1920,
-		.height = 1080,
-		.vts_def = IMX363_VTS_30FPS_HD,
-		.vts_min = IMX363_VTS_30FPS_HD,
-		.reg_list = {
-			.num_of_regs = ARRAY_SIZE(mode_1920_1080_regs),
-			.regs = mode_1920_1080_regs,
-		},
-		.link_freq_index = IMX363_LINK_FREQ_640MBPS,
-		.crop = {
-			.left = IMX363_PIXEL_ARRAY_LEFT,
-			.top = IMX363_PIXEL_ARRAY_TOP,
-			.width = 4032,
-			.height = 3024,
 		},
 	},
 };
