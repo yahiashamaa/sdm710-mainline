@@ -32,6 +32,8 @@
 /delete-node/ &rmtfs_mem;
 
 / {
+	chassis-type = "handset";
+
 	aliases {
 		hsuart0 = &uart6;
 	};
