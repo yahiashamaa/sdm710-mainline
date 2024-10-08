@@ -1037,6 +1037,10 @@
 	};
 };
 
+&q6core {
+	qcom,acdb-name = "qcom/sdm670/sargo/Global_cal.acdb";
+};
+
 &sdhc_1 {
 	supports-cqe;
 	mmc-hs200-1_8v;
