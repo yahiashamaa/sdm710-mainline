@@ -1187,6 +1187,10 @@
 	};
 };
 
+&q6core {
+	qcom,acdb-name = "qcom/sdm670/sargo/Global_cal.acdb";
+};
+
 &q6voicedai {
 	dai@1 {
 		reg = <VOICEMMODE1>;
