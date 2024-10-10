@@ -84,8 +84,8 @@ static int modemsmem_probe(struct platform_device *pdev) {
 	return 0;
 }
 
-static int modemsmem_remove(struct platform_device *pdev) {
-	return 0;
+static void modemsmem_remove(struct platform_device *pdev)
+{
 }
 
 static struct of_device_id modemsmem_of_match[] = {
