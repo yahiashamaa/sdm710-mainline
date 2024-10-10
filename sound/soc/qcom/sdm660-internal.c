@@ -374,9 +374,8 @@ static int snd_sdm660_int_probe(struct platform_device *pdev)
 	return devm_snd_soc_register_card(dev, card);
 }
 
-static int snd_sdm660_int_remove(struct platform_device *pdev)
+static void snd_sdm660_int_remove(struct platform_device *pdev)
 {
-	return 0;
 }
 
 static const struct of_device_id snd_sdm660_int_device_id[] = {
