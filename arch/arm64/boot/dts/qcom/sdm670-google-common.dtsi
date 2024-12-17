@@ -682,12 +682,11 @@
 	status = "okay";
 };
 
-&camss_port0 {
-	camss_endpoint0: endpoint {
-		clock-lanes = <7>;
-		data-lanes = <0 1 2 3>;
-		remote-endpoint = <&cam_rear_endpoint>;
-	};
+&camss_endpoint0 {
+	clock-lanes = <7>;
+	data-lanes = <0 1 2 3>;
+	remote-endpoint = <&cam_rear_endpoint>;
+	status = "okay";
 };
 
 &camss_endpoint1 {
