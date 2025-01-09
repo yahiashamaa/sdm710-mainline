@@ -519,6 +519,30 @@ static int smb2_get_prop_status(struct smb2_chip *chip, int *val)
 	}
 }
 
+static int smb2_set_prop_status(struct smb2_chip *chip, int val)
+{
+	int rc;
+	u32 enable;
+
+	if (val == POWER_SUPPLY_STATUS_CHARGING)
+		enable = CHARGING_ENABLE_CMD_BIT;
+	else if (val == POWER_SUPPLY_STATUS_DISCHARGING
+	      || val == POWER_SUPPLY_STATUS_NOT_CHARGING)
+		enable = 0;
+	else
+		return -EINVAL;
+
+	rc = regmap_update_bits(chip->regmap, chip->base + CHARGING_ENABLE_CMD,
+				CHARGING_ENABLE_CMD_BIT, enable);
+	if (rc < 0) {
+		dev_err(chip->dev, "Failed to write charging status ret=%d\n",
+			rc);
+		return rc;
+	}
+
+	return rc;
+}
+
 static inline int smb2_get_current_limit(struct smb2_chip *chip,
 					 unsigned int *val)
 {
@@ -695,6 +719,8 @@ static int smb2_set_property(struct power_supply *psy,
 	switch (psp) {
 	case POWER_SUPPLY_PROP_CURRENT_MAX:
 		return smb2_set_current_limit(chip, val->intval);
+	case POWER_SUPPLY_PROP_STATUS:
+		return smb2_set_prop_status(chip, val->intval);
 	default:
 		dev_err(chip->dev, "No setter for property: %d\n", psp);
 		return -EINVAL;
@@ -706,6 +732,7 @@ static int smb2_property_is_writable(struct power_supply *psy,
 {
 	switch (psp) {
 	case POWER_SUPPLY_PROP_CURRENT_MAX:
+	case POWER_SUPPLY_PROP_STATUS:
 		return 1;
 	default:
 		return 0;
