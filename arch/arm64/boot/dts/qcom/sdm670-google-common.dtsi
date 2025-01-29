@@ -362,6 +362,72 @@
 				};
 			};
 		};
+
+		battery-thermal {
+			polling-delay-passive = <250>;
+			polling-delay = <1000>;
+
+			thermal-sensors = <&pm660_adc_tm 1>;
+
+			cooling-maps {
+				map0 {
+					trip = <&battery_alert0>;
+					cooling-device = <&pm660_charger 1 1>;
+				};
+
+				map1 {
+					trip = <&battery_alert1>;
+					cooling-device = <&pm660_charger 2 2>;
+				};
+
+				map2 {
+					trip = <&battery_alert2>;
+					cooling-device = <&pm660_charger 3 3>;
+				};
+
+				map3 {
+					trip = <&battery_alert3>;
+					cooling-device = <&pm660_charger 4 4>;
+				};
+
+				map4 {
+					trip = <&battery_alert4>;
+					cooling-device = <&pm660_charger 5 5>;
+				};
+			};
+
+			trips {
+				battery_alert0: trip-point0 {
+					temperature = <37500>;
+					hysteresis = <1000>;
+					type = "passive";
+				};
+
+				battery_alert1: trip-point1 {
+					temperature = <39500>;
+					hysteresis = <1000>;
+					type = "passive";
+				};
+
+				battery_alert2: trip-point2 {
+					temperature = <41500>;
+					hysteresis = <1000>;
+					type = "passive";
+				};
+
+				battery_alert3: trip-point3 {
+					temperature = <42500>;
+					hysteresis = <1000>;
+					type = "passive";
+				};
+
+				battery_alert4: trip-point4 {
+					temperature = <44500>;
+					hysteresis = <1000>;
+					type = "passive";
+				};
+			};
+		};
 	};
 
 	/*
@@ -1039,6 +1105,14 @@
 	xo-therm@0 {
 		reg = <0>;
 		io-channels = <&pm660_adc ADC5_XO_THERM_100K_PU>;
+		qcom,hw-settle-time-us = <200>;
+		qcom,pre-scaling = <1 1>;
+		qcom,ratiometric;
+	};
+
+	msm-therm@1 {
+		reg = <1>;
+		io-channels = <&pm660_adc ADC5_AMUX_THM1_100K_PU>;
 		qcom,hw-settle-time-us = <200>;
 		qcom,pre-scaling = <1 1>;
 		qcom,ratiometric;
