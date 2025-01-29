@@ -916,7 +916,7 @@ static const struct smb2_register smb2_init_seq[] = {
 	 */
 	{ .addr = FAST_CHARGE_CURRENT_CFG,
 	  .mask = FAST_CHARGE_CURRENT_SETTING_MASK,
-	  .val = 1000000 / CURRENT_SCALE_FACTOR },
+	  .val = THERMAL_FCC_MAX / CURRENT_SCALE_FACTOR },
 };
 
 static int smb2_thermal_get_max_state(struct thermal_cooling_device *cdev, unsigned long *max_state)
