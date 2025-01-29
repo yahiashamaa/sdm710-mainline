@@ -22,6 +22,7 @@
 #include <linux/regmap.h>
 #include <linux/types.h>
 #include <linux/workqueue.h>
+#include <linux/thermal.h>
 
 /* clang-format off */
 #define BATTERY_CHARGER_STATUS_1			0x06
@@ -351,6 +352,9 @@
 #define CURRENT_SCALE_FACTOR				25000
 /* clang-format on */
 
+#define THERMAL_FCC_MAX					3000000
+#define THERMAL_FCC_STEP				500000
+
 enum charger_status {
 	TRICKLE_CHARGE = 0,
 	PRE_CHARGE,
@@ -381,6 +385,7 @@ struct smb2_register {
  * @usb_in_i_chan:	USB_IN current measurement channel
  * @usb_in_v_chan:	USB_IN voltage measurement channel
  * @chg_psy:		Charger power supply instance
+ * @cdev:		Cooling device
  */
 struct smb2_chip {
 	struct device *dev;
@@ -397,6 +402,11 @@ struct smb2_chip {
 	struct iio_channel *usb_in_v_chan;
 
 	struct power_supply *chg_psy;
+
+	struct thermal_cooling_device *cdev;
+	u32 cdev_fcc_max;
+	u32 cdev_fcc_step;
+	int cooling_state;
 };
 
 static enum power_supply_property smb2_properties[] = {
@@ -909,6 +919,76 @@ static const struct smb2_register smb2_init_seq[] = {
 	  .val = 1000000 / CURRENT_SCALE_FACTOR },
 };
 
+static int smb2_thermal_get_max_state(struct thermal_cooling_device *cdev, unsigned long *max_state)
+{
+	struct smb2_chip *chip = cdev->devdata;
+
+	*max_state = (chip->cdev_fcc_max / chip->cdev_fcc_step) - 1;
+
+	return 0;
+}
+
+static int smb2_thermal_get_cur_state(struct thermal_cooling_device *cdev, unsigned long *state)
+{
+	struct smb2_chip *chip = cdev->devdata;
+
+	*state = chip->cooling_state;
+
+	return 0;
+}
+
+static int smb2_thermal_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
+{
+	struct smb2_chip *chip = cdev->devdata;
+	u32 current_ua = chip->cdev_fcc_max - state * chip->cdev_fcc_step;
+
+	regmap_write(chip->regmap, chip->base + FAST_CHARGE_CURRENT_CFG,
+		     current_ua / CURRENT_SCALE_FACTOR);
+	chip->cooling_state = state;
+
+	return 0;
+}
+
+static int smb2_thermal_get_requested_power(struct thermal_cooling_device *cdev, u32 *power)
+{
+	struct smb2_chip *chip = cdev->devdata;
+	u32 current_ua = chip->cdev_fcc_max - chip->cooling_state * chip->cdev_fcc_step;
+
+	*power = current_ua / 1000;
+
+	return 0;
+}
+
+static int smb2_thermal_state2power(struct thermal_cooling_device *cdev,
+				    unsigned long state, u32 *power)
+{
+	struct smb2_chip *chip = cdev->devdata;
+	u32 current_ua = chip->cdev_fcc_max - state * chip->cdev_fcc_step;
+
+	*power = current_ua / 1000;
+
+	return 0;
+}
+
+static int smb2_thermal_power2state(struct thermal_cooling_device *cdev,
+				    u32 power, unsigned long *state)
+{
+	struct smb2_chip *chip = cdev->devdata;
+
+	*state = (chip->cdev_fcc_max - power * 1000) / chip->cdev_fcc_step;
+
+	return 0;
+}
+
+static const struct thermal_cooling_device_ops smb2_cooling_ops = {
+	.get_max_state = smb2_thermal_get_max_state,
+	.get_cur_state = smb2_thermal_get_cur_state,
+	.set_cur_state = smb2_thermal_set_cur_state,
+	.get_requested_power = smb2_thermal_get_requested_power,
+	.state2power = smb2_thermal_state2power,
+	.power2state = smb2_thermal_power2state,
+};
+
 static int smb2_init_hw(struct smb2_chip *chip)
 {
 	int rc, i;
@@ -985,6 +1065,18 @@ static int smb2_probe(struct platform_device *pdev)
 		return dev_err_probe(chip->dev, PTR_ERR(chip->usb_in_i_chan),
 				     "Couldn't get usbin_i IIO channel\n");
 	}
+
+	chip->cooling_state = 0;
+	chip->cdev_fcc_max = THERMAL_FCC_MAX;
+	chip->cdev_fcc_step = THERMAL_FCC_STEP;
+
+	chip->cdev = devm_thermal_of_cooling_device_register(chip->dev,
+							     chip->dev->of_node,
+							     "qcom-smb2-charger",
+							     chip,
+							     &smb2_cooling_ops);
+	if (IS_ERR(chip->cdev))
+		return PTR_ERR(chip->cdev);
 
 	rc = smb2_init_hw(chip);
 	if (rc < 0)
