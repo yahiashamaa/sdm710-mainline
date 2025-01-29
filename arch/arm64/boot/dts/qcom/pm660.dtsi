@@ -87,6 +87,8 @@
 				      <&pm660_rradc 4>;
 			io-channel-names = "usbin_i", "usbin_v";
 
+			#cooling-cells = <2>;
+
 			status = "disabled";
 		};
 
