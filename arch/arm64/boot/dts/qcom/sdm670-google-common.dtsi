@@ -416,9 +416,16 @@
 		pinctrl-0 = <&cam_front_ldo_pin>;
 	};
 
-	cam_rear_ldo: cam-rear-ldo-regulator {
+	cam_rear_vana_ldo: cam-rear-vana-ldo-regulator {
 		compatible = "regulator-fixed";
-		regulator-name = "cam_rear_ldo";
+		regulator-name = "cam_rear_vana_ldo";
+		gpios = <&tlmm 8 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
+
+	cam_rear_vdig_ldo: cam-rear-vdig-ldo-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "cam_rear_vdig_ldo";
 		regulator-min-microvolt = <1352000>;
 		regulator-max-microvolt = <1352000>;
 		regulator-enable-ramp-delay = <233>;
@@ -712,8 +719,8 @@
 		reset-gpios = <&tlmm 127 GPIO_ACTIVE_HIGH>;
 
 		vif-supply = <&cam_vio_ldo>;
-		vana-supply = <&cam_rear_ldo>;
-		vdig-supply = <&cam_rear_ldo>;
+		vana-supply = <&cam_rear_vana_ldo>;
+		vdig-supply = <&cam_rear_vdig_ldo>;
 		vio-supply = <&cam_vio_ldo>;
 
 		pinctrl-names = "default";
@@ -1224,11 +1231,6 @@
 	gpio-reserved-ranges = <0 4>, <81 4>;
 
 	cam_rear_default: cam-rear-default-state {
-		vana-pins {
-			pins = "gpio8";
-			output-high;
-		};
-
 		reset-pins {
 			pins = "gpio127";
 			function = "gpio";
