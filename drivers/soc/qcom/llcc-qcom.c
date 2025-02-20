@@ -3345,7 +3345,7 @@ static const struct qcom_llcc_config sdm670_cfg[] = {
 	{
 		.sct_data	= sdm670_data,
 		.size		= ARRAY_SIZE(sdm670_data),
-		.need_llcc_cfg	= false,
+		.skip_llcc_cfg	= true,
 		.reg_offset	= llcc_v1_reg_offset,
 		.edac_reg_offset = &llcc_v1_edac_reg_offset,
 		.no_edac	= true,
