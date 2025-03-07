@@ -83,6 +83,9 @@ required:
 
 examples:
   - |
+    #include <dt-bindings/clock/qcom,camcc-sdm845.h>
+    #include <dt-bindings/gpio/gpio.h>
+
     camera@1a {
         compatible = "sony,imx355";
         reg = <0x1a>;
