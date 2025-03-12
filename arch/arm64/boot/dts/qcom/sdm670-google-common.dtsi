@@ -841,6 +841,11 @@
 	};
 };
 
+&cdsp_pas {
+	status = "okay";
+	firmware-name = "qcom/sdm670/sargo/cdsp.mbn";
+};
+
 &gcc {
 	protected-clocks = <GCC_QSPI_CORE_CLK>,
 			   <GCC_QSPI_CORE_CLK_SRC>,
