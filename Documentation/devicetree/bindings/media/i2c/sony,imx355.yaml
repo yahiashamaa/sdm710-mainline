@@ -39,15 +39,12 @@ properties:
     description: External clock frequency.
 
   vana-supply:
-    $ref: /schemas/types.yaml#/definitions/phandle
     description: Analog power supply.
 
   vdig-supply:
-    $ref: /schemas/types.yaml#/definitions/phandle
     description: Analog power supply.
 
   vio-supply:
-    $ref: /schemas/types.yaml#/definitions/phandle
     description: Interface power supply.
 
   reset-gpios:
