@@ -42,7 +42,7 @@ properties:
     description: Analog power supply.
 
   vdig-supply:
-    description: Analog power supply.
+    description: Digital power supply.
 
   vio-supply:
     description: Interface power supply.
