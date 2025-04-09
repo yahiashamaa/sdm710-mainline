@@ -581,6 +581,7 @@
 	status = "okay";
 };
 
+// emmc
 &sdhc_1 {
 	supports-cqe;
 	mmc-hs200-1_8v;
@@ -591,6 +592,20 @@
 
 	vmmc-supply = <&vreg_l4b_2p95>;
 	vqmmc-supply = <&vreg_l8a_1p8>;
+
+	status = "okay";
+};
+
+// sd-card
+&sdhc_2 {
+	/* Card detection seems broken, this workarround is not great
+	as the card is plugged in to the side of the device.*/
+	non-removable;
+
+	bus-width = <4>;
+
+	vmmc-supply = <&vreg_l5b_2p95>;
+	vqmmc-supply = <&vreg_l15a_1p8>;
 
 	status = "okay";
 };
