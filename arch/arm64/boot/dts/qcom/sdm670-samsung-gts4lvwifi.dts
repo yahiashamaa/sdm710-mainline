@@ -605,7 +605,7 @@
 	bus-width = <4>;
 
 	vmmc-supply = <&vreg_l5b_2p95>;
-	vqmmc-supply = <&vreg_l15a_1p8>;
+	vqmmc-supply = <&vreg_l2b_2p95>;
 
 	status = "okay";
 };
