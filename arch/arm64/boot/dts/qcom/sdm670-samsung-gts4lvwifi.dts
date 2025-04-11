@@ -598,9 +598,11 @@
 
 // sd-card
 &sdhc_2 {
-	/* Card detection seems broken, this workarround is not great
-	as the card is plugged in to the side of the device.*/
-	non-removable;
+	pinctrl-0 = <&sdc2_state_on &sdc2_cd_default>;
+	pinctrl-1 = <&sdc2_state_off &sdc2_cd_default>;
+	pinctrl-names = "default", "sleep";
+
+	cd-gpios = <&tlmm 3 GPIO_ACTIVE_LOW>;
 
 	bus-width = <4>;
 
@@ -608,6 +610,17 @@
 	vqmmc-supply = <&vreg_l2b_2p95>;
 
 	status = "okay";
+};
+
+&tlmm {
+	gpio-reserved-ranges = <81 4>;
+
+	sdc2_cd_default: sdc2-cd-default-state {
+		pins = "gpio3";
+		function = "gpio";
+		drive-strength = <2>;
+		bias-disable;
+	};
 };
 
 &uart6 {
