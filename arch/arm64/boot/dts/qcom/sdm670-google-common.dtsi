@@ -771,7 +771,7 @@
 		assigned-clocks = <&camcc CAM_CC_MCLK0_CLK>;
 		assigned-clock-rates = <24000000>;
 
-		reset-gpios = <&tlmm 127 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&tlmm 127 GPIO_ACTIVE_LOW>;
 
 		vif-supply = <&cam_vio_ldo>;
 		vana-supply = <&cam_rear_vana_ldo>;
