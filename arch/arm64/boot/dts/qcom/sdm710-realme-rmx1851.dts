@@ -1,0 +1,74 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Device tree for Realme 3 Pro
+ * Adapted from xiaomi-lavender device tree
+ * Copyright (c) 2025, Yahia Shamaa <yehiashamaa987@gmail.com>
+ */
+
+/dts-v1/;
+
+#include "sdm710.dtsi"
+
+/ {
+	model = "Realme 3 Pro";
+	compatible = "realme,rmx1851", "qcom,sdm710";
+	qcom,msm-id =	<360 0x0>,
+			<393 0x0>;
+	
+	aliases { };	
+
+	chosen {
+		
+		bootargs = "clk_ignore_unused regulator_ignore_unused pd_ignore_unused";		
+
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		stdout-path = "framebuffer0";
+
+		framebuffer0: framebuffer@9c000000 {
+			compatible = "simple-framebuffer";
+			reg = <0 0x9c000000 0 (1080 * 2340 * 4)>;
+			width = <1080>;
+			height = <2340>;
+			stride = <(1080 * 4)>;
+			format = "a8r8g8b8";
+			status = "okay";
+		};
+	
+	};
+	
+	clocks {
+                sleep_clk: sleep-clk {
+                        compatible = "fixed-clock";
+                        #clock-cells = <0>;
+                        clock-frequency = <32764>;
+                };
+
+                xo_board: xo-board {
+                        compatible = "fixed-clock";
+                        #clock-cells = <0>;
+                        clock-frequency = <38400000>;
+                };
+        };
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+		framebuffer-region@9c000000 {
+			reg = <0 0x9c000000 0 0x2300000>;
+			no-map;
+		};
+	};
+};
+
+&gcc {
+	status = "disabled";
+};
+
+&tlmm {
+	status = "disabled";
+};
+

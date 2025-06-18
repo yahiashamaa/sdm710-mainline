@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: GPL-2.0
+/* 
+ * SDM710 SoC device tree source
+ *	
+ * Copyright (c) 2018, The Linux Foundation. All rights reserved.
+ * 
+ */
+
+#include "sdm670.dtsi"
+
+/ {
+	model = "Qualcomm Technologies, Inc. SDM710";
+	compatible = "qcom,sdm670";
+	qcom,msm-id =	<360 0x0>,
+			<393 0x0>;
+};
+
+&gpu {
+	qcom,chipid = <0x06010600>;
+};
