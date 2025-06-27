@@ -134,7 +134,7 @@ struct imx355 {
 	struct regulator_bulk_data supplies[3];
 };
 
-static const char *imx355_supply_names[] = {
+static const char * const imx355_supply_names[] = {
 	"vana",
 	"vdig",
 	"vio",
