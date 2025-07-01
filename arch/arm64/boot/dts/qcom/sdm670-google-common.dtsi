@@ -468,8 +468,8 @@
 		gpios = <&pm660l_gpios 4 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 
-		pinctrl-names = "default";
 		pinctrl-0 = <&cam_front_ldo_pin>;
+		pinctrl-names = "default";
 	};
 
 	cam_rear_vana_ldo: cam-rear-vana-ldo-regulator {
@@ -503,8 +503,8 @@
 		gpios = <&pm660_gpios 13 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 
-		pinctrl-names = "default";
 		pinctrl-0 = <&cam_vio_pin>;
+		pinctrl-names = "default";
 	};
 };
 
@@ -751,9 +751,9 @@
 };
 
 &cci {
-	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&cci0_default &cci1_default &cam_mclk_default>;
 	pinctrl-1 = <&cci0_sleep &cci1_sleep>;
+	pinctrl-names = "default", "sleep";
 
 	status = "okay";
 };
@@ -813,8 +813,8 @@
 		vdig-supply = <&cam_front_ldo>;
 		vio-supply = <&cam_vio_ldo>;
 
-		pinctrl-names = "default";
 		pinctrl-0 = <&cam_front_default>;
+		pinctrl-names = "default";
 
 		rotation = <270>;
 		orientation = <0>;
