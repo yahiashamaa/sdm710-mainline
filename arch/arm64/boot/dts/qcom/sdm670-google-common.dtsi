@@ -736,19 +736,22 @@
 	vdda-pll-supply = <&vreg_s6a_0p87>;
 
 	status = "okay";
+
+	ports {
+		port@1 {
+			camss_endpoint1: endpoint {
+				clock-lanes = <7>;
+				data-lanes = <0 1 2 3>;
+				remote-endpoint = <&cam_front_endpoint>;
+			};
+		};
+	};
 };
 
 &camss_endpoint0 {
 	clock-lanes = <7>;
 	data-lanes = <0 1 2 3>;
 	remote-endpoint = <&cam_rear_endpoint>;
-	status = "okay";
-};
-
-&camss_endpoint1 {
-	clock-lanes = <7>;
-	data-lanes = <0 1 2 3>;
-	remote-endpoint = <&cam_front_endpoint>;
 	status = "okay";
 };
 
