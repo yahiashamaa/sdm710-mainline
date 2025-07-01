@@ -738,6 +738,14 @@
 	status = "okay";
 
 	ports {
+		port@0 {
+			camss_endpoint0: endpoint {
+				clock-lanes = <7>;
+				data-lanes = <0 1 2 3>;
+				remote-endpoint = <&cam_rear_endpoint>;
+			};
+		};
+
 		port@1 {
 			camss_endpoint1: endpoint {
 				clock-lanes = <7>;
@@ -746,13 +754,6 @@
 			};
 		};
 	};
-};
-
-&camss_endpoint0 {
-	clock-lanes = <7>;
-	data-lanes = <0 1 2 3>;
-	remote-endpoint = <&cam_rear_endpoint>;
-	status = "okay";
 };
 
 &cci {
