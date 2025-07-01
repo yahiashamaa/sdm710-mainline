@@ -733,6 +733,8 @@
 
 &camss {
 	vdda-phy-supply = <&vreg_l1a_1p225>;
+	vdda-pll-supply = <&vreg_s6a_0p87>;
+
 	status = "okay";
 };
 
