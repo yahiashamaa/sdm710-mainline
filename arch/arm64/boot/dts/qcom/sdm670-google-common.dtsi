@@ -1321,19 +1321,10 @@
 	};
 
 	cam_mclk_default: cam-default-state {
-		mclk0-pins {
-			pins = "gpio13";
-			function = "cam_mclk";
-			drive-strength = <2>;
-			bias-disable;
-		};
-
-		mclk2-pins {
-			pins = "gpio15";
-			function = "cam_mclk";
-			drive-strength = <2>;
-			bias-disable;
-		};
+		pins = "gpio13", "gpio15";
+		function = "cam_mclk";
+		drive-strength = <2>;
+		bias-disable;
 	};
 
 	cs35l36_top_default: cs35l36-top-default-state {
