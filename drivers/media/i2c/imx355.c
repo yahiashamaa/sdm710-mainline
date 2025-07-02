@@ -135,9 +135,9 @@ struct imx355 {
 };
 
 static const char * const imx355_supply_names[] = {
-	"vana",
-	"vdig",
-	"vio",
+	"avdd",
+	"dvdd",
+	"dovdd",
 };
 
 static const struct imx355_reg imx355_global_regs[] = {
