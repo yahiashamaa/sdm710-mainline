@@ -1542,50 +1542,53 @@ static const struct v4l2_subdev_internal_ops imx355_internal_ops = {
 	.open = imx355_open,
 };
 
-static int imx355_suspend(struct device *dev)
+static int imx355_power_off(struct device *dev)
 {
 	struct i2c_client *client = container_of(dev, struct i2c_client, dev);
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct imx355 *imx355 = to_imx355(sd);
-	int ret;
 
 	clk_disable_unprepare(imx355->mclk);
 
 	gpiod_set_value_cansleep(imx355->reset_gpio, 0);
 
-	ret = regulator_bulk_disable(ARRAY_SIZE(imx355->supplies),
-				    imx355->supplies);
-	if (ret) {
-		dev_err(dev, "failed to disable regulators: %d\n", ret);
-		return ret;
-	}
+	regulator_bulk_disable(ARRAY_SIZE(imx355->supplies), imx355->supplies);
 
 	return 0;
 }
 
-static int imx355_resume(struct device *dev)
+static int imx355_power_on(struct device *dev)
 {
 	struct i2c_client *client = container_of(dev, struct i2c_client, dev);
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct imx355 *imx355 = to_imx355(sd);
 	int ret;
 
+	ret = clk_prepare_enable(imx355->mclk);
+	if (ret) {
+		dev_err(dev, "failed to enable clocks: %d\n", ret);
+		return ret;
+	}
+
 	ret = regulator_bulk_enable(ARRAY_SIZE(imx355->supplies),
 				    imx355->supplies);
 	if (ret) {
 		dev_err(dev, "failed to enable regulators: %d\n", ret);
-		return ret;
+		goto error_disable_clocks;
 	}
 
 	gpiod_set_value_cansleep(imx355->reset_gpio, 1);
-
-	clk_prepare_enable(imx355->mclk);
 	usleep_range(12000, 13000);
 
 	return 0;
+
+error_disable_clocks:
+	clk_disable_unprepare(imx355->mclk);
+	return ret;
 }
 
-DEFINE_RUNTIME_DEV_PM_OPS(imx355_pm_ops, imx355_suspend, imx355_resume, NULL);
+static DEFINE_RUNTIME_DEV_PM_OPS(imx355_pm_ops, imx355_power_off,
+				 imx355_power_on, NULL);
 
 /* Initialize control handlers */
 static int imx355_init_controls(struct imx355 *imx355)
@@ -1778,38 +1781,21 @@ static int imx355_probe(struct i2c_client *client)
 				      imx355->supplies);
 	if (ret) {
 		dev_err_probe(&client->dev, ret, "could not get regulators");
-		return ret;
-	}
-
-	ret = regulator_bulk_enable(ARRAY_SIZE(imx355->supplies),
-				    imx355->supplies);
-	if (ret) {
-		dev_err(&client->dev, "failed to enable regulators: %d\n", ret);
-		return ret;
+		goto error_probe;
 	}
 
 	imx355->reset_gpio = devm_gpiod_get_optional(&client->dev, "reset",
-						     GPIOD_OUT_HIGH);
+						     GPIOD_OUT_LOW);
 	if (IS_ERR(imx355->reset_gpio)) {
-		ret = PTR_ERR(imx355->reset_gpio);
-		dev_err_probe(&client->dev, ret, "failed to get gpios");
-		goto error_vreg_disable;
+		ret = dev_err_probe(&client->dev, PTR_ERR(imx355->reset_gpio),
+				    "failed to get gpios");
+		goto error_probe;
 	}
 
 	imx355->mclk = devm_clk_get(&client->dev, "mclk");
 	if (IS_ERR(imx355->mclk)) {
-		ret = PTR_ERR(imx355->mclk);
-		dev_err_probe(&client->dev, ret, "failed to get mclk");
-		goto error_vreg_disable;
-	}
-
-	clk_prepare_enable(imx355->mclk);
-	usleep_range(12000, 13000);
-
-	/* Check module identity */
-	ret = imx355_identify_module(imx355);
-	if (ret) {
-		dev_err(&client->dev, "failed to find sensor: %d", ret);
+		ret = dev_err_probe(&client->dev, PTR_ERR(imx355->mclk),
+				    "failed to get mclk");
 		goto error_probe;
 	}
 
@@ -1820,13 +1806,26 @@ static int imx355_probe(struct i2c_client *client)
 		goto error_probe;
 	}
 
+	ret = imx355_power_on(&client->dev);
+	if (ret) {
+		dev_err(&client->dev, "failed to power on sensor: %d", ret);
+		goto error_probe;
+	}
+
+	/* Check module identity */
+	ret = imx355_identify_module(imx355);
+	if (ret) {
+		dev_err(&client->dev, "failed to find sensor: %d", ret);
+		goto error_power_off;
+	}
+
 	/* Set default mode to max resolution */
 	imx355->cur_mode = &supported_modes[0];
 
 	ret = imx355_init_controls(imx355);
 	if (ret) {
 		dev_err(&client->dev, "failed to init controls: %d", ret);
-		goto error_probe;
+		goto error_power_off;
 	}
 
 	/* Initialize subdev */
@@ -1866,12 +1865,11 @@ error_media_entity_runtime_pm:
 error_handler_free:
 	v4l2_ctrl_handler_free(imx355->sd.ctrl_handler);
 
+error_power_off:
+	imx355_power_off(&client->dev);
+
 error_probe:
 	mutex_destroy(&imx355->mutex);
-	clk_disable_unprepare(imx355->mclk);
-
-error_vreg_disable:
-	regulator_bulk_disable(ARRAY_SIZE(imx355->supplies), imx355->supplies);
 
 	return ret;
 }
@@ -1886,7 +1884,11 @@ static void imx355_remove(struct i2c_client *client)
 	v4l2_ctrl_handler_free(sd->ctrl_handler);
 
 	pm_runtime_disable(&client->dev);
-	pm_runtime_set_suspended(&client->dev);
+
+	if (!pm_runtime_status_suspended(&client->dev)) {
+		imx355_power_off(&client->dev);
+		pm_runtime_set_suspended(&client->dev);
+	}
 
 	mutex_destroy(&imx355->mutex);
 }
