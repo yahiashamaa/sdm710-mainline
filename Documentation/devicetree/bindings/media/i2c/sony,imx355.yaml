@@ -48,21 +48,15 @@ properties:
 
   port:
     $ref: /schemas/graph.yaml#/$defs/port-base
-    description:
-      CSI output port.
+    additionalProperties: false
 
     properties:
       endpoint:
         $ref: /schemas/media/video-interfaces.yaml
-        description:
-          CSI endpoint for the sensor output.
-
         unevaluatedProperties: false
 
         required:
           - link-frequencies
-
-    unevaluatedProperties: false
 
     required:
       - endpoint
@@ -73,6 +67,7 @@ required:
   - compatible
   - reg
   - clocks
+  - port
 
 examples:
   - |
