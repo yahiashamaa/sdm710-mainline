@@ -813,9 +813,9 @@
 
 		reset-gpios = <&tlmm 9 GPIO_ACTIVE_HIGH>;
 
-		vana-supply = <&cam_front_ldo>;
-		vdig-supply = <&cam_front_ldo>;
-		vio-supply = <&cam_vio_ldo>;
+		avdd-supply = <&cam_front_ldo>;
+		dvdd-supply = <&cam_front_ldo>;
+		dovdd-supply = <&cam_vio_ldo>;
 
 		pinctrl-0 = <&cam_front_default>;
 		pinctrl-names = "default";
