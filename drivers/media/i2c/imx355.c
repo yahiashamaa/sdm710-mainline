@@ -1694,7 +1694,7 @@ error:
 	return ret;
 }
 
-static struct imx355_hwcfg *imx355_get_hwcfg(struct device *dev)
+static struct imx355_hwcfg *imx355_get_hwcfg(struct device *dev, struct imx355 *imx355)
 {
 	struct imx355_hwcfg *cfg;
 	struct v4l2_fwnode_endpoint bus_cfg = {
@@ -1719,11 +1719,15 @@ static struct imx355_hwcfg *imx355_get_hwcfg(struct device *dev)
 	if (!cfg)
 		goto out_err;
 
-	ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
-				       &cfg->ext_clk);
-	if (ret) {
-		dev_err(dev, "can't get clock frequency");
-		goto out_err;
+	if (imx355->mclk) {
+		cfg->ext_clk = clk_get_rate(imx355->mclk);
+	} else {
+		ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
+					       &cfg->ext_clk);
+		if (ret) {
+			dev_err(dev, "can't get clock frequency");
+			goto out_err;
+		}
 	}
 
 	dev_dbg(dev, "ext clk: %d", cfg->ext_clk);
@@ -1809,7 +1813,7 @@ static int imx355_probe(struct i2c_client *client)
 		goto error_probe;
 	}
 
-	imx355->hwcfg = imx355_get_hwcfg(&client->dev);
+	imx355->hwcfg = imx355_get_hwcfg(&client->dev, imx355);
 	if (!imx355->hwcfg) {
 		dev_err(&client->dev, "failed to get hwcfg");
 		ret = -ENODEV;
