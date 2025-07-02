@@ -24,9 +24,6 @@ properties:
   reg:
     maxItems: 1
 
-  assigned-clocks: true
-  assigned-clock-rates: true
-
   clocks:
     maxItems: 1
 
