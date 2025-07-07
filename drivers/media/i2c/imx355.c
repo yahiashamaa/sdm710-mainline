@@ -1550,7 +1550,8 @@ static int imx355_power_off(struct device *dev)
 
 	clk_disable_unprepare(imx355->mclk);
 
-	gpiod_set_value_cansleep(imx355->reset_gpio, 0);
+	if (imx355->reset_gpio)
+		gpiod_set_value_cansleep(imx355->reset_gpio, 0);
 
 	regulator_bulk_disable(ARRAY_SIZE(imx355->supplies), imx355->supplies);
 
@@ -1577,8 +1578,11 @@ static int imx355_power_on(struct device *dev)
 		goto error_disable_clocks;
 	}
 
-	gpiod_set_value_cansleep(imx355->reset_gpio, 1);
-	usleep_range(12000, 13000);
+	if (imx355->reset_gpio) {
+		usleep_range(5000, 5100);
+		gpiod_set_value_cansleep(imx355->reset_gpio, 1);
+		usleep_range(8000, 8100);
+	}
 
 	return 0;
 
