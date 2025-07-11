@@ -1796,7 +1796,7 @@ static int imx355_probe(struct i2c_client *client)
 		goto error_probe;
 	}
 
-	imx355->mclk = devm_clk_get(&client->dev, "mclk");
+	imx355->mclk = devm_clk_get_optional(&client->dev, "mclk");
 	if (IS_ERR(imx355->mclk)) {
 		ret = dev_err_probe(&client->dev, PTR_ERR(imx355->mclk),
 				    "failed to get mclk");
