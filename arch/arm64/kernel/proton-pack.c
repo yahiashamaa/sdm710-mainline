@@ -172,7 +172,7 @@ static enum mitigation_state spectre_v2_get_cpu_hw_mitigation_state(void)
 		return SPECTRE_UNAFFECTED;
 
 	/* Alternatively, we have a list of unaffected CPUs */
-	if (is_midr_in_range_list(read_cpuid_id(), spectre_v2_safe_list))
+	if (is_midr_in_range_list(spectre_v2_safe_list))
 		return SPECTRE_UNAFFECTED;
 
 	return SPECTRE_VULNERABLE;
@@ -331,7 +331,7 @@ bool has_spectre_v3a(const struct arm64_cpu_capabilities *entry, int scope)
 	};
 
 	WARN_ON(scope != SCOPE_LOCAL_CPU || preemptible());
-	return is_midr_in_range_list(read_cpuid_id(), spectre_v3a_unsafe_list);
+	return is_midr_in_range_list(spectre_v3a_unsafe_list);
 }
 
 void spectre_v3a_enable_mitigation(const struct arm64_cpu_capabilities *__unused)
@@ -475,7 +475,7 @@ static enum mitigation_state spectre_v4_get_cpu_hw_mitigation_state(void)
 		{ /* sentinel */ },
 	};
 
-	if (is_midr_in_range_list(read_cpuid_id(), spectre_v4_safe_list))
+	if (is_midr_in_range_list(spectre_v4_safe_list))
 		return SPECTRE_UNAFFECTED;
 
 	/* CPU features are detected first */
@@ -864,7 +864,7 @@ static bool is_spectre_bhb_safe(int scope)
 	if (scope != SCOPE_LOCAL_CPU)
 		return all_safe;
 
-	if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_safe_list))
+	if (is_midr_in_range_list(spectre_bhb_safe_list))
 		return true;
 
 	all_safe = false;
@@ -879,16 +879,19 @@ static u8 spectre_bhb_loop_affected(void)
 	static const struct midr_range spectre_bhb_k132_list[] = {
 		MIDR_ALL_VERSIONS(MIDR_CORTEX_X3),
 		MIDR_ALL_VERSIONS(MIDR_NEOVERSE_V2),
+		{},
 	};
 	static const struct midr_range spectre_bhb_k38_list[] = {
 		MIDR_ALL_VERSIONS(MIDR_CORTEX_A715),
 		MIDR_ALL_VERSIONS(MIDR_CORTEX_A720),
+		{},
 	};
 	static const struct midr_range spectre_bhb_k32_list[] = {
 		MIDR_ALL_VERSIONS(MIDR_CORTEX_A78),
 		MIDR_ALL_VERSIONS(MIDR_CORTEX_A78AE),
 		MIDR_ALL_VERSIONS(MIDR_CORTEX_A78C),
 		MIDR_ALL_VERSIONS(MIDR_CORTEX_X1),
+		MIDR_ALL_VERSIONS(MIDR_CORTEX_X1C),
 		MIDR_ALL_VERSIONS(MIDR_CORTEX_A710),
 		MIDR_ALL_VERSIONS(MIDR_CORTEX_X2),
 		MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N2),
@@ -901,6 +904,7 @@ static u8 spectre_bhb_loop_affected(void)
 		MIDR_ALL_VERSIONS(MIDR_CORTEX_A77),
 		MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N1),
 		MIDR_ALL_VERSIONS(MIDR_QCOM_KRYO_4XX_GOLD),
+		MIDR_ALL_VERSIONS(MIDR_HISI_HIP09),
 		{},
 	};
 	static const struct midr_range spectre_bhb_k11_list[] = {
@@ -913,17 +917,17 @@ static u8 spectre_bhb_loop_affected(void)
 		{},
 	};
 
-	if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k132_list))
+	if (is_midr_in_range_list(spectre_bhb_k132_list))
 		k = 132;
-	else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k38_list))
+	else if (is_midr_in_range_list(spectre_bhb_k38_list))
 		k = 38;
-	else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k32_list))
+	else if (is_midr_in_range_list(spectre_bhb_k32_list))
 		k = 32;
-	else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k24_list))
+	else if (is_midr_in_range_list(spectre_bhb_k24_list))
 		k = 24;
-	else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k11_list))
+	else if (is_midr_in_range_list(spectre_bhb_k11_list))
 		k = 11;
-	else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k8_list))
+	else if (is_midr_in_range_list(spectre_bhb_k8_list))
 		k =  8;
 
 	return k;
@@ -996,6 +1000,11 @@ bool is_spectre_bhb_affected(const struct arm64_cpu_capabilities *entry,
 	return true;
 }
 
+u8 get_spectre_bhb_loop_value(void)
+{
+	return max_bhb_k;
+}
+
 static void this_cpu_set_vectors(enum arm64_bp_harden_el1_vectors slot)
 {
 	const char *v = arm64_get_bp_hardening_vector(slot);
@@ -1013,7 +1022,7 @@ static void this_cpu_set_vectors(enum arm64_bp_harden_el1_vectors slot)
 	isb();
 }
 
-static bool __read_mostly __nospectre_bhb;
+bool __read_mostly __nospectre_bhb;
 static int __init parse_spectre_bhb_param(char *str)
 {
 	__nospectre_bhb = true;
@@ -1089,6 +1098,11 @@ void spectre_bhb_enable_mitigation(const struct arm64_cpu_capabilities *entry)
 	}
 
 	update_mitigation_state(&spectre_bhb_state, state);
+}
+
+bool is_spectre_bhb_fw_mitigated(void)
+{
+	return test_bit(BHB_FW, &system_bhb_mitigations);
 }
 
 /* Patched to NOP when enabled */

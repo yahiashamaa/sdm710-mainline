@@ -24,9 +24,6 @@ properties:
   reg:
     maxItems: 1
 
-  assigned-clocks: true
-  assigned-clock-rates: true
-
   clocks:
     maxItems: 1
 
@@ -34,17 +31,13 @@ properties:
     items:
       - const: mclk
 
-  clock-frequency:
-    $ref: /schemas/types.yaml#/definitions/uint32
-    description: External clock frequency.
-
-  vana-supply:
+  avdd-supply:
     description: Analog power supply.
 
-  vdig-supply:
+  dvdd-supply:
     description: Digital power supply.
 
-  vio-supply:
+  dovdd-supply:
     description: Interface power supply.
 
   reset-gpios:
@@ -52,21 +45,15 @@ properties:
 
   port:
     $ref: /schemas/graph.yaml#/$defs/port-base
-    description:
-      CSI output port.
+    additionalProperties: false
 
     properties:
       endpoint:
         $ref: /schemas/media/video-interfaces.yaml
-        description:
-          CSI endpoint for the sensor output.
-
         unevaluatedProperties: false
 
         required:
           - link-frequencies
-
-    unevaluatedProperties: false
 
     required:
       - endpoint
@@ -76,7 +63,8 @@ unevaluatedProperties: false
 required:
   - compatible
   - reg
-  - clock-frequency
+  - clocks
+  - port
 
 examples:
   - |
@@ -94,16 +82,14 @@ examples:
             clocks = <&camcc CAM_CC_MCLK2_CLK>;
             clock-names = "mclk";
 
-            clock-frequency = <19200000>;
-
             assigned-clocks = <&camcc CAM_CC_MCLK2_CLK>;
             assigned-clock-rates = <24000000>;
 
             reset-gpios = <&tlmm 9 GPIO_ACTIVE_HIGH>;
 
-            vana-supply = <&cam_front_ldo>;
-            vdig-supply = <&cam_front_ldo>;
-            vio-supply = <&cam_vio_ldo>;
+            avdd-supply = <&cam_front_ldo>;
+            dvdd-supply = <&cam_front_ldo>;
+            dovdd-supply = <&cam_vio_ldo>;
 
             pinctrl-names = "default";
             pinctrl-0 = <&cam_front_default>;

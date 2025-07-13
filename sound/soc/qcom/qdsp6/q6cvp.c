@@ -6,6 +6,7 @@
 #include <linux/of.h>
 #include <linux/soc/qcom/apr.h>
 #include "q6cvp.h"
+#include "q6dsp-common.h"
 #include "q6voice-common.h"
 
 #define VSS_IVOCPROC_DIRECTION_RX	0
@@ -237,19 +238,9 @@ int q6cvp_send_channel_info(struct q6voice_session *cvp, bool is_tx)
 		cmd.param_data.channel_info.num_channels = 2;
 
 	cmd.param_data.channel_info.bits_per_sample = 16;
-	cmd.param_data.channel_info.channel_mapping[0] = 1;
 
-	if (is_tx)
-		cmd.param_data.channel_info.channel_mapping[1] = 0;
-	else
-		cmd.param_data.channel_info.channel_mapping[1] = 1;
-
-	cmd.param_data.channel_info.channel_mapping[2] = 0;
-	cmd.param_data.channel_info.channel_mapping[3] = 0;
-	cmd.param_data.channel_info.channel_mapping[4] = 0;
-	cmd.param_data.channel_info.channel_mapping[5] = 0;
-	cmd.param_data.channel_info.channel_mapping[6] = 0;
-	cmd.param_data.channel_info.channel_mapping[7] = 0;
+	q6dsp_map_channels(cmd.param_data.channel_info.channel_mapping,
+			   cmd.param_data.channel_info.num_channels);
 
 	return q6voice_common_send(cvp, &cmd.hdr);
 }
@@ -282,19 +273,9 @@ int q6cvp_send_media_format(struct q6voice_session *cvp, int port_id, bool is_tx
 
 	cmd.param_data.media_format_info.bits_per_sample = 16;
 	cmd.param_data.media_format_info.sample_rate = 48000;
-	cmd.param_data.media_format_info.channel_mapping[0] = 1;
 
-	if (is_tx)
-		cmd.param_data.media_format_info.channel_mapping[1] = 0;
-	else
-		cmd.param_data.media_format_info.channel_mapping[1] = 1;
-
-	cmd.param_data.media_format_info.channel_mapping[2] = 0;
-	cmd.param_data.media_format_info.channel_mapping[3] = 0;
-	cmd.param_data.media_format_info.channel_mapping[4] = 0;
-	cmd.param_data.media_format_info.channel_mapping[5] = 0;
-	cmd.param_data.media_format_info.channel_mapping[6] = 0;
-	cmd.param_data.media_format_info.channel_mapping[7] = 0;
+	q6dsp_map_channels(cmd.param_data.channel_info.channel_mapping,
+			   cmd.param_data.channel_info.num_channels);
 
 	return q6voice_common_send(cvp, &cmd.hdr);
 }

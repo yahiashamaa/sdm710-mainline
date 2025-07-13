@@ -713,6 +713,12 @@ static int qcom_fg_gen3_get_current(struct qcom_fg_chip *chip, int *val)
 	temp = (s16)(readval[1] << 8 | readval[0]);
 	*val = div_s64((s64)temp * 488281, 1000);
 
+	/*
+	 * PSY API expects charging batteries to report a positive current, which is inverted
+	 * to what the PMIC reports.
+	 */
+	*val = -*val;
+
 	return 0;
 }
 
@@ -1286,8 +1292,6 @@ static int qcom_fg_probe(struct platform_device *pdev)
 static void qcom_fg_remove(struct platform_device *pdev)
 {
 	struct qcom_fg_chip *chip = platform_get_drvdata(pdev);
-
-	power_supply_put_battery_info(chip->chg_psy, chip->batt_info);
 
 	if(chip->sram_wq)
 		destroy_workqueue(chip->sram_wq);

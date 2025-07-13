@@ -468,8 +468,8 @@
 		gpios = <&pm660l_gpios 4 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 
-		pinctrl-names = "default";
 		pinctrl-0 = <&cam_front_ldo_pin>;
+		pinctrl-names = "default";
 	};
 
 	cam_rear_vana_ldo: cam-rear-vana-ldo-regulator {
@@ -503,8 +503,8 @@
 		gpios = <&pm660_gpios 13 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 
-		pinctrl-names = "default";
 		pinctrl-0 = <&cam_vio_pin>;
+		pinctrl-names = "default";
 	};
 };
 
@@ -733,27 +733,33 @@
 
 &camss {
 	vdda-phy-supply = <&vreg_l1a_1p225>;
-	status = "okay";
-};
+	vdda-pll-supply = <&vreg_s6a_0p87>;
 
-&camss_endpoint0 {
-	clock-lanes = <7>;
-	data-lanes = <0 1 2 3>;
-	remote-endpoint = <&cam_rear_endpoint>;
 	status = "okay";
-};
 
-&camss_endpoint1 {
-	clock-lanes = <7>;
-	data-lanes = <0 1 2 3>;
-	remote-endpoint = <&cam_front_endpoint>;
-	status = "okay";
+	ports {
+		port@0 {
+			camss_endpoint0: endpoint {
+				clock-lanes = <7>;
+				data-lanes = <0 1 2 3>;
+				remote-endpoint = <&cam_rear_endpoint>;
+			};
+		};
+
+		port@1 {
+			camss_endpoint1: endpoint {
+				clock-lanes = <7>;
+				data-lanes = <0 1 2 3>;
+				remote-endpoint = <&cam_front_endpoint>;
+			};
+		};
+	};
 };
 
 &cci {
-	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&cci0_default &cci1_default &cam_mclk_default>;
 	pinctrl-1 = <&cci0_sleep &cci1_sleep>;
+	pinctrl-names = "default", "sleep";
 
 	status = "okay";
 };
@@ -802,19 +808,17 @@
 		clocks = <&camcc CAM_CC_MCLK2_CLK>;
 		clock-names = "mclk";
 
-		clock-frequency = <19200000>;
-
 		assigned-clocks = <&camcc CAM_CC_MCLK2_CLK>;
-		assigned-clock-rates = <24000000>;
+		assigned-clock-rates = <19200000>;
 
 		reset-gpios = <&tlmm 9 GPIO_ACTIVE_HIGH>;
 
-		vana-supply = <&cam_front_ldo>;
-		vdig-supply = <&cam_front_ldo>;
-		vio-supply = <&cam_vio_ldo>;
+		avdd-supply = <&cam_front_ldo>;
+		dvdd-supply = <&cam_front_ldo>;
+		dovdd-supply = <&cam_vio_ldo>;
 
-		pinctrl-names = "default";
 		pinctrl-0 = <&cam_front_default>;
+		pinctrl-names = "default";
 
 		rotation = <270>;
 		orientation = <0>;
@@ -1319,19 +1323,10 @@
 	};
 
 	cam_mclk_default: cam-default-state {
-		mclk0-pins {
-			pins = "gpio13";
-			function = "cam_mclk";
-			drive-strength = <2>;
-			bias-disable;
-		};
-
-		mclk2-pins {
-			pins = "gpio15";
-			function = "cam_mclk";
-			drive-strength = <2>;
-			bias-disable;
-		};
+		pins = "gpio13", "gpio15";
+		function = "cam_mclk";
+		drive-strength = <2>;
+		bias-disable;
 	};
 
 	cs35l36_top_default: cs35l36-top-default-state {
