@@ -1,0 +1,11 @@
+config TOUCHSCREEN_HIMAX_HX83112A_NOFLASH
+	tristate "Himax hx83112a noflash touchscreen driver"
+	depends on SPI
+	select REGMAP_SPI
+	help
+	  Say Y here to enable support for Himax hx83112b touchscreens.
+
+	  If unsure, say N.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called himax_hx83112b.
