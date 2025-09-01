@@ -2,7 +2,7 @@
 /* 
  * SDM710 SoC device tree source
  *	
- * Copyright (c) 2018, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2025, The Linux Foundation. All rights reserved.
  * 
  */
 
@@ -13,6 +13,23 @@
 	compatible = "qcom,sdm670";
 	qcom,msm-id =	<360 0x0>,
 			<393 0x0>;
+};
+
+&cpu6_opp_table {
+	cpu6_opp11: opp-2054400000 {
+		opp-hz = /bits/ 64 <2054400000>;
+		opp-peak-kBps = <7216000 20889600>;
+	};
+
+	cpu6_opp12: opp-2169600000 {
+		opp-hz = /bits/ 64 <2169600000>;
+		opp-peak-kBps = <7216000 20889600>;
+	};
+
+	cpu6_opp13: opp-2208000000 {
+		opp-hz = /bits/ 64 <2208000000>;
+		opp-peak-kBps = <7216000 20889600>;
+	};
 };
 
 &soc {
