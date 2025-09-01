@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
  * Copyright (C) 2018-2020 Oplus. All rights reserved.
+ * Copyright (C) 2025 Yahia Shamaa <yehiashamaa987@gmail.com>
  */
 
 #ifndef HX83112B_H
@@ -8,6 +9,8 @@
 
 /*********PART1:Head files**********************/
 #include <linux/i2c.h>
+#include <linux/types.h> 
+#include <linux/firmware.h>  
 
 #ifdef CONFIG_FB
 #include <linux/fb.h>
@@ -136,7 +139,6 @@ static int hx83112a_nf_gest_pt_cnt;
 static int hx83112a_nf_gest_pt_x[10];
 static int hx83112a_nf_gest_pt_y[10];
 
-
 #define HX_KEY_MAX_COUNT             4
 #define DEFAULT_RETRY_CNT            3
 #define HIMAX_REG_RETRY_TIMES        10
@@ -217,12 +219,6 @@ typedef enum {
     HIMAX_INSPECTION_LPWUG_IDLE_RAWDATA,
     HIMAX_INSPECTION_LPWUG_IDLE_NOISE,
 }HX83112A_NF_THP_INSPECTION_ENUM;
-
-/* Error code of AFE Inspection */
-#define HX_RSLT_OUT_PATH_OK "/sdcard/TpTestReport/screenOn/OK/"
-#define HX_RSLT_OUT_PATH_NG "/sdcard/TpTestReport/screenOn/NG/"
-#define HX_GES_RSLT_OUT_PATH_OK "/sdcard/TpTestReport/screenOff/OK/"
-#define HX_GES_RSLT_OUT_PATH_NG "/sdcard/TpTestReport/screenOff/NG/"
 
 /*#define HX_RSLT_OUT_FILE_OK "tp_testlimit_OK_"*/
 /*#define HX_RSLT_OUT_FILE_NG "tp_testlimitst_NG_"*/
@@ -561,5 +557,68 @@ struct hx83112a_nf_core_fp {
 #endif
 };
 #endif
+
+/*FUCTION PROTOTYPES*/
+void hx83112a_nf_flash_write_burst(uint8_t *reg_byte, uint8_t *write_data);
+void hx83112a_nf_flash_write_burst_length(uint8_t *reg_byte, uint8_t *write_data, int length);
+void hx83112a_nf_burst_enable(uint8_t auto_add_4_byte);
+void hx83112a_nf_register_read(uint8_t *read_addr, int read_length, uint8_t *read_data, bool hx83112a_nf_cfg_flag);
+void hx83112a_nf_register_write(uint8_t *write_addr, int write_length, uint8_t *write_data, bool hx83112a_nf_cfg_flag);
+bool hx83112a_nf_sense_off(void);
+bool hx83112a_nf_enter_safe_mode(void);
+void hx83112a_nf_interface_on(void);
+void hx83112a_nf_diag_register_set(uint8_t diag_command);
+bool hx83112a_nf_wait_wip(int Timing);
+void hx83112a_nf_sense_on(uint8_t FlashMode);
+void hx83112a_nf_in_parse_assign_cmd(uint32_t addr, uint8_t *cmd, int len);
+void hx83112a_nf_update_dirly_0f(void);
+void hx83112a_nf_mcu_sys_reset(void);
+int hx83112a_nf_dis_rload_0f(int disable);
+void hx83112a_nf_mcu_clean_sram_0f(uint8_t *addr, int write_len, int type);
+void hx83112a_nf_mcu_write_sram_0f(const struct firmware *fw_entry, uint8_t *addr, int start_index, uint32_t write_len);
+int hx83112a_nf_sram_write_crc_check(const struct firmware *fw_entry, uint8_t *addr, int strt_idx, uint32_t len);
+bool hx83112a_nf_parse_bin_cfg_data(const struct firmware *fw_entry);
+void hx83112a_nf_mcu_firmware_update_0f(const struct firmware *fw_entry);
+int hx83112a_nf_0f_op_file_dirly(char *file_name);
+int hx83112a_nf_mcu_0f_operation_dirly(void);
+void hx83112a_nf_mcu_0f_operation(struct work_struct *work);
+void hx83112a_nf_mcu_read_sram_0f(const struct firmware *fw_entry, uint8_t *addr, int start_index, int read_len);
+void hx83112a_nf_mcu_read_all_sram(uint8_t *addr, int read_len);
+void hx83112a_nf_mcu_firmware_read_0f(const struct firmware *fw_entry, int type);
+void hx83112a_nf_mcu_0f_operation_check(int type);
+int hx83112a_nf_0f_init(void);
+bool hx83112a_nf_ic_package_check(void);
+void hx83112a_nf_power_on_init(void);
+void hx83112a_nf_read_OPPO_FW_ver(struct chip_data_hx83112a_nf *chip_info);
+bool hx83112a_nf_calculateChecksum(bool change_iref);
+int hx83112a_nf_cal_data_len(int raw_cnt_rmd, int HX_MAX_PT, int raw_cnt_max);
+int hx83112a_nf_report_data_init(int max_touch_point, int tx_num, int rx_num);
+bool hx83112a_nf_read_event_stack(uint8_t *buf, uint8_t length);
+int hx83112a_nf_ic_esd_recovery(int hx_esd_event, int hx_zero_event, int length);
+void hx83112a_nf_esd_hw_reset(struct chip_data_hx83112a_nf *chip_info);
+void hx83112a_nf_ultra_enter(void);
+int hx83112a_nf_checksum_cal(struct chip_data_hx83112a_nf *chip_info, uint8_t *buf, int ts_status);
+void hx83112a_nf_log_touch_data(uint8_t *buf, struct hx83112a_nf_report_data *hx83112a_nf_touch_data);
+void hx83112a_nf_idle_mode(int disable);
+void hx83112a_nf_reload_disable(int on);
+void hx83112a_nf_switch_data_type(uint8_t checktype);
+int hx83112a_nf_switch_mode(int mode);
+uint32_t hx83112a_nf_check_mode(uint8_t checktype);
+void hx83112a_nf_get_noise_base(void);
+uint16_t hx83112a_nf_get_noise_weight(void);
+uint32_t hx83112a_nf_wait_sorting_mode(uint8_t checktype);
+int hx83112a_nf_find_crtra_id(char *input);
+int hx83112a_nf_print_crtra_after_parsing(struct chip_data_hx83112a_nf *chip_info);
+int hx83112a_nf_get_size_str_arr(char **input);
+void hx83112a_nf_init_psl(void);
+void hx83112a_nf_chip_erase(void);
+void hx83112a_nf_flash_programming(uint8_t *FW_content, int FW_Size);
+int hx83112a_nf_write_read_reg(uint8_t *tmp_addr, uint8_t *tmp_data, uint8_t hb, uint8_t lb);
+void hx83112a_nf_diag_parse_raw_data(struct hx83112a_nf_report_data *hx83112a_nf_touch_data,
+                                     int mul_num, int self_num, uint8_t diag_cmd,
+                                     int32_t *mutual_data, int32_t *self_data);
+bool hx83112a_nf_diag_check_sum(struct hx83112a_nf_report_data *hx83112a_nf_touch_data);
+int hx83112a_nf_ic_reset(struct chip_data_hx83112a_nf *chip_info, uint8_t loadconfig, uint8_t int_off);
+void hx83112a_nf_freq_hop_trigger(void *chip_data);
 
 #endif
