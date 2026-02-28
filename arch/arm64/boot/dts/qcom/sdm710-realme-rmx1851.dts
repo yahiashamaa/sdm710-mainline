@@ -31,6 +31,7 @@
 /delete-node/ &gpu_mem;
 /delete-node/ &rmtfs_mem;
 /delete-node/ &spss_mem;
+/delete-node/ &tz_mem;
 
 / {
 	model = "Realme 3 Pro";
@@ -47,6 +48,11 @@
 	reserved-memory {
 		#address-cells = <2>;
 		#size-cells = <2>;
+		
+		tz_mem: trust-zone@86200000 {
+			reg = <0 0x86200000 0 0x4900000>;
+			no-map;
+		};
 
 		mpss_region: mpss@8b000000 {
 			reg = <0 0x8b000000 0 0x9600000>;
